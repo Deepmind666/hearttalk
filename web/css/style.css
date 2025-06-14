@@ -1,0 +1,75 @@
+/* 智慧驿站·心语同行 - 主样式文件 */
+
+:root {
+    --primary-color: #0d6efd;
+    --primary-dark: #0b5ed7;
+    --success-color: #198754;
+    --info-color: #0dcaf0;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+}
+
+.bg-gradient-primary {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+}
+
+.feature-icon {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hover-lift {
+    transition: transform 0.3s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-5px);
+}
+
+/* 导航栏优化样式 */
+.navbar-brand:hover {
+    text-decoration: none !important;
+}
+
+.nav-link:hover {
+    color: #0d6efd !important;
+    text-decoration: none !important;
+}
+
+/* 移动端优化 */
+@media (max-width: 768px) {
+    .navbar-brand span {
+        font-size: 1.5rem !important;
+    }
+    
+    .d-flex.flex-wrap {
+        gap: 0.5rem !important;
+    }
+    
+    .nav-link {
+        font-size: 0.9rem;
+        padding: 0.25rem 0.5rem !important;
+    }
+    
+    .btn {
+        font-size: 0.9rem;
+        padding: 0.375rem 0.75rem !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .navbar-brand span {
+        font-size: 1.25rem !important;
+    }
+    
+    .nav-link {
+        font-size: 0.85rem;
+    }
+    
+    .btn {
+        font-size: 0.85rem;
+    }
+}

@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智慧驿站·心语同行 - 心理测评</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- 自定义样式 -->
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --primary-dark: #0b5ed7;
+            --success-color: #198754;
+            --info-color: #0dcaf0;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+        }
+        
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .hover-lift {
+            transition: transform 0.3s ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-5px);
+        }
+        
+        /* 兼容性CSS */
+        .d-flex {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: flex;
+        }
+        
+        .flex-wrap {
+            -webkit-flex-wrap: wrap;
+            -moz-flex-wrap: wrap;
+            -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+        }
+        
+        .gap-3 {
+            gap: 1rem;
+        }
+        
+        /* 兼容性备用方案 */
+        .gap-3 > * {
+            margin-right: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .gap-3 > *:last-child {
+            margin-right: 0;
+        }
+
+        .justify-content-center {
+            -webkit-box-pack: center;
+            -webkit-justify-content: center;
+            -moz-box-pack: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+        }
+
+        .align-items-center {
+            -webkit-box-align: center;
+            -webkit-align-items: center;
+            -moz-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+        }
+        
+        /* 导航栏优化样式 */
+        .navbar-brand:hover {
+            text-decoration: none !important;
+        }
+        
+        .nav-link:hover {
+            color: #0d6efd !important;
+            text-decoration: none !important;
+        }
+        
+        /* 移动端优化 */
+        @media (max-width: 768px) {
+            .navbar-brand span {
+                font-size: 1.5rem !important;
+            }
+
+            .d-flex.flex-wrap {
+                gap: 0.5rem !important;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .navbar-brand span {
+                font-size: 1.25rem !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+        <div class="container">
+            <!-- 第一行：网站标题 -->
+            <div class="w-100 d-flex justify-content-center mb-2">
+                <a class="navbar-brand d-flex align-items-center text-decoration-none" href="index.html">
+                    <img src="images/2.png" alt="网站Logo" style="height: 60px; width: auto; margin-right: 15px; border-radius: 10px;">
+                    <span class="fw-bold text-primary fs-3">智慧驿站·心语同行</span>
+                </a>
+            </div>
+
+            <!-- 第二行：导航链接 -->
+            <div class="w-100 d-flex justify-content-center">
+                <div class="d-flex flex-wrap justify-content-center align-items-center gap-2 gap-md-3">
+                    <!-- 主要导航链接 -->
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="index.html">首页</a>
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="about.html">关于我们</a>
+                    <a class="btn btn-primary px-3 py-2" href="assessment.html">心理测评</a>
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="activities.html">党建空间</a>
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="community.html">互动社区</a>
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="consultation.html">在线咨询</a>
+
+                    <!-- 用户操作按钮 -->
+                    <div class="d-flex gap-1 user-actions">
+                        <a href="login.html" class="nav-link text-dark px-2 py-2 text-decoration-none">登录</a>
+                        <a href="register.html" class="nav-link text-dark px-2 py-2 text-decoration-none">注册</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-primary text-white py-5">
+        <div class="container">
+            <div class="row align-items-center" style="min-height: 60vh;">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold mb-4">
+                        心理健康测评
+                    </h1>
+                    <p class="lead mb-4">
+                        通过专业的心理健康量表，了解您的心理状态，获得个性化建议。
+                        我们提供基于国际标准化量表的科学评估工具，
+                        帮助您及时发现潜在的心理健康问题。
+                    </p>
+                    <div class="d-flex gap-3 flex-wrap">
+                        <a href="#assessments" class="btn btn-light btn-lg">
+                            <i class="fas fa-clipboard-check me-2"></i>开始测评
+                        </a>
+                        <a href="consultation.html" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-comments me-2"></i>咨询专家
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <div class="bg-white bg-opacity-10 rounded-3 p-5">
+                        <i class="fas fa-brain fa-5x mb-3"></i>
+                        <h3>心理评估</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 主要内容 -->
+    <section class="py-5" id="assessments">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">测评工具</h2>
+                <p class="text-muted">选择适合您的心理健康评估</p>
+            </div>
+
+        <!-- 测评选项 -->
+        <div class="row g-4 mb-5">
+            <!-- 第一行：基础心理健康筛查 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card border-0 shadow-sm h-100 text-center hover-lift">
+                    <div class="card-body p-4">
+                        <div class="bg-primary text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                            <i class="fas fa-brain fa-2x"></i>
+                        </div>
+                        <h5 class="card-title">抑郁症筛查 (PHQ-9)</h5>
+                        <p class="card-text text-muted">
+                            基于PHQ-9量表，评估抑郁症状的严重程度，适用于初步筛查
+                        </p>
+                        <div class="mb-2">
+                            <span class="badge bg-primary">9题</span>
+                            <span class="badge bg-secondary">5分钟</span>
+                        </div>
+                        <button class="btn btn-primary" onclick="startAssessment('depression')">
+                            开始测评
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="card border-0 shadow-sm h-100 text-center hover-lift">
+                    <div class="card-body p-4">
+                        <div class="bg-success text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                            <i class="fas fa-heart fa-2x"></i>
+                        </div>
+                        <h5 class="card-title">焦虑症筛查 (GAD-7)</h5>
+                        <p class="card-text text-muted">
+                            基于GAD-7量表，评估广泛性焦虑障碍的症状严重程度
+                        </p>
+                        <div class="mb-2">
+                            <span class="badge bg-success">7题</span>
+                            <span class="badge bg-secondary">3分钟</span>
+                        </div>
+                        <button class="btn btn-success" onclick="startAssessment('anxiety')">
+                            开始测评
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="card border-0 shadow-sm h-100 text-center hover-lift">
+                    <div class="card-body p-4">
+                        <div class="bg-info text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                            <i class="fas fa-chart-line fa-2x"></i>
+                        </div>
+                        <h5 class="card-title">压力水平评估 (PSS)</h5>
+                        <p class="card-text text-muted">
+                            感知压力量表，评估个体对生活事件压力的主观感受
+                        </p>
+                        <div class="mb-2">
+                            <span class="badge bg-info">10题</span>
+                            <span class="badge bg-secondary">5分钟</span>
+                        </div>
+                        <button class="btn btn-info" onclick="startAssessment('stress')">
+                            开始测评
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 第二行：情绪与人格评估 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card border-0 shadow-sm h-100 text-center hover-lift">
+                    <div class="card-body p-4">
+                        <div class="bg-warning text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                            <i class="fas fa-smile fa-2x"></i>
+                        </div>
+                        <h5 class="card-title">情绪状态评估</h5>
+                        <p class="card-text text-muted">
+                            评估当前的情绪状态，包括积极情绪和消极情绪的平衡
+                        </p>
+                        <div class="mb-2">
+                            <span class="badge bg-warning">20题</span>
+                            <span class="badge bg-secondary">8分钟</span>
+                        </div>
+                        <button class="btn btn-warning" onclick="startAssessment('emotion')">
+                            开始测评
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="card border-0 shadow-sm h-100 text-center hover-lift">
+                    <div class="card-body p-4">
+                        <div class="bg-danger text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                            <i class="fas fa-exclamation-triangle fa-2x"></i>
+                        </div>
+                        <h5 class="card-title">创伤后应激评估</h5>
+                        <p class="card-text text-muted">
+                            评估是否存在创伤后应激障碍(PTSD)的相关症状
+                        </p>
+                        <div class="mb-2">
+                            <span class="badge bg-danger">17题</span>
+                            <span class="badge bg-secondary">10分钟</span>
+                        </div>
+                        <button class="btn btn-danger" onclick="startAssessment('ptsd')">
+                            开始测评
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="card border-0 shadow-sm h-100 text-center hover-lift">
+                    <div class="card-body p-4">
+                        <div class="bg-dark text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                            <i class="fas fa-moon fa-2x"></i>
+                        </div>
+                        <h5 class="card-title">睡眠质量评估</h5>
+                        <p class="card-text text-muted">
+                            匹兹堡睡眠质量指数，全面评估睡眠质量和睡眠障碍
+                        </p>
+                        <div class="mb-2">
+                            <span class="badge bg-dark">19题</span>
+                            <span class="badge bg-secondary">8分钟</span>
+                        </div>
+                        <button class="btn btn-dark" onclick="startAssessment('sleep')">
+                            开始测评
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 第三行：学习与社交评估 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card border-0 shadow-sm h-100 text-center hover-lift">
+                    <div class="card-body p-4">
+                        <div class="bg-purple text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; background-color: #6f42c1;">
+                            <i class="fas fa-graduation-cap fa-2x"></i>
+                        </div>
+                        <h5 class="card-title">学习倦怠评估</h5>
+                        <p class="card-text text-muted">
+                            评估学习过程中的倦怠程度，包括情绪耗竭和学习效能感
+                        </p>
+                        <div class="mb-2">
+                            <span class="badge" style="background-color: #6f42c1;">15题</span>
+                            <span class="badge bg-secondary">6分钟</span>
+                        </div>
+                        <button class="btn" style="background-color: #6f42c1; color: white;" onclick="startAssessment('burnout')">
+                            开始测评
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="card border-0 shadow-sm h-100 text-center hover-lift">
+                    <div class="card-body p-4">
+                        <div class="bg-teal text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; background-color: #20c997;">
+                            <i class="fas fa-users fa-2x"></i>
+                        </div>
+                        <h5 class="card-title">社交焦虑评估</h5>
+                        <p class="card-text text-muted">
+                            评估在社交场合中的焦虑水平和回避行为
+                        </p>
+                        <div class="mb-2">
+                            <span class="badge" style="background-color: #20c997;">12题</span>
+                            <span class="badge bg-secondary">5分钟</span>
+                        </div>
+                        <button class="btn" style="background-color: #20c997; color: white;" onclick="startAssessment('social')">
+                            开始测评
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="card border-0 shadow-sm h-100 text-center hover-lift">
+                    <div class="card-body p-4">
+                        <div class="bg-orange text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; background-color: #fd7e14;">
+                            <i class="fas fa-lightbulb fa-2x"></i>
+                        </div>
+                        <h5 class="card-title">自我效能感评估</h5>
+                        <p class="card-text text-muted">
+                            评估个体对自己能力的信心和对困难任务的应对能力
+                        </p>
+                        <div class="mb-2">
+                            <span class="badge" style="background-color: #fd7e14;">10题</span>
+                            <span class="badge bg-secondary">4分钟</span>
+                        </div>
+                        <button class="btn" style="background-color: #fd7e14; color: white;" onclick="startAssessment('efficacy')">
+                            开始测评
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 综合评估推荐 -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card border-primary">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fas fa-star me-2"></i>综合心理健康评估套餐</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-lg-8">
+                                <h6 class="text-primary">全面心理健康筛查</h6>
+                                <p class="text-muted mb-2">
+                                    包含抑郁、焦虑、压力、情绪状态、睡眠质量等核心评估，
+                                    为您提供全面的心理健康状况分析和个性化建议。
+                                </p>
+                                <div class="d-flex flex-wrap gap-2 mb-3">
+                                    <span class="badge bg-primary">5项核心测评</span>
+                                    <span class="badge bg-success">约15分钟</span>
+                                    <span class="badge bg-info">专业报告</span>
+                                    <span class="badge bg-warning">个性化建议</span>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 text-center">
+                                <a href="comprehensive-assessment.html" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-play me-2"></i>开始综合评估
+                                </a>
+                                <p class="small text-muted mt-2">推荐首次使用</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 测评说明 -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="text-center mb-4">
+                        <h3 class="fw-bold">测评说明</h3>
+                        <p class="text-muted">了解我们的心理健康评估工具</p>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                        <i class="fas fa-shield-alt"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6>专业可靠</h6>
+                                    <p class="text-muted small">
+                                        所有量表均基于国际标准化心理测评工具，具有良好的信效度
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                        <i class="fas fa-user-secret"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6>隐私保护</h6>
+                                    <p class="text-muted small">
+                                        所有测评数据严格保密，仅用于生成个人报告和改善服务
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-info text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6>即时反馈</h6>
+                                    <p class="text-muted small">
+                                        完成测评后立即获得详细报告和专业建议
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-warning text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                        <i class="fas fa-comments"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6>专业支持</h6>
+                                    <p class="text-muted small">
+                                        如需进一步帮助，可预约专业心理咨询师进行深度咨询
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <p class="text-muted small">
+                            <i class="fas fa-info-circle me-1"></i>
+                            测评结果仅供参考，不能替代专业医学诊断。如有严重心理困扰，请及时寻求专业帮助。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-light py-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5 class="text-primary mb-3">智慧驿站·心语同行</h5>
+                    <p class="text-muted">
+                        以党建引领为核心，融合心理健康服务的创新平台，
+                        为师生提供专业、温暖、便捷的心理健康支持。
+                    </p>
+                </div>
+
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="text-primary mb-3">服务平台</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="assessment.html" class="text-muted text-decoration-none">心理测评</a></li>
+                        <li><a href="consultation.html" class="text-muted text-decoration-none">在线咨询</a></li>
+                        <li><a href="activities.html" class="text-muted text-decoration-none">党建空间</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="text-primary mb-3">社区</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="community.html" class="text-muted text-decoration-none">讨论区</a></li>
+                        <li><a href="about.html" class="text-muted text-decoration-none">关于我们</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h6 class="text-primary mb-3">联系方式</h6>
+                    <ul class="list-unstyled text-muted">
+                        <li><i class="fas fa-envelope me-2"></i>1403073295@qq.com</li>
+                        <li><i class="fas fa-user me-2"></i>技术联系人：李康锐</li>
+                        <li><i class="fas fa-university me-2"></i>广东工业大学自动化学院本科物联网党支部维护管理</li>
+                    </ul>
+                </div>
+            </div>
+
+            <hr class="my-4">
+
+            <div class="row align-items-center">
+                <div class="col-md-12 text-center">
+                    <p class="text-muted mb-0">
+                        &copy; 2024 智慧驿站·心语同行. 保留所有权利.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+    <!-- 用户状态管理 -->
+    <script src="js/user-status.js"></script>
+
+    <!-- 心理测评功能 -->
+    <script>
+        // 测评工具配置
+        const assessmentTools = {
+            depression: {
+                name: 'PHQ-9 抑郁症筛查',
+                description: '患者健康问卷-9，用于筛查和评估抑郁症状严重程度',
+                questions: 9,
+                time: 5
+            },
+            anxiety: {
+                name: 'GAD-7 焦虑症筛查',
+                description: '广泛性焦虑障碍量表-7，评估焦虑症状',
+                questions: 7,
+                time: 3
+            },
+            stress: {
+                name: 'PSS-10 压力感知量表',
+                description: '评估个体对生活压力的主观感受',
+                questions: 10,
+                time: 5
+            },
+            emotion: {
+                name: '情绪状态评估',
+                description: '评估当前积极和消极情绪状态',
+                questions: 20,
+                time: 8
+            },
+            ptsd: {
+                name: 'PCL-5 创伤后应激评估',
+                description: '创伤后应激障碍检查表',
+                questions: 17,
+                time: 10
+            },
+            sleep: {
+                name: 'PSQI 睡眠质量指数',
+                description: '匹兹堡睡眠质量指数',
+                questions: 19,
+                time: 8
+            },
+            burnout: {
+                name: '学习倦怠量表',
+                description: '评估学习过程中的倦怠程度',
+                questions: 15,
+                time: 6
+            },
+            social: {
+                name: '社交焦虑量表',
+                description: '评估社交场合中的焦虑水平',
+                questions: 12,
+                time: 5
+            },
+            efficacy: {
+                name: '一般自我效能感量表',
+                description: '评估个体对自己能力的信心',
+                questions: 10,
+                time: 4
+            }
+        };
+
+        // 开始单项测评
+        function startAssessment(type) {
+            const tool = assessmentTools[type];
+            if (!tool) {
+                alert('测评工具配置错误');
+                return;
+            }
+
+            // 检查是否有可用的测评页面
+            if (type === 'depression') {
+                // PHQ-9 抑郁症筛查已开发完成，直接跳转
+                window.location.href = 'assessment-depression.html';
+                return;
+            }
+
+            if (type === 'anxiety') {
+                // GAD-7 焦虑症筛查已开发完成，直接跳转
+                window.location.href = 'assessment-anxiety.html';
+                return;
+            }
+
+            if (type === 'stress') {
+                // PSS-10 压力感知量表已开发完成，直接跳转
+                window.location.href = 'assessment-stress.html';
+                return;
+            }
+
+            if (type === 'emotion') {
+                // PANAS 情绪状态评估已开发完成，直接跳转
+                window.location.href = 'assessment-emotion.html';
+                return;
+            }
+
+            if (type === 'sleep') {
+                // PSQI 睡眠质量评估已开发完成，直接跳转
+                window.location.href = 'assessment-sleep.html';
+                return;
+            }
+
+            if (type === 'burnout') {
+                // 学习倦怠量表已开发完成，直接跳转
+                window.location.href = 'assessment-burnout.html';
+                return;
+            }
+
+            if (type === 'ptsd') {
+                // PCL-5 创伤后应激评估已开发完成，直接跳转
+                window.location.href = 'assessment-ptsd.html';
+                return;
+            }
+
+            if (type === 'social') {
+                // 社交焦虑量表已开发完成，直接跳转
+                window.location.href = 'assessment-social.html';
+                return;
+            }
+
+            if (type === 'efficacy') {
+                // 一般自我效能感量表已开发完成，直接跳转
+                window.location.href = 'assessment-efficacy.html';
+                return;
+            }
+
+            // 所有测评工具都已开发完成，这里不应该到达
+            alert(`测评工具配置错误：${type}`);
+        }
+
+        // 开始综合评估
+        function startComprehensiveAssessment() {
+            const confirmed = confirm(
+                '您即将开始综合心理健康评估\n\n' +
+                '包含内容：\n' +
+                '• PHQ-9 抑郁症筛查\n' +
+                '• GAD-7 焦虑症筛查\n' +
+                '• PSS-10 压力评估\n' +
+                '• 情绪状态评估\n' +
+                '• PSQI 睡眠质量评估\n\n' +
+                '总计约30分钟，建议一次性完成。\n\n' +
+                '是否开始综合评估？'
+            );
+
+            if (confirmed) {
+                alert('正在启动综合心理健康评估...\n\n功能正在开发中，敬请期待！');
+                // window.location.href = 'comprehensive-assessment.html';
+            }
+        }
+
+        // 页面加载完成后的初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 添加卡片悬停效果
+            const cards = document.querySelectorAll('.hover-lift');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                    this.style.transition = 'transform 0.3s ease';
+                });
+
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+
+            // 显示页面加载完成提示
+            console.log('心理测评页面加载完成 - 共9项专业测评工具可用');
+        });
+    </script>
+</body>
+</html>

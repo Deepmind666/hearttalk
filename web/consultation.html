@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智慧驿站·心语同行 - 在线咨询</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- 自定义样式 -->
+    <style>
+        .temporary-message {
+            opacity: 0.7;
+        }
+
+        .temporary-message .bg-white {
+            background-color: #f8f9fa !important;
+        }
+
+        .chat-messages {
+            scrollbar-width: thin;
+            scrollbar-color: #dee2e6 transparent;
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background-color: #dee2e6;
+            border-radius: 3px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background-color: #adb5bd;
+        }
+    </style>
+    
+    <!-- 自定义样式 -->
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --primary-dark: #0b5ed7;
+            --success-color: #198754;
+            --info-color: #0dcaf0;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+        }
+        
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .hover-lift {
+            transition: transform 0.3s ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-5px);
+        }
+        
+        /* 兼容性CSS */
+        .d-flex {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: flex;
+        }
+        
+        .flex-wrap {
+            -webkit-flex-wrap: wrap;
+            -moz-flex-wrap: wrap;
+            -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+        }
+        
+        .gap-3 {
+            gap: 1rem;
+        }
+        
+        /* 兼容性备用方案 */
+        .gap-3 > * {
+            margin-right: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .gap-3 > *:last-child {
+            margin-right: 0;
+        }
+
+        .justify-content-center {
+            -webkit-box-pack: center;
+            -webkit-justify-content: center;
+            -moz-box-pack: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+        }
+
+        .align-items-center {
+            -webkit-box-align: center;
+            -webkit-align-items: center;
+            -moz-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+        }
+        
+        /* 导航栏优化样式 */
+        .navbar-brand:hover {
+            text-decoration: none !important;
+        }
+        
+        .nav-link:hover {
+            color: #0d6efd !important;
+            text-decoration: none !important;
+        }
+        
+        /* 移动端优化 */
+        @media (max-width: 768px) {
+            .navbar-brand span {
+                font-size: 1.5rem !important;
+            }
+            
+            .d-flex.flex-wrap {
+                gap: 0.5rem !important;
+            }
+            
+            .nav-link {
+                font-size: 0.9rem;
+                padding: 0.25rem 0.5rem !important;
+            }
+            
+            .btn {
+                font-size: 0.9rem;
+                padding: 0.375rem 0.75rem !important;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .navbar-brand span {
+                font-size: 1.25rem !important;
+            }
+            
+            .nav-link {
+                font-size: 0.85rem;
+            }
+            
+            .btn {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+        <div class="container">
+            <!-- 第一行：网站标题 -->
+            <div class="w-100 d-flex justify-content-center mb-2">
+                <a class="navbar-brand d-flex align-items-center text-decoration-none" href="index.html">
+                    <img src="images/2.png" alt="网站Logo" style="height: 60px; width: auto; margin-right: 15px; border-radius: 10px;">
+                    <span class="fw-bold text-primary fs-3">智慧驿站·心语同行</span>
+                </a>
+            </div>
+
+            <!-- 第二行：导航链接 -->
+            <div class="w-100 d-flex justify-content-center">
+                <div class="d-flex flex-wrap justify-content-center align-items-center gap-2 gap-md-3">
+                    <!-- 主要导航链接 -->
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="index.html">首页</a>
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="about.html">关于我们</a>
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="assessment.html">心理测评</a>
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="activities.html">党建空间</a>
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="community.html">互动社区</a>
+                    <a class="btn btn-primary px-3 py-2" href="consultation.html">在线咨询</a>
+
+                    <!-- 用户操作按钮 -->
+                    <div class="d-flex gap-1">
+                        <a href="login.html" class="nav-link text-dark px-2 py-2 text-decoration-none">登录</a>
+                        <a href="register.html" class="nav-link text-dark px-2 py-2 text-decoration-none">注册</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-primary text-white py-5">
+        <div class="container">
+            <div class="row align-items-center" style="min-height: 60vh;">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold mb-4">
+                        在线咨询
+                    </h1>
+                    <p class="lead mb-4">
+                        提供24小时智能心理健康助手和辅导员预约服务。
+                        无论何时何地，我们都在这里倾听您的心声，
+                        为您提供专业、温暖、及时的心理健康支持。
+                    </p>
+                    <div class="d-flex gap-3 flex-wrap">
+                        <a href="#ai-chat" class="btn btn-light btn-lg">
+                            <i class="fas fa-comments me-2"></i>智能助手
+                        </a>
+                        <a href="#appointment" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-calendar-alt me-2"></i>预约辅导员
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <div class="bg-white bg-opacity-10 rounded-3 p-5">
+                        <i class="fas fa-comments fa-5x mb-3"></i>
+                        <h3>心理咨询</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI智能咨询 -->
+    <section class="py-5" id="ai-chat">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">智能心理健康助手</h2>
+                <p class="text-muted">24小时在线，即时响应，温暖陪伴</p>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card border-0 shadow-lg">
+                        <div class="card-header bg-primary text-white p-3">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-white bg-opacity-20 rounded-circle p-2 me-3">
+                                    <i class="fas fa-robot fa-lg"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-0">心语智能助手</h5>
+                                    <small class="opacity-75">心理健康智能陪伴</small>
+                                </div>
+                                <div class="ms-auto">
+                                    <span class="badge bg-success">在线</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-body p-0">
+                            <!-- 聊天区域 -->
+                            <div id="chatMessages" class="chat-messages p-4" style="height: 400px; overflow-y: auto; background-color: #f8f9fa;">
+                                <!-- 欢迎消息 -->
+                                <div class="message-item mb-3">
+                                    <div class="d-flex">
+                                        <div class="bg-primary text-white rounded-circle p-2 me-3" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                                            <i class="fas fa-robot"></i>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <div class="bg-white rounded-3 p-3 shadow-sm">
+                                                <p class="mb-1">您好！我是心语智能助手，很高兴为您提供心理健康支持服务。</p>
+                                                <p class="mb-0">请告诉我您遇到的困扰或想要咨询的问题，我会尽力为您提供温暖的陪伴和建议。</p>
+                                            </div>
+                                            <small class="text-muted ms-2">刚刚</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 输入区域 -->
+                            <div class="border-top p-3">
+                                <div class="input-group">
+                                    <input type="text" id="messageInput" class="form-control" placeholder="请输入您的问题..." onkeypress="handleKeyPress(event)">
+                                    <button class="btn btn-primary" type="button" onclick="sendMessage()">
+                                        <i class="fas fa-paper-plane me-1"></i>发送
+                                    </button>
+                                </div>
+                                <div class="mt-2">
+                                    <small class="text-muted">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        <span id="apiStatusText">智能助手提供情感支持，如需深度交流请预约辅导员聊天</span>
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 专家预约 -->
+    <section class="py-5 bg-light" id="appointment">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">预约辅导员聊天</h2>
+                <p class="text-muted">专业辅导员，一对一深度交流</p>
+            </div>
+
+            <div class="row">
+                <!-- 咨询师介绍 -->
+                <div class="col-lg-4 mb-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="bg-success text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                                <i class="fas fa-user-md fa-2x"></i>
+                            </div>
+                            <h5 class="card-title">专业辅导员</h5>
+                            <p class="card-text text-muted">
+                                具备心理学专业背景<br>
+                                丰富的学生工作经验<br>
+                                擅长学业指导、情感支持等
+                            </p>
+                            <div class="mb-3">
+                                <span class="badge bg-success me-1">学业指导</span>
+                                <span class="badge bg-info me-1">情感支持</span>
+                                <span class="badge bg-warning">生活规划</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 预约表单 -->
+                <div class="col-lg-8">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-calendar-alt me-2"></i>预约辅导员聊天
+                            </h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <form id="appointmentForm">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="userName" class="form-label">姓名 *</label>
+                                        <input type="text" class="form-control" id="userName" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="userPhone" class="form-label">联系电话 *</label>
+                                        <input type="tel" class="form-control" id="userPhone" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="userEmail" class="form-label">邮箱</label>
+                                        <input type="email" class="form-control" id="userEmail">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="consultationType" class="form-label">聊天类型 *</label>
+                                        <select class="form-select" id="consultationType" required>
+                                            <option value="">请选择聊天类型</option>
+                                            <option value="study">学业困扰</option>
+                                            <option value="emotion">情感问题</option>
+                                            <option value="stress">压力疏导</option>
+                                            <option value="relationship">人际关系</option>
+                                            <option value="career">职业规划</option>
+                                            <option value="life">生活指导</option>
+                                            <option value="other">其他问题</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="preferredDate" class="form-label">希望聊天时间 *</label>
+                                        <input type="datetime-local" class="form-control" id="preferredDate" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="urgency" class="form-label">紧急程度 *</label>
+                                        <select class="form-select" id="urgency" required>
+                                            <option value="">请选择紧急程度</option>
+                                            <option value="low">一般（1-2周内）</option>
+                                            <option value="medium">较急（3-5天内）</option>
+                                            <option value="high">紧急（24小时内）</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="problemDescription" class="form-label">问题描述 *</label>
+                                        <textarea class="form-control" id="problemDescription" rows="4" placeholder="请简要描述您遇到的问题或困扰..." required></textarea>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="privacyAgree" required>
+                                            <label class="form-check-label" for="privacyAgree">
+                                                我同意并接受<a href="#" class="text-primary">隐私政策</a>和<a href="#" class="text-primary">服务条款</a>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-success btn-lg">
+                                            <i class="fas fa-calendar-check me-2"></i>提交预约申请
+                                        </button>
+                                        <button type="reset" class="btn btn-outline-secondary btn-lg ms-2">
+                                            <i class="fas fa-redo me-2"></i>重置表单
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-light py-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5 class="text-primary mb-3">智慧驿站·心语同行</h5>
+                    <p class="text-muted">
+                        以党建引领为核心，融合心理健康服务的创新平台，
+                        为师生提供专业、温暖、便捷的心理健康支持。
+                    </p>
+                </div>
+
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="text-primary mb-3">服务平台</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="assessment.html" class="text-muted text-decoration-none">心理测评</a></li>
+                        <li><a href="consultation.html" class="text-muted text-decoration-none">在线咨询</a></li>
+                        <li><a href="activities.html" class="text-muted text-decoration-none">党建空间</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="text-primary mb-3">社区</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="community.html" class="text-muted text-decoration-none">讨论区</a></li>
+                        <li><a href="about.html" class="text-muted text-decoration-none">关于我们</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h6 class="text-primary mb-3">联系方式</h6>
+                    <ul class="list-unstyled text-muted">
+                        <li><i class="fas fa-envelope me-2"></i>1403073295@qq.com</li>
+                        <li><i class="fas fa-user me-2"></i>技术联系人：李康锐</li>
+                        <li><i class="fas fa-university me-2"></i>广东工业大学自动化学院本科物联网党支部维护管理</li>
+                    </ul>
+                </div>
+            </div>
+
+            <hr class="my-4">
+
+            <div class="row align-items-center">
+                <div class="col-md-12 text-center">
+                    <p class="text-muted mb-0">
+                        &copy; 2024 智慧驿站·心语同行. 保留所有权利.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+    <!-- AI聊天功能 -->
+    <script>
+        // AI回复模板
+        const aiResponses = {
+            greetings: [
+                "您好！我理解您现在的感受。请告诉我更多关于您遇到的具体情况。",
+                "感谢您的信任。我会认真倾听您的困扰，请详细描述一下您的问题。",
+                "我很高兴能为您提供帮助。请放心，这里是一个安全的交流空间。"
+            ],
+            anxiety: [
+                "焦虑是很常见的情绪反应。建议您尝试深呼吸练习：吸气4秒，屏息4秒，呼气4秒。这可以帮助您放松。",
+                "面对焦虑，您可以尝试将注意力集中在当下。观察周围的5样东西，听4种声音，触摸3样物品，这是5-4-3接地技巧。",
+                "焦虑往往来自对未来的担忧。试着问自己：这种担心是否现实？我能控制什么？专注于可控的部分。"
+            ],
+            depression: [
+                "抑郁情绪需要被重视。请记住，寻求帮助是勇敢的表现。建议您保持规律作息，适量运动，这对改善情绪很有帮助。",
+                "当感到低落时，试着做一些小的、能带来成就感的事情。即使是整理房间或散步也是很好的开始。",
+                "抑郁不是您的错，也不是软弱的表现。如果症状持续，建议您寻求专业心理咨询师的帮助。"
+            ],
+            stress: [
+                "学习压力确实不容易应对。建议您制定合理的学习计划，将大任务分解为小目标，这样更容易管理。",
+                "压力管理的关键是平衡。确保您有足够的休息时间，适当的娱乐活动，以及与朋友家人的交流。",
+                "面对压力时，优先级很重要。列出任务清单，先处理最重要和紧急的事情，其他的可以稍后处理。"
+            ],
+            relationship: [
+                "人际关系问题很复杂，但沟通是解决的关键。试着用'我'的表达方式，比如'我感到...'而不是'你总是...'",
+                "在人际交往中，设定健康的边界很重要。您有权利说'不'，也有权利表达自己的需求和感受。",
+                "每个人都有不同的沟通方式。试着理解对方的角度，同时也要诚实地表达自己的想法。"
+            ],
+            default: [
+                "我理解您的困扰。每个人的情况都是独特的，建议您详细描述一下具体的情况，这样我能提供更有针对性的建议。",
+                "感谢您的分享。心理健康问题需要时间和耐心来处理。如果您觉得需要更深入的交流，建议预约我们的辅导员聊天。",
+                "您的感受是完全可以理解的。请记住，寻求帮助是积极的行为，您已经迈出了重要的第一步。"
+            ]
+        };
+
+        // 发送消息
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+
+            if (message === '') return;
+
+            // 添加用户消息
+            addMessage(message, 'user');
+            input.value = '';
+
+            // 显示AI正在思考
+            const thinkingMessage = addMessage('正在思考中...', 'ai', true);
+
+            try {
+                // 调用AI生成回复
+                const aiReply = await generateAIResponse(message);
+
+                // 移除思考消息
+                thinkingMessage.remove();
+
+                // 添加AI回复
+                addMessage(aiReply, 'ai');
+            } catch (error) {
+                console.error('生成回复失败:', error);
+
+                // 移除思考消息
+                thinkingMessage.remove();
+
+                // 添加错误回复
+                addMessage('抱歉，我现在遇到了一些问题，请稍后再试或联系管理员。', 'ai');
+            }
+        }
+
+        // 添加消息到聊天区域
+        function addMessage(message, sender, isTemporary = false) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message-item mb-3';
+
+            if (isTemporary) {
+                messageDiv.classList.add('temporary-message');
+            }
+
+            const currentTime = new Date().toLocaleTimeString('zh-CN', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
+            if (sender === 'user') {
+                messageDiv.innerHTML = `
+                    <div class="d-flex justify-content-end">
+                        <div class="flex-grow-1 text-end me-3">
+                            <div class="bg-primary text-white rounded-3 p-3 shadow-sm d-inline-block" style="max-width: 80%;">
+                                <p class="mb-0">${message}</p>
+                            </div>
+                            <small class="text-muted me-2">${currentTime}</small>
+                        </div>
+                        <div class="bg-secondary text-white rounded-circle p-2" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    </div>
+                `;
+            } else {
+                const iconClass = isTemporary ? 'fas fa-spinner fa-spin' : 'fas fa-robot';
+                messageDiv.innerHTML = `
+                    <div class="d-flex">
+                        <div class="bg-primary text-white rounded-circle p-2 me-3" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                            <i class="${iconClass}"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="bg-white rounded-3 p-3 shadow-sm" style="max-width: 80%;">
+                                <p class="mb-0">${message}</p>
+                            </div>
+                            ${!isTemporary ? `<small class="text-muted ms-2">${currentTime}</small>` : ''}
+                        </div>
+                    </div>
+                `;
+            }
+
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            return messageDiv; // 返回消息元素，用于后续操作
+        }
+
+        // 生成AI回复
+        async function generateAIResponse(userMessage) {
+            const apiSettings = JSON.parse(localStorage.getItem('deepseekApiSettings') || '{}');
+
+            // 如果没有配置API，使用预设回复
+            if (!apiSettings.apiKey) {
+                return getFallbackResponse(userMessage);
+            }
+
+            try {
+                const response = await fetch(apiSettings.apiUrl || 'https://api.deepseek.com/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiSettings.apiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: apiSettings.modelName || 'deepseek-chat',
+                        messages: [
+                            {
+                                role: 'system',
+                                content: apiSettings.systemPrompt || '你是一个专业的心理健康智能助手，名叫"心语"。你的任务是为用户提供温暖的情感支持和心理健康建议。请用温和、理解、专业的语气回复用户，避免给出具体的医疗诊断，如果用户需要专业治疗建议预约辅导员。'
+                            },
+                            {
+                                role: 'user',
+                                content: userMessage
+                            }
+                        ],
+                        max_tokens: apiSettings.maxTokens || 1000,
+                        temperature: apiSettings.temperature || 0.7
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                return data.choices?.[0]?.message?.content || '抱歉，我现在无法回复，请稍后再试。';
+
+            } catch (error) {
+                console.error('DeepSeek API调用失败:', error);
+                // API调用失败时使用预设回复
+                return getFallbackResponse(userMessage);
+            }
+        }
+
+        // 获取预设回复（当API不可用时）
+        function getFallbackResponse(userMessage) {
+            const message = userMessage.toLowerCase();
+
+            if (message.includes('焦虑') || message.includes('紧张') || message.includes('担心')) {
+                return getRandomResponse(aiResponses.anxiety);
+            } else if (message.includes('抑郁') || message.includes('难过') || message.includes('低落') || message.includes('沮丧')) {
+                return getRandomResponse(aiResponses.depression);
+            } else if (message.includes('压力') || message.includes('学习') || message.includes('考试') || message.includes('作业')) {
+                return getRandomResponse(aiResponses.stress);
+            } else if (message.includes('朋友') || message.includes('同学') || message.includes('家人') || message.includes('关系')) {
+                return getRandomResponse(aiResponses.relationship);
+            } else if (message.includes('你好') || message.includes('hello') || message.includes('hi')) {
+                return getRandomResponse(aiResponses.greetings);
+            } else {
+                return getRandomResponse(aiResponses.default);
+            }
+        }
+
+        // 获取随机回复
+        function getRandomResponse(responses) {
+            return responses[Math.floor(Math.random() * responses.length)];
+        }
+
+        // 处理回车键
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        // 预约表单提交
+        document.getElementById('appointmentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // 获取表单数据
+            const formData = {
+                id: Date.now(), // 使用时间戳作为ID
+                name: document.getElementById('userName').value,
+                phone: document.getElementById('userPhone').value,
+                email: document.getElementById('userEmail').value,
+                type: document.getElementById('consultationType').value,
+                preferredDate: document.getElementById('preferredDate').value,
+                urgency: document.getElementById('urgency').value,
+                description: document.getElementById('problemDescription').value,
+                status: 'pending', // 默认状态为待处理
+                submitTime: new Date().toISOString() // 提交时间
+            };
+
+            // 保存到localStorage
+            const appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+            appointments.push(formData);
+            localStorage.setItem('appointments', JSON.stringify(appointments));
+
+            // 模拟提交
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>提交中...';
+            submitBtn.disabled = true;
+
+            setTimeout(() => {
+                alert('预约申请已提交成功！\n\n辅导员会在24小时内联系您确认具体的聊天时间。\n请保持电话畅通。\n\n预约信息已发送给管理员，您也可以联系管理员查看处理进度。');
+
+                // 重置表单
+                document.getElementById('appointmentForm').reset();
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 2000);
+        });
+
+        // 检查API状态
+        function checkApiStatus() {
+            const apiSettings = JSON.parse(localStorage.getItem('deepseekApiSettings') || '{}');
+            const statusText = document.getElementById('apiStatusText');
+
+            if (!apiSettings.apiKey) {
+                statusText.innerHTML = '当前使用预设回复模式，管理员可配置DeepSeek API获得更智能的对话体验';
+                statusText.className = 'text-warning';
+            } else {
+                statusText.innerHTML = '已连接心理健康服务大模型，为您提供智能对话服务！';
+                statusText.className = 'text-success';
+            }
+        }
+
+        // 页面加载完成后的初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 设置最小预约时间为当前时间
+            const now = new Date();
+            now.setHours(now.getHours() + 1); // 至少提前1小时预约
+            document.getElementById('preferredDate').min = now.toISOString().slice(0, 16);
+
+            // 检查API状态
+            checkApiStatus();
+        });
+    </script>
+</body>
+</html>

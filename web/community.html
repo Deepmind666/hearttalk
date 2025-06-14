@@ -1,0 +1,2430 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智慧驿站·心语同行 - 互动社区</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- 自定义样式 -->
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --primary-dark: #0b5ed7;
+            --success-color: #198754;
+            --info-color: #0dcaf0;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+        }
+        
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .hover-lift {
+            transition: transform 0.3s ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-5px);
+        }
+        
+        /* 兼容性CSS */
+        .d-flex {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: flex;
+        }
+        
+        .flex-wrap {
+            -webkit-flex-wrap: wrap;
+            -moz-flex-wrap: wrap;
+            -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+        }
+        
+        .gap-3 {
+            gap: 1rem;
+        }
+        
+        /* 兼容性备用方案 */
+        .gap-3 > * {
+            margin-right: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .gap-3 > *:last-child {
+            margin-right: 0;
+        }
+
+        .justify-content-center {
+            -webkit-box-pack: center;
+            -webkit-justify-content: center;
+            -moz-box-pack: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+        }
+
+        .align-items-center {
+            -webkit-box-align: center;
+            -webkit-align-items: center;
+            -moz-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+        }
+        
+        /* 导航栏优化样式 */
+        .navbar-brand:hover {
+            text-decoration: none !important;
+        }
+
+        .nav-link:hover {
+            color: #0d6efd !important;
+            text-decoration: none !important;
+        }
+
+        /* 确保导航按钮大小一致 */
+        .navbar .nav-link {
+            padding: 0.5rem 0.5rem !important;
+            font-size: 1rem !important;
+            line-height: 1.5 !important;
+            display: inline-block !important;
+            min-height: 38px !important;
+            display: flex !important;
+            align-items: center !important;
+        }
+        
+        /* 移动端优化 */
+        @media (max-width: 768px) {
+            .navbar-brand span {
+                font-size: 1.5rem !important;
+            }
+            
+            .d-flex.flex-wrap {
+                gap: 0.5rem !important;
+            }
+            
+            .nav-link {
+                font-size: 0.9rem;
+                padding: 0.25rem 0.5rem !important;
+            }
+            
+            .btn {
+                font-size: 0.9rem;
+                padding: 0.375rem 0.75rem !important;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .navbar-brand span {
+                font-size: 1.25rem !important;
+            }
+            
+            .nav-link {
+                font-size: 0.85rem;
+            }
+            
+            .btn {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+        <div class="container">
+            <!-- 第一行：网站标题 -->
+            <div class="w-100 d-flex justify-content-center mb-2">
+                <a class="navbar-brand d-flex align-items-center text-decoration-none" href="index.html">
+                    <img src="images/2.png" alt="网站Logo" style="height: 60px; width: auto; margin-right: 15px; border-radius: 10px;">
+                    <span class="fw-bold text-primary fs-3">智慧驿站·心语同行</span>
+                </a>
+            </div>
+
+            <!-- 第二行：导航链接 -->
+            <div class="w-100 d-flex justify-content-center">
+                <div class="d-flex flex-wrap justify-content-center align-items-center gap-2 gap-md-3">
+                    <!-- 主要导航链接 -->
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="index.html">首页</a>
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="about.html">关于我们</a>
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="assessment.html">心理测评</a>
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="activities.html">党建空间</a>
+                    <a class="btn btn-primary px-3 py-2" href="community.html">互动社区</a>
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="consultation.html">在线咨询</a>
+
+                    <!-- 用户操作按钮 -->
+                    <div class="d-flex gap-1 user-actions">
+                        <a href="login.html" class="nav-link text-dark px-2 py-2 text-decoration-none">登录</a>
+                        <a href="register.html" class="nav-link text-dark px-2 py-2 text-decoration-none">注册</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-primary text-white py-5">
+        <div class="container">
+            <div class="row align-items-center" style="min-height: 60vh;">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold mb-4">
+                        互动社区论坛
+                    </h1>
+                    <p class="lead mb-4">
+                        心语同行，共建温暖社区。在这里，您可以分享心得、寻求帮助、互相支持。
+                        我们致力于创建一个安全、包容、积极的心理健康交流平台，
+                        让每个人都能在这里找到理解和支持。
+                    </p>
+                    <div class="d-flex gap-3 flex-wrap">
+                        <a href="#forum" class="btn btn-light btn-lg">
+                            <i class="fas fa-comments me-2"></i>进入论坛
+                        </a>
+                        <a href="#guidelines" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-heart me-2"></i>社区理念
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <div class="bg-white bg-opacity-10 rounded-3 p-5">
+                        <i class="fas fa-users fa-5x mb-3"></i>
+                        <h3>心语社区</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 社区理念 -->
+    <section class="py-5" id="guidelines">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">社区理念</h2>
+                <p class="text-muted">心语同行，共建温暖家园</p>
+            </div>
+
+            <div class="row g-4 mb-5">
+                <div class="col-lg-3 col-md-6">
+                    <div class="card border-0 shadow-sm h-100 text-center">
+                        <div class="card-body p-4">
+                            <div class="bg-primary text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                <i class="fas fa-heart fa-2x"></i>
+                            </div>
+                            <h5 class="card-title">温暖包容</h5>
+                            <p class="card-text text-muted">
+                                每个人都值得被理解和关爱，我们用温暖的心拥抱每一个求助的声音
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="card border-0 shadow-sm h-100 text-center">
+                        <div class="card-body p-4">
+                            <div class="bg-success text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                <i class="fas fa-shield-alt fa-2x"></i>
+                            </div>
+                            <h5 class="card-title">安全保护</h5>
+                            <p class="card-text text-muted">
+                                严格保护用户隐私，营造安全的交流环境，让大家敢于分享真实感受
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="card border-0 shadow-sm h-100 text-center">
+                        <div class="card-body p-4">
+                            <div class="bg-info text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                <i class="fas fa-hands-helping fa-2x"></i>
+                            </div>
+                            <h5 class="card-title">互助支持</h5>
+                            <p class="card-text text-muted">
+                                鼓励成员之间互相帮助，分享经验，共同成长，传递正能量
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="card border-0 shadow-sm h-100 text-center">
+                        <div class="card-body p-4">
+                            <div class="bg-warning text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                <i class="fas fa-lightbulb fa-2x"></i>
+                            </div>
+                            <h5 class="card-title">专业指导</h5>
+                            <p class="card-text text-muted">
+                                提供专业的心理健康知识和建议，帮助大家更好地理解和管理情绪
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 论坛主体 -->
+    <section class="py-5 bg-light" id="forum">
+        <div class="container">
+            <div class="row">
+                <!-- 侧边栏 -->
+                <div class="col-lg-3 mb-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-primary text-white">
+                            <h6 class="mb-0"><i class="fas fa-list me-2"></i>论坛版块</h6>
+                        </div>
+                        <div class="list-group list-group-flush">
+                            <a href="javascript:void(0)" class="list-group-item list-group-item-action active" onclick="switchCategory('all', this)">
+                                <i class="fas fa-home me-2"></i>全部话题
+                                <span class="badge bg-primary rounded-pill float-end" id="count-all">0</span>
+                            </a>
+                            <a href="javascript:void(0)" class="list-group-item list-group-item-action" onclick="switchCategory('study', this)">
+                                <i class="fas fa-graduation-cap me-2"></i>学习压力
+                                <span class="badge bg-secondary rounded-pill float-end" id="count-study">0</span>
+                            </a>
+                            <a href="javascript:void(0)" class="list-group-item list-group-item-action" onclick="switchCategory('emotion', this)">
+                                <i class="fas fa-heart me-2"></i>情感交流
+                                <span class="badge bg-secondary rounded-pill float-end" id="count-emotion">0</span>
+                            </a>
+                            <a href="javascript:void(0)" class="list-group-item list-group-item-action" onclick="switchCategory('life', this)">
+                                <i class="fas fa-coffee me-2"></i>生活分享
+                                <span class="badge bg-secondary rounded-pill float-end" id="count-life">0</span>
+                            </a>
+                            <a href="javascript:void(0)" class="list-group-item list-group-item-action" onclick="switchCategory('help', this)">
+                                <i class="fas fa-question-circle me-2"></i>求助互助
+                                <span class="badge bg-secondary rounded-pill float-end" id="count-help">0</span>
+                            </a>
+                            <a href="javascript:void(0)" class="list-group-item list-group-item-action" onclick="switchCategory('experience', this)">
+                                <i class="fas fa-star me-2"></i>经验分享
+                                <span class="badge bg-secondary rounded-pill float-end" id="count-experience">0</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- 发帖按钮 -->
+                    <div class="card border-0 shadow-sm mt-3">
+                        <div class="card-body text-center">
+                            <button class="btn btn-primary btn-lg w-100" onclick="showNewPostModal()">
+                                <i class="fas fa-plus me-2"></i>发表话题
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 社区统计 -->
+                    <div class="card border-0 shadow-sm mt-3">
+                        <div class="card-header">
+                            <h6 class="mb-0"><i class="fas fa-users me-2"></i>社区统计</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>总话题数：</span>
+                                <span class="fw-bold" id="totalPosts">0</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>总回复数：</span>
+                                <span class="fw-bold" id="totalReplies">0</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>注册用户：</span>
+                                <span class="fw-bold" id="totalUsers">0</span>
+                            </div>
+                            <hr>
+                            <button class="btn btn-outline-secondary btn-sm w-100 mb-2" onclick="forceUpdateContent()" title="更新到最新内容">
+                                <i class="fas fa-sync me-1"></i>更新内容
+                            </button>
+                            <button class="btn btn-outline-secondary btn-sm w-100" onclick="resetForumData()" title="重置论坛数据（管理员专用）" id="resetDataBtn" style="display: none;">
+                                <i class="fas fa-refresh me-1"></i>重置数据
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 主内容区 -->
+                <div class="col-lg-9">
+                    <!-- 搜索和筛选 -->
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="searchInput" placeholder="搜索话题...">
+                                        <button class="btn btn-outline-secondary" onclick="searchPosts()">
+                                            <i class="fas fa-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 text-end">
+                                    <div class="btn-group" role="group">
+                                        <input type="radio" class="btn-check" name="sortBy" id="sortLatest" value="latest" checked>
+                                        <label class="btn btn-outline-primary" for="sortLatest">最新</label>
+
+                                        <input type="radio" class="btn-check" name="sortBy" id="sortHot" value="hot">
+                                        <label class="btn btn-outline-primary" for="sortHot">热门</label>
+
+                                        <input type="radio" class="btn-check" name="sortBy" id="sortReplies" value="replies">
+                                        <label class="btn btn-outline-primary" for="sortReplies">回复</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 话题列表 -->
+                    <div id="postsContainer">
+                        <!-- 话题将通过JavaScript动态生成 -->
+                    </div>
+
+                    <!-- 分页 -->
+                    <nav aria-label="话题分页" class="mt-4">
+                        <ul class="pagination justify-content-center" id="pagination">
+                            <!-- 分页将通过JavaScript动态生成 -->
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 发表话题模态框 -->
+    <div class="modal fade" id="newPostModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-plus me-2"></i>发表新话题</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="newPostForm">
+                        <div class="mb-3">
+                            <label for="postTitle" class="form-label">话题标题 <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="postTitle" placeholder="请输入话题标题" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="postCategory" class="form-label">选择版块 <span class="text-danger">*</span></label>
+                            <select class="form-control" id="postCategory" required>
+                                <option value="">请选择版块</option>
+                                <option value="study">学习压力</option>
+                                <option value="emotion">情感交流</option>
+                                <option value="life">生活分享</option>
+                                <option value="help">求助互助</option>
+                                <option value="experience">经验分享</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="postContent" class="form-label">话题内容 <span class="text-danger">*</span></label>
+                            <textarea class="form-control" id="postContent" rows="8" placeholder="分享您的想法、经历或问题..." required></textarea>
+                            <div class="form-text">请友善交流，遵守社区规范</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="isAnonymous">
+                                <label class="form-check-label" for="isAnonymous">
+                                    匿名发布（将显示为"匿名用户"）
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" onclick="submitNewPost()">
+                        <i class="fas fa-paper-plane me-2"></i>发布话题
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 话题详情模态框 -->
+    <div class="modal fade" id="postDetailModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="postDetailTitle">话题详情</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="postDetailContent">
+                        <!-- 话题详情内容将通过JavaScript动态生成 -->
+                    </div>
+
+                    <!-- 回复区域 -->
+                    <div class="mt-4" id="replySection">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="mb-0"><i class="fas fa-comments me-2"></i>回复讨论</h6>
+                            <button class="btn btn-outline-primary btn-sm" onclick="showNewPostModalFromDetail()" id="newPostFromDetailBtn">
+                                <i class="fas fa-plus me-1"></i>发表新话题
+                            </button>
+                        </div>
+                        <div id="repliesContainer">
+                            <!-- 回复列表将通过JavaScript动态生成 -->
+                        </div>
+
+                        <!-- 发表回复 -->
+                        <div class="card mt-3" id="replyForm">
+                            <div class="card-body">
+                                <form id="newReplyForm">
+                                    <div class="mb-3">
+                                        <textarea class="form-control" id="replyContent" rows="3" placeholder="写下您的回复..." required></textarea>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="replyAnonymous">
+                                            <label class="form-check-label" for="replyAnonymous">
+                                                匿名回复
+                                            </label>
+                                        </div>
+                                        <button type="button" class="btn btn-primary" onclick="submitReply()">
+                                            <i class="fas fa-reply me-2"></i>发表回复
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-light py-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5 class="text-primary mb-3">智慧驿站·心语同行</h5>
+                    <p class="text-muted">
+                        以党建引领为核心，融合心理健康服务的创新平台，
+                        为师生提供专业、温暖、便捷的心理健康支持。
+                    </p>
+                </div>
+
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="text-primary mb-3">服务平台</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="assessment.html" class="text-muted text-decoration-none">心理测评</a></li>
+                        <li><a href="consultation.html" class="text-muted text-decoration-none">在线咨询</a></li>
+                        <li><a href="activities.html" class="text-muted text-decoration-none">党建空间</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="text-primary mb-3">社区</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="community.html" class="text-muted text-decoration-none">讨论区</a></li>
+                        <li><a href="about.html" class="text-muted text-decoration-none">关于我们</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h6 class="text-primary mb-3">联系方式</h6>
+                    <ul class="list-unstyled text-muted">
+                        <li><i class="fas fa-envelope me-2"></i>1403073295@qq.com</li>
+                        <li><i class="fas fa-user me-2"></i>技术联系人：李康锐</li>
+                        <li><i class="fas fa-university me-2"></i>广东工业大学自动化学院本科物联网党支部维护管理</li>
+                    </ul>
+                </div>
+            </div>
+
+            <hr class="my-4">
+
+            <div class="row align-items-center">
+                <div class="col-md-12 text-center">
+                    <p class="text-muted mb-0">
+                        &copy; 2024 智慧驿站·心语同行. 保留所有权利.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+    <!-- 用户状态管理 -->
+    <script src="js/user-status.js"></script>
+
+    <!-- 社区论坛功能 -->
+    <script>
+        // 全局变量
+        let currentUser = null;
+        let currentCategory = 'all';
+        let currentSort = 'latest';
+        let currentPage = 1;
+        const postsPerPage = 10;
+
+        // 版块配置
+        const categories = {
+            'study': { name: '学习压力', icon: 'fas fa-graduation-cap', color: '#0d6efd' },
+            'emotion': { name: '情感交流', icon: 'fas fa-heart', color: '#dc3545' },
+            'life': { name: '生活分享', icon: 'fas fa-coffee', color: '#198754' },
+            'help': { name: '求助互助', icon: 'fas fa-question-circle', color: '#ffc107' },
+            'experience': { name: '经验分享', icon: 'fas fa-star', color: '#6f42c1' }
+        };
+
+        // 获取当前用户
+        function getCurrentUser() {
+            return JSON.parse(localStorage.getItem('currentUser') || 'null');
+        }
+
+        // 获取论坛数据
+        function getForumData() {
+            return {
+                posts: JSON.parse(localStorage.getItem('forumPosts') || '[]'),
+                replies: JSON.parse(localStorage.getItem('forumReplies') || '[]')
+            };
+        }
+
+        // 初始化预设热门话题
+        function initializeDefaultPosts() {
+            const forumData = getForumData();
+
+            // 检查是否需要更新到最新版本的预设数据
+            const currentVersion = localStorage.getItem('forumDataVersion');
+            const latestVersion = '2.0'; // 更新版本号
+
+            if (forumData.posts.length > 0 && currentVersion === latestVersion) {
+                return;
+            }
+
+            const defaultPosts = [
+                {
+                    id: 1001,
+                    title: "期末考试压力大，如何调节心态？",
+                    content: "马上就要期末考试了，感觉压力特别大，每天都很焦虑，晚上也睡不好。有没有什么好的方法可以帮助调节心态，缓解考试焦虑呢？希望大家分享一些经验。",
+                    category: "study",
+                    author: "学习小助手",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(), // 2天前
+                    views: 156,
+                    replies: 8,
+                    lastReplyTime: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString() // 3小时前
+                },
+                {
+                    id: 1002,
+                    title: "分享一些缓解焦虑的小技巧",
+                    content: "最近学会了一些缓解焦虑的方法，想和大家分享：\n\n1. 深呼吸练习：4-7-8呼吸法\n2. 正念冥想：每天10分钟\n3. 运动放松：散步或瑜伽\n4. 写日记：记录情绪变化\n\n这些方法对我很有帮助，希望也能帮到有需要的朋友。",
+                    category: "experience",
+                    author: "心理小达人",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(), // 1天前
+                    views: 203,
+                    replies: 12,
+                    lastReplyTime: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString() // 1小时前
+                },
+                {
+                    id: 1003,
+                    title: "室友关系处理不好，感觉很困扰",
+                    content: "和室友的关系最近变得很紧张，因为一些生活习惯的差异产生了矛盾。我试图沟通但效果不好，现在每天回宿舍都感觉很压抑。请问大家有什么好的建议吗？",
+                    category: "emotion",
+                    author: "匿名用户",
+                    authorId: null,
+                    isAnonymous: true,
+                    createTime: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(), // 6小时前
+                    views: 89,
+                    replies: 5,
+                    lastReplyTime: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString() // 2小时前
+                },
+                {
+                    id: 1004,
+                    title: "推荐几本心理健康相关的好书",
+                    content: "想给大家推荐几本我觉得很不错的心理健康书籍：\n\n📚《情绪急救》- 盖伊·温奇\n📚《不完美，不要紧》- 海蒂·格兰特·哈尔沃森\n📚《正念的奇迹》- 一行禅师\n📚《心流》- 米哈里·契克森米哈赖\n\n这些书都很实用，对理解和管理情绪很有帮助。",
+                    category: "life",
+                    author: "读书爱好者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString(), // 12小时前
+                    views: 134,
+                    replies: 7,
+                    lastReplyTime: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString() // 4小时前
+                },
+                {
+                    id: 1005,
+                    title: "失眠问题求助，已经持续一周了",
+                    content: "最近一周都睡不好，躺在床上翻来覆去就是睡不着，白天精神状态很差，影响学习和生活。试过数羊、听音乐都没用。有经验的朋友能给些建议吗？",
+                    category: "help",
+                    author: "夜猫子同学",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString(), // 8小时前
+                    views: 67,
+                    replies: 4,
+                    lastReplyTime: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString() // 1小时前
+                },
+                {
+                    id: 1006,
+                    title: "今天心情特别好，想和大家分享快乐",
+                    content: "今天收到了期待已久的好消息，心情特别棒！☀️ 想和大家分享这份快乐。记得有人说过，快乐分享给别人就会变成双倍的快乐。希望看到这个帖子的朋友们也能感受到这份正能量！",
+                    category: "life",
+                    author: "阳光小天使",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
+                    views: 45,
+                    replies: 6,
+                    lastReplyTime: new Date(Date.now() - 30 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 1007,
+                    title: "如何平衡学习和社团活动？",
+                    content: "最近加入了几个社团，活动很多很有趣，但是发现学习时间被挤压了。期中考试成绩不太理想，家长也有些担心。想问问大家是怎么平衡学习和课外活动的？",
+                    category: "study",
+                    author: "忙碌的大二生",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 16 * 60 * 60 * 1000).toISOString(),
+                    views: 128,
+                    replies: 9,
+                    lastReplyTime: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 1008,
+                    title: "分手后如何走出阴霾？",
+                    content: "和交往两年的对象分手了，虽然是和平分手，但还是很难过。每天都没什么精神，做什么都提不起兴趣。朋友们都说时间会冲淡一切，但现在真的很痛苦。有过类似经历的朋友能分享一下是怎么走出来的吗？",
+                    category: "emotion",
+                    author: "匿名用户",
+                    authorId: null,
+                    isAnonymous: true,
+                    createTime: new Date(Date.now() - 10 * 60 * 60 * 1000).toISOString(),
+                    views: 89,
+                    replies: 11,
+                    lastReplyTime: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 1009,
+                    title: "推荐一些减压的小游戏和APP",
+                    content: "最近压力比较大，想找一些能够放松心情的小游戏或者APP。不要太复杂的，就是能够在课间或者睡前玩一下，帮助放松的那种。大家有什么好推荐吗？\n\n我先推荐几个：\n🎮 纪念碑谷 - 画面很美，音乐很棒\n🧘 潮汐 - 白噪音和冥想\n🌱 森林 - 专注和时间管理",
+                    category: "life",
+                    author: "游戏爱好者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 14 * 60 * 60 * 1000).toISOString(),
+                    views: 167,
+                    replies: 15,
+                    lastReplyTime: new Date(Date.now() - 45 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 1010,
+                    title: "社交恐惧症怎么办？不敢和陌生人说话",
+                    content: "我从小就比较内向，现在上大学了，发现自己有严重的社交恐惧。在课堂上不敢发言，小组讨论时也很紧张，和陌生人说话会脸红心跳。这样下去很影响学习和生活，求助大家有什么好的建议吗？",
+                    category: "help",
+                    author: "内向的小羊",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 18 * 60 * 60 * 1000).toISOString(),
+                    views: 134,
+                    replies: 13,
+                    lastReplyTime: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 1011,
+                    title: "从重度拖延症患者到高效学习者的转变",
+                    content: "想和大家分享我克服拖延症的经历。以前我是个严重的拖延症患者，作业总是拖到最后一刻，考试前才开始复习。后来通过一些方法，现在基本能够按计划完成任务了。\n\n主要方法：\n1. 番茄工作法 - 25分钟专注+5分钟休息\n2. 任务分解 - 把大任务分成小步骤\n3. 奖励机制 - 完成任务后给自己小奖励\n4. 找学习伙伴 - 互相监督\n\n希望能帮到有同样困扰的朋友！",
+                    category: "experience",
+                    author: "逆袭小能手",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 20 * 60 * 60 * 1000).toISOString(),
+                    views: 245,
+                    replies: 18,
+                    lastReplyTime: new Date(Date.now() - 20 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 1012,
+                    title: "家庭压力太大，父母期望过高怎么办？",
+                    content: "父母对我的期望很高，总是拿我和别人家的孩子比较。虽然知道他们是为了我好，但压力真的很大。每次考试成绩不理想，他们就会很失望，我也很愧疚。想知道大家是怎么处理这种情况的？",
+                    category: "emotion",
+                    author: "压力山大的学生",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 22 * 60 * 60 * 1000).toISOString(),
+                    views: 178,
+                    replies: 14,
+                    lastReplyTime: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 1013,
+                    title: "大学生活感到迷茫，不知道未来方向",
+                    content: "现在大三了，看着周围同学都有明确的目标，有的准备考研，有的准备工作，有的准备出国。而我却感到很迷茫，不知道自己想要什么，也不知道适合做什么。这种迷茫感让我很焦虑，有时候甚至怀疑自己的选择。",
+                    category: "help",
+                    author: "迷茫的大三生",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 26 * 60 * 60 * 1000).toISOString(),
+                    views: 156,
+                    replies: 12,
+                    lastReplyTime: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 1014,
+                    title: "如何建立良好的作息习惯？",
+                    content: "一直想要早睡早起，但总是做不到。晚上刷手机到很晚，早上起不来，白天没精神。这样的恶性循环让我很困扰。请问大家有什么实用的方法可以帮助建立良好的作息习惯吗？",
+                    category: "life",
+                    author: "夜猫子改造计划",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 28 * 60 * 60 * 1000).toISOString(),
+                    views: 198,
+                    replies: 16,
+                    lastReplyTime: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 1015,
+                    title: "考研压力大，如何保持心态平衡？",
+                    content: "准备考研已经半年了，最近压力越来越大。看到进度慢的时候就很焦虑，担心考不上。有时候学不进去，又会自责。身边也有朋友因为压力太大放弃了。想问问考研过来人是怎么调节心态的？",
+                    category: "study",
+                    author: "考研路上",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 30 * 60 * 60 * 1000).toISOString(),
+                    views: 223,
+                    replies: 19,
+                    lastReplyTime: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 1016,
+                    title: "分享我的冥想入门经验",
+                    content: "开始练习冥想已经三个月了，感觉对情绪管理和专注力都有很大帮助。刚开始的时候也觉得很难，坐不住，脑子里各种想法。现在想分享一些入门经验：\n\n🧘‍♀️ 从5分钟开始，不要贪多\n🎵 可以用引导音频，推荐Headspace\n🕐 固定时间练习，比如每天早上\n🪑 找个舒适的姿势，不一定要盘腿\n💭 不要强迫自己不想，观察想法就好\n\n希望能帮到想尝试冥想的朋友！",
+                    category: "experience",
+                    author: "冥想小白",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 32 * 60 * 60 * 1000).toISOString(),
+                    views: 187,
+                    replies: 13,
+                    lastReplyTime: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 1017,
+                    title: "第一次离家住校，想家怎么办？",
+                    content: "刚上大学一个月，第一次离开家这么远。虽然室友都很好，学校生活也还不错，但还是经常想家，特别是晚上的时候。有时候会偷偷哭，不敢让室友看到。这种情况正常吗？多久能适应呢？",
+                    category: "emotion",
+                    author: "想家的新生",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 34 * 60 * 60 * 1000).toISOString(),
+                    views: 145,
+                    replies: 17,
+                    lastReplyTime: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 1018,
+                    title: "如何克服完美主义倾向？",
+                    content: "我发现自己有很严重的完美主义倾向，做什么事情都要求完美，结果经常因为害怕做不好而拖延，或者花费过多时间在细节上。这样既影响效率，也让自己很累。有没有什么方法可以改善这种情况？",
+                    category: "help",
+                    author: "完美主义困扰者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 36 * 60 * 60 * 1000).toISOString(),
+                    views: 167,
+                    replies: 14,
+                    lastReplyTime: new Date(Date.now() - 7 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 1019,
+                    title: "推荐一些提升专注力的方法",
+                    content: "作为一个注意力容易分散的人，我尝试了很多方法来提升专注力，现在想分享一些有效的：\n\n🎯 环境整理：保持桌面整洁\n📱 手机管理：学习时开启专注模式\n⏰ 时间分块：用番茄工作法\n🎵 背景音乐：选择无歌词的轻音乐\n💧 保持水分：适量饮水保持大脑活跃\n🌿 绿植陪伴：在桌上放一盆小植物\n\n希望对有同样困扰的朋友有帮助！",
+                    category: "experience",
+                    author: "专注力训练师",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 38 * 60 * 60 * 1000).toISOString(),
+                    views: 234,
+                    replies: 21,
+                    lastReplyTime: new Date(Date.now() - 25 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 1020,
+                    title: "大学期间如何培养兴趣爱好？",
+                    content: "感觉自己除了学习就没有什么特别的兴趣爱好，生活比较单调。看到室友们都有自己的爱好，有的喜欢摄影，有的喜欢音乐，有的喜欢运动，我也想培养一些兴趣爱好，让生活更丰富一些。大家有什么建议吗？",
+                    category: "life",
+                    author: "寻找兴趣的人",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 40 * 60 * 60 * 1000).toISOString(),
+                    views: 156,
+                    replies: 18,
+                    lastReplyTime: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 1021,
+                    title: "如何应对学习中的挫折感？",
+                    content: "最近在学一门比较难的课程，总是遇到不会的问题，感觉很挫败。有时候看着别人都懂了，就我还在那里困惑，就会怀疑自己的能力。这种挫折感让我很难受，甚至有点想放弃。请问大家是怎么应对学习中的挫折的？",
+                    category: "study",
+                    author: "学习路上的困惑者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 42 * 60 * 60 * 1000).toISOString(),
+                    views: 189,
+                    replies: 16,
+                    lastReplyTime: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 1022,
+                    title: "异地恋如何维持？感觉越来越难了",
+                    content: "和男朋友异地恋已经一年多了，最近感觉关系越来越难维持。平时只能通过视频聊天，但是时间久了话题也越来越少，有时候还会因为一些小事吵架。看着身边的朋友都是近距离恋爱，有时候真的很羡慕。有经验的朋友能给些建议吗？",
+                    category: "emotion",
+                    author: "匿名用户",
+                    authorId: null,
+                    isAnonymous: true,
+                    createTime: new Date(Date.now() - 44 * 60 * 60 * 1000).toISOString(),
+                    views: 145,
+                    replies: 13,
+                    lastReplyTime: new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 1023,
+                    title: "分享我的时间管理心得",
+                    content: "经过一年多的摸索，我总结了一套适合自己的时间管理方法，效果还不错：\n\n📅 周计划：每周日制定下周计划\n📝 日清单：每天列出3-5个重要任务\n⏰ 时间块：给不同类型任务分配固定时间\n🎯 优先级：用重要紧急四象限法\n📊 复盘：每天晚上回顾当天完成情况\n🎁 奖励：完成目标后给自己小奖励\n\n关键是要根据自己的情况调整，找到适合的节奏。",
+                    category: "experience",
+                    author: "时间管理实践者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 46 * 60 * 60 * 1000).toISOString(),
+                    views: 278,
+                    replies: 24,
+                    lastReplyTime: new Date(Date.now() - 15 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 1024,
+                    title: "室友总是很晚回来，影响休息怎么办？",
+                    content: "室友经常很晚才回宿舍，有时候是学习到很晚，有时候是和朋友聚会。回来的时候动静比较大，会影响我的睡眠。我是那种比较容易被吵醒的人，这样下去身体吃不消。想和室友沟通但又怕影响关系，不知道该怎么办。",
+                    category: "help",
+                    author: "睡眠困扰者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString(),
+                    views: 123,
+                    replies: 11,
+                    lastReplyTime: new Date(Date.now() - 9 * 60 * 60 * 1000).toISOString()
+                },
+
+                // 学习压力版块新增话题
+                {
+                    id: 1025,
+                    title: "专业课太难了，感觉跟不上进度",
+                    content: "这学期选了一门专业核心课，老师讲得很快，内容也很抽象。每次上课都感觉云里雾里，作业也做得很吃力。看到其他同学都能跟上，我就更焦虑了。是我基础太差还是学习方法有问题？",
+                    category: "study",
+                    author: "学习困难户",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 50 * 60 * 60 * 1000).toISOString(),
+                    views: 198,
+                    replies: 15,
+                    lastReplyTime: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 1026,
+                    title: "如何提高记忆力？总是记不住知识点",
+                    content: "最近发现自己的记忆力越来越差，刚背过的单词转眼就忘，课堂笔记复习时也想不起来当时的内容。试过很多方法，比如重复背诵、做思维导图，但效果都不太好。有没有什么科学有效的记忆方法？",
+                    category: "study",
+                    author: "记忆力困扰者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 52 * 60 * 60 * 1000).toISOString(),
+                    views: 167,
+                    replies: 13,
+                    lastReplyTime: new Date(Date.now() - 7 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 1027,
+                    title: "学习效率低下，一天下来没学到什么",
+                    content: "每天都在图书馆坐很久，但感觉效率很低。经常走神，刷手机，或者看书看不进去。明明花了很多时间，但学习效果很差。看到别人学习那么专注，我就很羡慕。怎样才能提高学习效率呢？",
+                    category: "study",
+                    author: "效率焦虑者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 54 * 60 * 60 * 1000).toISOString(),
+                    views: 234,
+                    replies: 18,
+                    lastReplyTime: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString()
+                },
+
+                // 情感交流版块新增话题
+                {
+                    id: 1028,
+                    title: "感觉自己很孤独，没有真正的朋友",
+                    content: "虽然认识很多同学，平时也会一起吃饭聊天，但总感觉没有真正深入的友谊。大家都很忙，聚在一起也多是聊些表面的话题。有时候想找人倾诉内心的想法，却发现没有合适的人。这种孤独感让我很难受。",
+                    category: "emotion",
+                    author: "匿名用户",
+                    authorId: null,
+                    isAnonymous: true,
+                    createTime: new Date(Date.now() - 56 * 60 * 60 * 1000).toISOString(),
+                    views: 178,
+                    replies: 16,
+                    lastReplyTime: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 1029,
+                    title: "和好朋友因为小事闹矛盾了",
+                    content: "和室友兼好友因为一件小事产生了分歧，现在关系变得很尴尬。我们都是比较要强的性格，谁都不愿意先道歉。但我真的很珍惜这段友谊，不想因为这点小事就破坏关系。该怎么办呢？",
+                    category: "emotion",
+                    author: "友谊珍惜者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 58 * 60 * 60 * 1000).toISOString(),
+                    views: 145,
+                    replies: 12,
+                    lastReplyTime: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 1030,
+                    title: "对未来感到迷茫和不安",
+                    content: "马上就要毕业了，但对未来充满了不确定性。工作难找，房价很高，感觉压力很大。看着父母为我操心，我也很愧疚。有时候会想，如果当初选择不同的专业会不会更好？这种对未来的不安让我夜不能寐。",
+                    category: "emotion",
+                    author: "未来焦虑者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 60 * 60 * 60 * 1000).toISOString(),
+                    views: 203,
+                    replies: 19,
+                    lastReplyTime: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()
+                },
+
+                // 生活分享版块新增话题
+                {
+                    id: 1031,
+                    title: "分享一些宿舍生活的小技巧",
+                    content: "住宿舍两年了，总结了一些让生活更舒适的小技巧：\n\n🧹 收纳整理：用收纳盒分类存放物品\n💡 照明改善：买个小台灯，晚上不影响室友\n🌱 空气清新：养几盆小植物或用香薰\n🔇 降噪神器：准备耳塞和眼罩\n🍜 简单料理：准备电热水壶和保温盒\n🧼 卫生习惯：定期清洁，保持整洁\n\n希望对大家有帮助！",
+                    category: "life",
+                    author: "宿舍生活达人",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 62 * 60 * 60 * 1000).toISOString(),
+                    views: 267,
+                    replies: 22,
+                    lastReplyTime: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 1032,
+                    title: "推荐一些适合学生的健康食谱",
+                    content: "作为一个注重健康的学生，想分享一些简单易做又营养的食谱：\n\n🥗 营养早餐：燕麦+牛奶+水果\n🍜 简单午餐：蒸蛋羹+蔬菜沙拉\n🥘 晚餐搭配：瘦肉+蔬菜+粗粮\n🥤 健康饮品：柠檬蜂蜜水、红枣枸杞茶\n🍎 健康零食：坚果、酸奶、水果\n\n这些都很适合学生党，营养又不贵！",
+                    category: "life",
+                    author: "健康饮食推广者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 64 * 60 * 60 * 1000).toISOString(),
+                    views: 189,
+                    replies: 17,
+                    lastReplyTime: new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 1033,
+                    title: "大学生如何理财？分享我的经验",
+                    content: "从大一开始就在学习理财，现在想分享一些心得：\n\n💰 记账习惯：每天记录收支，了解钱花在哪里\n🎯 预算规划：设定月度预算，控制支出\n💳 理性消费：区分需要和想要，避免冲动购买\n📈 小额投资：可以尝试一些低风险的理财产品\n🎁 开源节流：做兼职增加收入，同时控制支出\n\n理财要从学生时代开始培养！",
+                    category: "life",
+                    author: "理财小能手",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 66 * 60 * 60 * 1000).toISOString(),
+                    views: 245,
+                    replies: 20,
+                    lastReplyTime: new Date(Date.now() - 10 * 60 * 60 * 1000).toISOString()
+                },
+
+                // 求助互助版块新增话题
+                {
+                    id: 1034,
+                    title: "求助：如何克服演讲恐惧症？",
+                    content: "下周要做课堂展示，但我有严重的演讲恐惧症。一想到要在那么多人面前说话就紧张得不行，手心出汗，声音发抖。之前有过几次糟糕的演讲经历，现在更加害怕了。有没有什么方法可以克服这种恐惧？",
+                    category: "help",
+                    author: "演讲恐惧者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 68 * 60 * 60 * 1000).toISOString(),
+                    views: 156,
+                    replies: 14,
+                    lastReplyTime: new Date(Date.now() - 11 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 1035,
+                    title: "急需建议：如何处理学业和兼职的冲突？",
+                    content: "为了减轻家里的经济负担，我在外面做兼职。但最近发现兼职占用了太多时间，影响了学习。期中考试成绩不理想，但又不能放弃兼职。感觉陷入了两难境地，不知道该怎么平衡。",
+                    category: "help",
+                    author: "两难选择者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 70 * 60 * 60 * 1000).toISOString(),
+                    views: 187,
+                    replies: 16,
+                    lastReplyTime: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 1036,
+                    title: "求助：如何应对网络成瘾问题？",
+                    content: "最近发现自己对手机和网络的依赖越来越严重，每天刷社交媒体、看视频的时间超过6小时。明知道这样不好，但就是控制不住。学习效率因此大大降低，生活作息也被打乱。有没有什么有效的方法戒除网瘾？",
+                    category: "help",
+                    author: "匿名用户",
+                    authorId: null,
+                    isAnonymous: true,
+                    createTime: new Date(Date.now() - 72 * 60 * 60 * 1000).toISOString(),
+                    views: 198,
+                    replies: 18,
+                    lastReplyTime: new Date(Date.now() - 13 * 60 * 60 * 1000).toISOString()
+                },
+
+                // 经验分享版块新增话题
+                {
+                    id: 1037,
+                    title: "从学渣到学霸的逆袭之路",
+                    content: "想分享我从大一学渣到现在成绩优秀的经历。刚入学时成绩很差，几乎每科都是及格边缘。后来通过调整学习方法和心态，成绩有了很大提升：\n\n📚 制定学习计划：每周、每日都有明确目标\n🎯 找到学习方法：不同科目用不同方法\n👥 组建学习小组：和同学互相督促\n📝 做好笔记整理：课后及时复习巩固\n💪 保持积极心态：相信自己能够进步\n\n希望我的经历能给大家一些启发！",
+                    category: "experience",
+                    author: "逆袭成功者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 74 * 60 * 60 * 1000).toISOString(),
+                    views: 312,
+                    replies: 26,
+                    lastReplyTime: new Date(Date.now() - 14 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 1038,
+                    title: "如何建立良好的人际关系网络",
+                    content: "大学四年下来，我学会了如何建立和维护人际关系，想分享一些心得：\n\n🤝 真诚待人：不要带着功利心去交朋友\n👂 学会倾听：给别人表达的机会和空间\n🎁 适当付出：在别人需要时提供帮助\n📱 保持联系：定期和朋友们聊天问候\n🎉 参与活动：多参加集体活动增进感情\n💬 有效沟通：学会表达自己的想法\n\n好的人际关系是一生的财富！",
+                    category: "experience",
+                    author: "社交达人",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 76 * 60 * 60 * 1000).toISOString(),
+                    views: 234,
+                    replies: 21,
+                    lastReplyTime: new Date(Date.now() - 15 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 1039,
+                    title: "分享我的自律养成经验",
+                    content: "从一个拖延症重度患者到现在的自律达人，我用了两年时间。分享一些实用的自律方法：\n\n⏰ 早起习惯：每天6点起床，给自己更多时间\n📋 任务清单：列出每天要完成的事情\n🏃 运动习惯：每天至少30分钟运动\n📖 阅读习惯：每天阅读至少30分钟\n🧘 冥想练习：每天10分钟正念冥想\n📱 数字断舍离：减少无意义的手机使用\n\n自律给我自由，希望大家也能体验到！",
+                    category: "experience",
+                    author: "自律生活家",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 78 * 60 * 60 * 1000).toISOString(),
+                    views: 289,
+                    replies: 23,
+                    lastReplyTime: new Date(Date.now() - 16 * 60 * 60 * 1000).toISOString()
+                }
+            ];
+
+            const defaultReplies = [
+                // 第一个话题的回复
+                {
+                    id: 2001,
+                    postId: 1001,
+                    content: "我也有同样的困扰！最近发现听轻音乐和做深呼吸练习很有帮助，推荐试试看。",
+                    author: "同路人",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2002,
+                    postId: 1001,
+                    content: "建议制定合理的复习计划，不要给自己太大压力。记住，考试只是检验学习成果的一种方式，不是全部。",
+                    author: "心理咨询师",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 20 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2003,
+                    postId: 1001,
+                    content: "运动真的很有效！我每天晚上跑步半小时，睡眠质量明显改善了。",
+                    author: "运动达人",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 15 * 60 * 60 * 1000).toISOString()
+                },
+
+                // 第二个话题的回复
+                {
+                    id: 2004,
+                    postId: 1002,
+                    content: "4-7-8呼吸法真的很有用！我试过几次，确实能快速平静下来。谢谢分享！",
+                    author: "感谢的小伙伴",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 18 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2005,
+                    postId: 1002,
+                    content: "正念冥想我也在练习，推荐一个APP叫'冥想正念'，里面有很多引导练习。",
+                    author: "冥想爱好者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString()
+                },
+
+                // 第三个话题的回复
+                {
+                    id: 2006,
+                    postId: 1003,
+                    content: "室友关系确实很重要。建议找个合适的时机，心平气和地坐下来谈谈，了解彼此的想法。",
+                    author: "过来人",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2007,
+                    postId: 1003,
+                    content: "可以尝试制定一些宿舍公约，把大家的需求和底线都写清楚，这样能减少很多误解。",
+                    author: "宿舍长经验",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString()
+                },
+
+                // 第四个话题的回复
+                {
+                    id: 2008,
+                    postId: 1004,
+                    content: "《情绪急救》我也看过，确实很实用！特别是里面关于处理拒绝和失败的部分。",
+                    author: "书友",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 10 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2009,
+                    postId: 1004,
+                    content: "谢谢推荐！我正好在找这类书籍，已经加入购物车了。",
+                    author: "学习者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString()
+                },
+
+                // 第五个话题的回复
+                {
+                    id: 2010,
+                    postId: 1005,
+                    content: "失眠可能和压力有关，建议睡前一小时不要看手机，试试泡个热水澡或者喝杯温牛奶。",
+                    author: "睡眠专家",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 7 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2011,
+                    postId: 1005,
+                    content: "我之前也失眠过，后来发现是因为想太多事情。建议睡前写下明天要做的事，清空大脑。",
+                    author: "匿名用户",
+                    authorId: null,
+                    isAnonymous: true,
+                    createTime: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()
+                },
+
+                // 第六个话题的回复
+                {
+                    id: 2012,
+                    postId: 1006,
+                    content: "感受到了你的快乐！正能量真的会传染，谢谢分享！🌟",
+                    author: "快乐传递者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2013,
+                    postId: 1006,
+                    content: "恭喜恭喜！看到你的帖子我也心情变好了，快乐真的会传染呢！",
+                    author: "开心果",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString()
+                },
+
+                // 新话题的回复
+                {
+                    id: 2014,
+                    postId: 1007,
+                    content: "我觉得关键是要学会时间管理。可以用日程表把学习和社团活动都安排好，确保学习时间不被挤压。",
+                    author: "时间管理达人",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 14 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2015,
+                    postId: 1007,
+                    content: "我的经验是选择1-2个真正感兴趣的社团深度参与，而不是什么都想尝试。质量比数量重要。",
+                    author: "社团老干部",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2016,
+                    postId: 1008,
+                    content: "分手确实很痛苦，我当时也是这样。建议多和朋友聊天，做一些自己喜欢的事情，慢慢就会好起来的。",
+                    author: "过来人的建议",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2017,
+                    postId: 1008,
+                    content: "这个时候不要强迫自己快点好起来，允许自己难过一段时间。可以写写日记，记录自己的感受。",
+                    author: "心理学专业",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2018,
+                    postId: 1009,
+                    content: "推荐《旅行青蛙》，很治愈的小游戏，看着小青蛙旅行心情会很平静。",
+                    author: "治愈系玩家",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 13 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2019,
+                    postId: 1009,
+                    content: "《Alto's Odyssey》也很不错，滑雪的游戏，画面很美，音乐很棒，玩起来很放松。",
+                    author: "游戏推荐官",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 11 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2020,
+                    postId: 1010,
+                    content: "我以前也有社交恐惧，后来通过练习慢慢改善了。建议从小事开始，比如主动和同学打招呼。",
+                    author: "社恐康复者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 16 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2021,
+                    postId: 1010,
+                    content: "可以尝试参加一些小组活动，在熟悉的环境中练习社交。记住，大部分人都很友善的。",
+                    author: "温暖的学姐",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 15 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2022,
+                    postId: 1011,
+                    content: "番茄工作法真的很有用！我现在每天都在用，效率提高了很多。谢谢分享！",
+                    author: "拖延症患者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 18 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2023,
+                    postId: 1011,
+                    content: "任务分解这个方法我也在用，把大作业分成小步骤，每完成一步就有成就感。",
+                    author: "高效学习者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 17 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2024,
+                    postId: 1012,
+                    content: "我觉得可以试着和父母沟通，让他们了解你的想法和压力。大部分父母都是可以理解的。",
+                    author: "沟通专家",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 20 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2025,
+                    postId: 1012,
+                    content: "家长的期望确实是压力，但也要记住他们是爱你的。可以设定一些自己的小目标，逐步进步。",
+                    author: "理解的朋友",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 19 * 60 * 60 * 1000).toISOString()
+                },
+
+                // 更多新话题的回复
+                {
+                    id: 2026,
+                    postId: 1013,
+                    content: "迷茫是很正常的，我大三的时候也是这样。建议多尝试不同的实习或志愿活动，在实践中找到方向。",
+                    author: "过来人指导",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2027,
+                    postId: 1013,
+                    content: "可以做一些职业测评，了解自己的兴趣和能力。学校的就业指导中心应该有相关资源。",
+                    author: "职业规划师",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 22 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2028,
+                    postId: 1014,
+                    content: "我的方法是把手机放在离床远一点的地方，这样晚上就不会一直刷手机了。",
+                    author: "早睡早起达人",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 26 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2029,
+                    postId: 1014,
+                    content: "建议睡前一小时不要看屏幕，可以读书或者听音乐。慢慢调整，不要急于求成。",
+                    author: "睡眠质量改善者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 25 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2030,
+                    postId: 1015,
+                    content: "考研确实压力大，我当时也是这样。建议制定合理的计划，不要和别人比进度，按自己的节奏来。",
+                    author: "考研成功上岸",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 28 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2031,
+                    postId: 1015,
+                    content: "适当的运动很重要，我每天晚上都会跑步半小时，有助于释放压力和改善睡眠。",
+                    author: "运动减压",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 27 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2032,
+                    postId: 1016,
+                    content: "谢谢分享！我也想尝试冥想，请问有什么好的入门书籍推荐吗？",
+                    author: "冥想新手",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 30 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2033,
+                    postId: 1016,
+                    content: "我也在练习冥想，确实对专注力有帮助。刚开始的时候坐5分钟都觉得很长，现在可以坐20分钟了。",
+                    author: "冥想进阶者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 29 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2034,
+                    postId: 1017,
+                    content: "想家是很正常的，我当时也是这样。可以多和家人视频通话，也可以在宿舍放一些家里的照片。",
+                    author: "温暖的学长",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 32 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2035,
+                    postId: 1017,
+                    content: "我刚上大学的时候也想家，后来慢慢适应了。建议多参加一些活动，认识新朋友，会好很多。",
+                    author: "适应良好的学姐",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 31 * 60 * 60 * 1000).toISOString()
+                },
+
+                // 新话题的回复
+                {
+                    id: 2036,
+                    postId: 1018,
+                    content: "完美主义确实很累人。我的经验是设定'足够好'的标准，不是每件事都需要100分。",
+                    author: "前完美主义者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 34 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2037,
+                    postId: 1018,
+                    content: "可以尝试给自己设定时间限制，比如这个任务最多花2小时，时间到了就提交，这样能避免过度纠结细节。",
+                    author: "效率提升专家",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 33 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2038,
+                    postId: 1019,
+                    content: "番茄工作法真的很有用！我现在每天都在用，25分钟专注，5分钟休息，效率提高了很多。",
+                    author: "番茄工作法爱好者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 36 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2039,
+                    postId: 1019,
+                    content: "我也发现绿植很有用！在桌上放了一盆多肉，看着就心情好，而且能提醒自己保持专注。",
+                    author: "绿植爱好者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 35 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2040,
+                    postId: 1020,
+                    content: "建议从简单的开始尝试，比如摄影，用手机就可以开始。或者尝试一些学校的社团活动。",
+                    author: "兴趣广泛的学长",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 38 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2041,
+                    postId: 1020,
+                    content: "我觉得可以从自己感兴趣的领域开始，比如喜欢音乐就学个乐器，喜欢运动就选个项目坚持。",
+                    author: "多才多艺",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 37 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2042,
+                    postId: 1021,
+                    content: "学习遇到困难很正常，每个人的节奏不一样。建议找老师或同学请教，不要一个人硬撑。",
+                    author: "学习经验分享者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 40 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2043,
+                    postId: 1021,
+                    content: "挫折是成长的一部分，我现在遇到困难会告诉自己：这是大脑在建立新的神经连接。",
+                    author: "积极心态者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 39 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2044,
+                    postId: 1022,
+                    content: "异地恋确实不容易，我和女朋友也是异地。我们会一起看电影、玩游戏，创造共同体验。",
+                    author: "异地恋坚持者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 42 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2045,
+                    postId: 1022,
+                    content: "沟通很重要，要坦诚地表达自己的感受和需求。还有就是要有共同的目标和计划。",
+                    author: "情感咨询师",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 41 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2046,
+                    postId: 1023,
+                    content: "时间块管理我也在用！把相似的任务放在一起做，减少切换成本，效率确实提高了。",
+                    author: "时间管理学习者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 44 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2047,
+                    postId: 1023,
+                    content: "复盘很重要！我每天晚上都会花10分钟回顾，看看哪些地方可以改进。",
+                    author: "反思达人",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 43 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2048,
+                    postId: 1024,
+                    content: "这种情况确实需要沟通。可以温和地提出来，比如建议制定一些宿舍公约。",
+                    author: "宿舍和谐使者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 46 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2049,
+                    postId: 1024,
+                    content: "可以准备一些耳塞或者白噪音设备，这样能减少被打扰的情况。",
+                    author: "睡眠质量守护者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 45 * 60 * 60 * 1000).toISOString()
+                },
+
+                // 学习压力版块新话题的回复
+                {
+                    id: 2050,
+                    postId: 1025,
+                    content: "我也遇到过这种情况，建议课前预习，课后及时复习，不懂的地方要主动问老师或同学。",
+                    author: "学习方法分享者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2051,
+                    postId: 1025,
+                    content: "可以找几个同学组成学习小组，大家一起讨论，互相帮助理解难点。",
+                    author: "小组学习倡导者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 47 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2052,
+                    postId: 1026,
+                    content: "推荐费曼学习法，把学到的知识讲给别人听，这样能加深记忆。",
+                    author: "记忆法专家",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 50 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2053,
+                    postId: 1026,
+                    content: "间隔重复很有效，不要一次性背完，要分多次复习，每次间隔时间逐渐延长。",
+                    author: "记忆训练师",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 49 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2054,
+                    postId: 1027,
+                    content: "建议用番茄工作法，25分钟专注学习，5分钟休息，这样能提高专注度。",
+                    author: "效率提升导师",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 52 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2055,
+                    postId: 1027,
+                    content: "环境很重要，找一个安静、整洁的地方学习，把手机放在看不到的地方。",
+                    author: "学习环境优化师",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 51 * 60 * 60 * 1000).toISOString()
+                },
+
+                // 情感交流版块新话题的回复
+                {
+                    id: 2056,
+                    postId: 1028,
+                    content: "孤独感很多人都有，建议主动参加一些兴趣小组或社团，找到志同道合的朋友。",
+                    author: "社交指导师",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 54 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2057,
+                    postId: 1028,
+                    content: "真正的友谊需要时间培养，不要急于求成。先做好自己，自然会吸引合适的朋友。",
+                    author: "友谊智者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 53 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2058,
+                    postId: 1029,
+                    content: "友谊比面子重要，建议主动道歉或者找个合适的机会缓解关系。",
+                    author: "和解促进者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 56 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2059,
+                    postId: 1029,
+                    content: "可以通过共同朋友或者一起参加活动来缓解尴尬，慢慢修复关系。",
+                    author: "关系修复专家",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 55 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2060,
+                    postId: 1030,
+                    content: "对未来的不安很正常，建议制定一些短期目标，一步步朝着理想前进。",
+                    author: "人生规划师",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 58 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2061,
+                    postId: 1030,
+                    content: "每个人都会经历这个阶段，重要的是行动起来，而不是一直焦虑。",
+                    author: "行动派导师",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 57 * 60 * 60 * 1000).toISOString()
+                },
+
+                // 生活分享版块新话题的回复
+                {
+                    id: 2062,
+                    postId: 1031,
+                    content: "收纳盒真的很有用！我现在桌面整洁多了，心情也变好了。",
+                    author: "整理爱好者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 60 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2063,
+                    postId: 1031,
+                    content: "小台灯推荐！晚上学习不会影响室友，而且光线柔和保护眼睛。",
+                    author: "护眼达人",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 59 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2064,
+                    postId: 1032,
+                    content: "燕麦真的很棒！我每天早上都吃，加点坚果和水果，营养又美味。",
+                    author: "健康早餐爱好者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 62 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2065,
+                    postId: 1032,
+                    content: "蒸蛋羹做法简单，蛋白质丰富，很适合学生党。我经常做来当午餐。",
+                    author: "简单料理家",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 61 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2066,
+                    postId: 1033,
+                    content: "记账真的很重要！我用了一年，现在对自己的消费习惯很清楚。",
+                    author: "记账达人",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 64 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2067,
+                    postId: 1033,
+                    content: "理财要趁早！我现在每个月都会存一部分钱，养成了很好的习惯。",
+                    author: "理财新手",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 63 * 60 * 60 * 1000).toISOString()
+                },
+
+                // 求助互助版块新话题的回复
+                {
+                    id: 2068,
+                    postId: 1034,
+                    content: "演讲恐惧很常见，建议多练习，可以先对着镜子练，再找朋友练习。",
+                    author: "演讲教练",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 66 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2069,
+                    postId: 1034,
+                    content: "深呼吸很有用，演讲前做几次深呼吸，能有效缓解紧张情绪。",
+                    author: "紧张缓解专家",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 65 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2070,
+                    postId: 1035,
+                    content: "可以和老板商量调整工作时间，或者选择一些时间更灵活的兼职。",
+                    author: "兼职经验者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 68 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2071,
+                    postId: 1035,
+                    content: "学业还是要优先，可以考虑申请助学金或奖学金来减轻经济压力。",
+                    author: "学业优先倡导者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 67 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2072,
+                    postId: 1036,
+                    content: "我也有过网瘾，后来通过设置手机使用时间限制，慢慢改善了。",
+                    author: "戒网瘾成功者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 70 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2073,
+                    postId: 1036,
+                    content: "建议找一些替代活动，比如运动、阅读，用健康的习惯替代网络依赖。",
+                    author: "习惯替换专家",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 69 * 60 * 60 * 1000).toISOString()
+                },
+
+                // 经验分享版块新话题的回复
+                {
+                    id: 2074,
+                    postId: 1037,
+                    content: "你的经历很励志！学习小组确实很有用，大家互相督促进步更快。",
+                    author: "励志追随者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 72 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2075,
+                    postId: 1037,
+                    content: "制定学习计划真的很重要，我现在也在用这个方法，效果不错。",
+                    author: "计划执行者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 71 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2076,
+                    postId: 1038,
+                    content: "真诚待人这点说得太对了！功利性的交往很难长久，真诚才是基础。",
+                    author: "真诚交友者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 74 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2077,
+                    postId: 1038,
+                    content: "学会倾听真的很重要，我发现当我认真听别人说话时，关系会变得更好。",
+                    author: "倾听学习者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 73 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2078,
+                    postId: 1039,
+                    content: "早起真的能改变人生！我现在每天6点起床，一天的时间变得很充实。",
+                    author: "早起实践者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 76 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2079,
+                    postId: 1039,
+                    content: "自律确实给人自由，我现在也在培养这些习惯，希望能坚持下去。",
+                    author: "自律追求者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 75 * 60 * 60 * 1000).toISOString()
+                },
+
+                // 为一些热门话题添加更多回复
+                {
+                    id: 2080,
+                    postId: 1019,
+                    content: "数字断舍离很重要！我把手机上的娱乐APP都删了，专注力提升了很多。",
+                    author: "数字极简主义者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 35 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2081,
+                    postId: 1023,
+                    content: "四象限法则我也在用！把重要紧急的事情优先处理，效率确实提高了。",
+                    author: "优先级管理者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 43 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2082,
+                    postId: 1011,
+                    content: "奖励机制真的有效！我现在完成任务后会给自己买个小礼物，动力更足了。",
+                    author: "奖励机制实践者",
+                    authorId: null,
+                    isAnonymous: false,
+                    createTime: new Date(Date.now() - 17 * 60 * 60 * 1000).toISOString()
+                }
+            ];
+
+            // 保存预设数据
+            saveForumData(defaultPosts, defaultReplies);
+
+            // 保存版本号
+            localStorage.setItem('forumDataVersion', '2.0');
+        }
+
+        // 保存论坛数据
+        function saveForumData(posts, replies) {
+            localStorage.setItem('forumPosts', JSON.stringify(posts));
+            localStorage.setItem('forumReplies', JSON.stringify(replies));
+        }
+
+        // 显示发帖模态框
+        function showNewPostModal() {
+            currentUser = getCurrentUser();
+            if (!currentUser) {
+                alert('请先登录后再发表话题');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const modal = new bootstrap.Modal(document.getElementById('newPostModal'));
+            modal.show();
+        }
+
+        // 提交新话题
+        function submitNewPost() {
+            const title = document.getElementById('postTitle').value.trim();
+            const category = document.getElementById('postCategory').value;
+            const content = document.getElementById('postContent').value.trim();
+            const isAnonymous = document.getElementById('isAnonymous').checked;
+
+            if (!title || !category || !content) {
+                alert('请填写完整信息');
+                return;
+            }
+
+            const forumData = getForumData();
+            const newPost = {
+                id: Date.now(),
+                title: title,
+                content: content,
+                category: category,
+                author: isAnonymous ? '匿名用户' : currentUser.username,
+                authorId: isAnonymous ? null : currentUser.id,
+                isAnonymous: isAnonymous,
+                createTime: new Date().toISOString(),
+                views: 0,
+                replies: 0,
+                lastReplyTime: new Date().toISOString()
+            };
+
+            forumData.posts.unshift(newPost);
+            saveForumData(forumData.posts, forumData.replies);
+
+            // 关闭模态框并重置表单
+            const modal = bootstrap.Modal.getInstance(document.getElementById('newPostModal'));
+            modal.hide();
+            document.getElementById('newPostForm').reset();
+
+            // 刷新页面数据
+            loadForumData();
+            alert('话题发表成功！');
+        }
+
+        // 切换版块
+        function switchCategory(category, element) {
+            // 阻止默认行为，避免页面跳动
+            event.preventDefault();
+
+            currentCategory = category;
+            currentPage = 1;
+
+            // 更新导航状态
+            document.querySelectorAll('.list-group-item').forEach(item => {
+                item.classList.remove('active');
+                const badge = item.querySelector('.badge');
+                if (badge) {
+                    badge.classList.remove('bg-primary');
+                    badge.classList.add('bg-secondary');
+                }
+            });
+
+            element.classList.add('active');
+            const activeBadge = element.querySelector('.badge');
+            if (activeBadge) {
+                activeBadge.classList.remove('bg-secondary');
+                activeBadge.classList.add('bg-primary');
+            }
+
+            loadPosts();
+            return false; // 确保不会跳转
+        }
+
+        // 搜索话题
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value.trim();
+            loadPosts(searchTerm);
+        }
+
+        // 加载话题列表
+        function loadPosts(searchTerm = '') {
+            const forumData = getForumData();
+            let posts = forumData.posts;
+
+            // 按版块筛选
+            if (currentCategory !== 'all') {
+                posts = posts.filter(post => post.category === currentCategory);
+            }
+
+            // 搜索筛选
+            if (searchTerm) {
+                posts = posts.filter(post =>
+                    post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    post.content.toLowerCase().includes(searchTerm.toLowerCase())
+                );
+            }
+
+            // 排序
+            switch (currentSort) {
+                case 'latest':
+                    posts.sort((a, b) => new Date(b.createTime) - new Date(a.createTime));
+                    break;
+                case 'hot':
+                    posts.sort((a, b) => (b.views + b.replies * 2) - (a.views + a.replies * 2));
+                    break;
+                case 'replies':
+                    posts.sort((a, b) => b.replies - a.replies);
+                    break;
+            }
+
+            // 分页
+            const totalPages = Math.ceil(posts.length / postsPerPage);
+            const startIndex = (currentPage - 1) * postsPerPage;
+            const endIndex = startIndex + postsPerPage;
+            const currentPosts = posts.slice(startIndex, endIndex);
+
+            // 渲染话题列表
+            renderPosts(currentPosts);
+            renderPagination(totalPages);
+        }
+
+        // 渲染话题列表
+        function renderPosts(posts) {
+            const container = document.getElementById('postsContainer');
+
+            if (posts.length === 0) {
+                container.innerHTML = `
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body text-center py-5">
+                            <i class="fas fa-comments fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">暂无话题</h5>
+                            <p class="text-muted">成为第一个发表话题的人吧！</p>
+                            <button class="btn btn-primary" onclick="showNewPostModal()">
+                                <i class="fas fa-plus me-2"></i>发表话题
+                            </button>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = posts.map(post => {
+                const category = categories[post.category];
+                const timeAgo = getTimeAgo(post.createTime);
+
+                return `
+                    <div class="card border-0 shadow-sm mb-3">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <span class="badge me-2" style="background-color: ${category.color};">
+                                            <i class="${category.icon} me-1"></i>${category.name}
+                                        </span>
+                                        <small class="text-muted">
+                                            ${post.author} · ${timeAgo}
+                                        </small>
+                                    </div>
+                                    <h6 class="card-title mb-2">
+                                        <a href="#" class="text-decoration-none" onclick="showPostDetail(${post.id})">
+                                            ${post.title}
+                                        </a>
+                                    </h6>
+                                    <p class="card-text text-muted small">
+                                        ${post.content.substring(0, 100)}${post.content.length > 100 ? '...' : ''}
+                                    </p>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <div class="row text-center">
+                                        <div class="col-4">
+                                            <div class="text-primary fw-bold">${post.views}</div>
+                                            <small class="text-muted">浏览</small>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="text-success fw-bold">${post.replies}</div>
+                                            <small class="text-muted">回复</small>
+                                        </div>
+                                        <div class="col-4">
+                                            <button class="btn btn-outline-primary btn-sm" onclick="showPostDetail(${post.id})">
+                                                查看
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 显示话题详情
+        function showPostDetail(postId) {
+            const forumData = getForumData();
+            const post = forumData.posts.find(p => p.id === postId);
+
+            if (!post) return;
+
+            // 增加浏览量
+            post.views++;
+            saveForumData(forumData.posts, forumData.replies);
+
+            // 获取回复
+            const replies = forumData.replies.filter(r => r.postId === postId);
+
+            // 渲染话题详情
+            const category = categories[post.category];
+            const timeAgo = getTimeAgo(post.createTime);
+
+            document.getElementById('postDetailTitle').textContent = post.title;
+            document.getElementById('postDetailContent').innerHTML = `
+                <div class="card border-0">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="badge me-2" style="background-color: ${category.color};">
+                                <i class="${category.icon} me-1"></i>${category.name}
+                            </span>
+                            <small class="text-muted">
+                                ${post.author} · ${timeAgo} · ${post.views} 次浏览
+                            </small>
+                        </div>
+                        <div class="post-content">
+                            ${post.content.replace(/\n/g, '<br>')}
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // 渲染回复列表
+            renderReplies(replies);
+
+            // 检查登录状态
+            currentUser = getCurrentUser();
+            const replyForm = document.getElementById('replyForm');
+            if (!currentUser) {
+                replyForm.innerHTML = `
+                    <div class="card-body text-center">
+                        <p class="text-muted">请先登录后再参与讨论</p>
+                        <a href="login.html" class="btn btn-primary">立即登录</a>
+                    </div>
+                `;
+            }
+
+            // 存储当前话题ID
+            window.currentPostId = postId;
+
+            // 显示模态框
+            const modal = new bootstrap.Modal(document.getElementById('postDetailModal'));
+            modal.show();
+        }
+
+        // 渲染回复列表
+        function renderReplies(replies) {
+            const container = document.getElementById('repliesContainer');
+
+            if (replies.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-3">
+                        <p class="text-muted">暂无回复，来发表第一个回复吧！</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = replies.map(reply => {
+                const timeAgo = getTimeAgo(reply.createTime);
+                return `
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <small class="text-muted">
+                                    <strong>${reply.author}</strong> · ${timeAgo}
+                                </small>
+                            </div>
+                            <div class="reply-content">
+                                ${reply.content.replace(/\n/g, '<br>')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 提交回复
+        function submitReply() {
+            if (!currentUser) {
+                alert('请先登录');
+                return;
+            }
+
+            const content = document.getElementById('replyContent').value.trim();
+            const isAnonymous = document.getElementById('replyAnonymous').checked;
+
+            if (!content) {
+                alert('请输入回复内容');
+                return;
+            }
+
+            const forumData = getForumData();
+            const newReply = {
+                id: Date.now(),
+                postId: window.currentPostId,
+                content: content,
+                author: isAnonymous ? '匿名用户' : currentUser.username,
+                authorId: isAnonymous ? null : currentUser.id,
+                isAnonymous: isAnonymous,
+                createTime: new Date().toISOString()
+            };
+
+            forumData.replies.push(newReply);
+
+            // 更新话题回复数和最后回复时间
+            const post = forumData.posts.find(p => p.id === window.currentPostId);
+            if (post) {
+                post.replies++;
+                post.lastReplyTime = new Date().toISOString();
+            }
+
+            saveForumData(forumData.posts, forumData.replies);
+
+            // 重新渲染回复列表
+            const replies = forumData.replies.filter(r => r.postId === window.currentPostId);
+            renderReplies(replies);
+
+            // 清空表单
+            document.getElementById('replyContent').value = '';
+            document.getElementById('replyAnonymous').checked = false;
+
+            // 刷新话题列表
+            loadPosts();
+
+            alert('回复发表成功！');
+        }
+
+        // 时间格式化
+        function getTimeAgo(isoString) {
+            const now = new Date();
+            const time = new Date(isoString);
+            const diffInSeconds = Math.floor((now - time) / 1000);
+
+            if (diffInSeconds < 60) return '刚刚';
+            if (diffInSeconds < 3600) return Math.floor(diffInSeconds / 60) + '分钟前';
+            if (diffInSeconds < 86400) return Math.floor(diffInSeconds / 3600) + '小时前';
+            if (diffInSeconds < 2592000) return Math.floor(diffInSeconds / 86400) + '天前';
+
+            return time.toLocaleDateString('zh-CN');
+        }
+
+        // 渲染分页
+        function renderPagination(totalPages) {
+            const container = document.getElementById('pagination');
+
+            if (totalPages <= 1) {
+                container.innerHTML = '';
+                return;
+            }
+
+            let paginationHTML = '';
+
+            // 上一页
+            if (currentPage > 1) {
+                paginationHTML += `
+                    <li class="page-item">
+                        <a class="page-link" href="#" onclick="changePage(${currentPage - 1})">上一页</a>
+                    </li>
+                `;
+            }
+
+            // 页码
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === currentPage) {
+                    paginationHTML += `<li class="page-item active"><span class="page-link">${i}</span></li>`;
+                } else {
+                    paginationHTML += `<li class="page-item"><a class="page-link" href="#" onclick="changePage(${i})">${i}</a></li>`;
+                }
+            }
+
+            // 下一页
+            if (currentPage < totalPages) {
+                paginationHTML += `
+                    <li class="page-item">
+                        <a class="page-link" href="#" onclick="changePage(${currentPage + 1})">下一页</a>
+                    </li>
+                `;
+            }
+
+            container.innerHTML = paginationHTML;
+        }
+
+        // 切换页面
+        function changePage(page) {
+            currentPage = page;
+            loadPosts();
+        }
+
+        // 加载论坛数据
+        function loadForumData() {
+            const forumData = getForumData();
+
+            // 更新话题的回复数统计
+            forumData.posts.forEach(post => {
+                const replyCount = forumData.replies.filter(reply => reply.postId === post.id).length;
+                post.replies = replyCount;
+            });
+
+            // 保存更新后的数据
+            saveForumData(forumData.posts, forumData.replies);
+
+            // 更新统计数据
+            document.getElementById('totalPosts').textContent = forumData.posts.length;
+            document.getElementById('totalReplies').textContent = forumData.replies.length;
+
+            // 更新用户数
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            document.getElementById('totalUsers').textContent = users.length;
+
+            // 更新版块计数
+            Object.keys(categories).forEach(category => {
+                const count = forumData.posts.filter(post => post.category === category).length;
+                document.getElementById(`count-${category}`).textContent = count;
+            });
+            document.getElementById('count-all').textContent = forumData.posts.length;
+
+            // 加载话题列表
+            loadPosts();
+        }
+
+        // 排序变化监听
+        document.addEventListener('change', function(e) {
+            if (e.target.name === 'sortBy') {
+                currentSort = e.target.value;
+                currentPage = 1;
+                loadPosts();
+            }
+        });
+
+        // 检查管理员权限
+        function checkAdminPermission() {
+            const adminSession = localStorage.getItem('adminSession');
+            return adminSession === 'true';
+        }
+
+        // 从话题详情页面显示发帖模态框
+        function showNewPostModalFromDetail() {
+            // 关闭当前的详情模态框
+            const detailModal = bootstrap.Modal.getInstance(document.getElementById('postDetailModal'));
+            if (detailModal) {
+                detailModal.hide();
+            }
+
+            // 显示发帖模态框
+            setTimeout(() => {
+                showNewPostModal();
+            }, 300); // 等待详情模态框关闭动画完成
+        }
+
+        // 页面初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化预设话题
+            initializeDefaultPosts();
+            // 加载论坛数据
+            loadForumData();
+
+            // 检查管理员权限，显示/隐藏重置按钮
+            if (checkAdminPermission()) {
+                document.getElementById('resetDataBtn').style.display = 'block';
+            }
+        });
+
+        // 强制更新到最新内容
+        function forceUpdateContent() {
+            if (confirm('确定要更新到最新内容吗？这将添加新的热门话题和回复。')) {
+                localStorage.removeItem('forumDataVersion');
+                initializeDefaultPosts();
+                loadForumData();
+                alert('内容已更新到最新版本！');
+            }
+        }
+
+        // 重置论坛数据（管理员专用）
+        function resetForumData() {
+            // 检查管理员权限
+            if (!checkAdminPermission()) {
+                alert('此功能仅限管理员使用！');
+                return;
+            }
+
+            if (confirm('确定要重置所有论坛数据吗？这将清除所有话题和回复，并重新加载预设内容。\n\n⚠️ 此操作不可撤销！')) {
+                localStorage.removeItem('forumPosts');
+                localStorage.removeItem('forumReplies');
+                localStorage.removeItem('forumDataVersion');
+                initializeDefaultPosts();
+                loadForumData();
+                alert('论坛数据已重置！');
+            }
+        }
+
+        // 将函数暴露到全局作用域
+        window.showNewPostModal = showNewPostModal;
+        window.showNewPostModalFromDetail = showNewPostModalFromDetail;
+        window.submitNewPost = submitNewPost;
+        window.switchCategory = switchCategory;
+        window.searchPosts = searchPosts;
+        window.showPostDetail = showPostDetail;
+        window.submitReply = submitReply;
+        window.changePage = changePage;
+        window.forceUpdateContent = forceUpdateContent;
+        window.resetForumData = resetForumData;
+    </script>
+</body>
+</html>

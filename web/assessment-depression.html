@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智慧驿站·心语同行 - PHQ-9抑郁症筛查</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- 自定义样式 -->
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --primary-dark: #0b5ed7;
+            --success-color: #198754;
+            --info-color: #0dcaf0;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+        }
+        
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+        }
+        
+        .question-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .question-card:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .option-label {
+            cursor: pointer;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
+        
+        .option-label:hover {
+            background-color: #f8f9fa;
+            border-color: var(--primary-color);
+        }
+        
+        .option-input:checked + .option-label {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .progress-container {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .result-card {
+            border-left: 5px solid;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+        
+        .result-minimal { border-left-color: var(--success-color); }
+        .result-mild { border-left-color: var(--warning-color); }
+        .result-moderate { border-left-color: #fd7e14; }
+        .result-severe { border-left-color: var(--danger-color); }
+        
+        /* 导航栏优化样式 */
+        .navbar-brand:hover {
+            text-decoration: none !important;
+        }
+        
+        .nav-link:hover {
+            color: #0d6efd !important;
+            text-decoration: none !important;
+        }
+        
+        /* 移动端优化 */
+        @media (max-width: 768px) {
+            .navbar-brand span {
+                font-size: 1.5rem !important;
+            }
+            
+            .d-flex.flex-wrap {
+                gap: 0.5rem !important;
+            }
+            
+            .nav-link {
+                font-size: 0.9rem;
+                padding: 0.25rem 0.5rem !important;
+            }
+            
+            .btn {
+                font-size: 0.9rem;
+                padding: 0.375rem 0.75rem !important;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .navbar-brand span {
+                font-size: 1.25rem !important;
+            }
+            
+            .nav-link {
+                font-size: 0.85rem;
+            }
+            
+            .btn {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+        <div class="container">
+            <!-- 第一行：网站标题 -->
+            <div class="w-100 d-flex justify-content-center mb-2">
+                <a class="navbar-brand d-flex align-items-center text-decoration-none" href="index.html">
+                    <span class="fw-bold text-primary fs-3">智慧驿站·心语同行</span>
+                </a>
+            </div>
+
+            <!-- 第二行：导航链接 -->
+            <div class="w-100 d-flex justify-content-center">
+                <div class="d-flex flex-wrap justify-content-center align-items-center gap-2 gap-md-3">
+                    <!-- 主要导航链接 -->
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="index.html">首页</a>
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="about.html">关于我们</a>
+                    <a class="btn btn-primary px-3 py-2" href="assessment.html">心理测评</a>
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="activities.html">活动中心</a>
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="community.html">互动社区</a>
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="consultation.html">在线咨询</a>
+
+                    <!-- 用户操作按钮 -->
+                    <div class="d-flex gap-1">
+                        <a href="login.html" class="nav-link text-dark px-2 py-2 text-decoration-none">登录</a>
+                        <a href="register.html" class="nav-link text-dark px-2 py-2 text-decoration-none">注册</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 进度条 -->
+    <div class="progress-container">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h5 class="mb-1">PHQ-9 抑郁症筛查量表</h5>
+                    <p class="text-muted mb-0">请根据最近两周的感受如实回答</p>
+                </div>
+                <div class="col-md-4">
+                    <div class="d-flex align-items-center">
+                        <span class="me-2">进度:</span>
+                        <div class="progress flex-grow-1 me-2">
+                            <div class="progress-bar" id="progressBar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <span id="progressText">0/9</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 测评内容 -->
+    <div class="container my-5">
+        <!-- 测评说明 -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="alert alert-info">
+                    <h6><i class="fas fa-info-circle me-2"></i>测评说明</h6>
+                    <p class="mb-0">
+                        PHQ-9是一个广泛使用的抑郁症筛查工具。请根据您在<strong>过去两周内</strong>的实际感受，
+                        选择最符合您情况的选项。请诚实作答，这将有助于更准确地评估您的心理状态。
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 测评表单 -->
+        <form id="phq9Form">
+            <div id="questionsContainer">
+                <!-- 问题将通过JavaScript动态生成 -->
+            </div>
+            
+            <!-- 提交按钮 -->
+            <div class="row mt-4">
+                <div class="col-12 text-center">
+                    <button type="button" class="btn btn-primary btn-lg px-5" id="submitBtn" onclick="calculateResult()" disabled>
+                        <i class="fas fa-calculator me-2"></i>计算结果
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <!-- 结果显示区域 -->
+        <div id="resultSection" class="mt-5" style="display: none;">
+            <!-- 结果将通过JavaScript动态生成 -->
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-light py-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5 class="text-primary mb-3">智慧驿站·心语同行</h5>
+                    <p class="text-muted">
+                        以党建引领为核心，融合心理健康服务的创新平台，
+                        为师生提供专业、温暖、便捷的心理健康支持。
+                    </p>
+                </div>
+
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="text-primary mb-3">服务平台</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="assessment.html" class="text-muted text-decoration-none">心理测评</a></li>
+                        <li><a href="consultation.html" class="text-muted text-decoration-none">在线咨询</a></li>
+                        <li><a href="activities.html" class="text-muted text-decoration-none">活动中心</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="text-primary mb-3">社区</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="community.html" class="text-muted text-decoration-none">讨论区</a></li>
+                        <li><a href="about.html" class="text-muted text-decoration-none">关于我们</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h6 class="text-primary mb-3">联系方式</h6>
+                    <ul class="list-unstyled text-muted">
+                        <li><i class="fas fa-envelope me-2"></i>contact@hearttalk.me</li>
+                        <li><i class="fas fa-phone me-2"></i>400-123-4567</li>
+                    </ul>
+                </div>
+            </div>
+
+            <hr class="my-4">
+
+            <div class="row align-items-center">
+                <div class="col-md-12 text-center">
+                    <p class="text-muted mb-0">
+                        &copy; 2024 智慧驿站·心语同行. 保留所有权利.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+    <!-- PHQ-9 测评功能 -->
+    <script>
+        // PHQ-9 问题数据
+        const phq9Questions = [
+            "做事时提不起劲或没有兴趣",
+            "感到心情低落、沮丧或绝望",
+            "入睡困难、睡不安稳或睡眠过多",
+            "感觉疲倦或没有活力",
+            "食欲不振或吃太多",
+            "觉得自己很糟糕，或觉得自己很失败，或让自己或家人失望",
+            "对事物专注有困难，例如阅读报纸或看电视时",
+            "动作或说话速度缓慢到别人已经察觉？或正好相反——烦躁或坐立不安、动来动去的情况超过平常",
+            "有不如死掉或用某种方式伤害自己的念头"
+        ];
+
+        // 选项数据
+        const options = [
+            { value: 0, text: "完全没有" },
+            { value: 1, text: "好几天" },
+            { value: 2, text: "一半以上的天数" },
+            { value: 3, text: "几乎每天" }
+        ];
+
+        // 生成问题
+        function generateQuestions() {
+            const container = document.getElementById('questionsContainer');
+
+            phq9Questions.forEach((question, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'row mb-4';
+                questionDiv.innerHTML = `
+                    <div class="col-12">
+                        <div class="card question-card">
+                            <div class="card-body">
+                                <h6 class="card-title">
+                                    <span class="badge bg-primary me-2">${index + 1}</span>
+                                    在过去两周内，您有多频繁被以下问题困扰：
+                                </h6>
+                                <p class="card-text fw-bold">${question}</p>
+                                <div class="row g-2">
+                                    ${options.map(option => `
+                                        <div class="col-md-3 col-6">
+                                            <input type="radio" class="btn-check option-input" name="q${index}" id="q${index}_${option.value}" value="${option.value}" onchange="updateProgress()">
+                                            <label class="option-label w-100 text-center" for="q${index}_${option.value}">
+                                                <div class="fw-bold">${option.text}</div>
+                                                <small class="text-muted">${option.value}分</small>
+                                            </label>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(questionDiv);
+            });
+        }
+
+        // 更新进度
+        function updateProgress() {
+            const totalQuestions = phq9Questions.length;
+            let answeredQuestions = 0;
+
+            for (let i = 0; i < totalQuestions; i++) {
+                const radios = document.querySelectorAll(`input[name="q${i}"]`);
+                for (let radio of radios) {
+                    if (radio.checked) {
+                        answeredQuestions++;
+                        break;
+                    }
+                }
+            }
+
+            const progress = (answeredQuestions / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('progressText').textContent = `${answeredQuestions}/${totalQuestions}`;
+
+            // 启用/禁用提交按钮
+            document.getElementById('submitBtn').disabled = answeredQuestions < totalQuestions;
+        }
+
+        // 计算结果
+        function calculateResult() {
+            let totalScore = 0;
+            const answers = [];
+
+            // 收集答案并计算总分
+            for (let i = 0; i < phq9Questions.length; i++) {
+                const radios = document.querySelectorAll(`input[name="q${i}"]`);
+                for (let radio of radios) {
+                    if (radio.checked) {
+                        const score = parseInt(radio.value);
+                        totalScore += score;
+                        answers.push({
+                            question: phq9Questions[i],
+                            score: score,
+                            text: options[score].text
+                        });
+                        break;
+                    }
+                }
+            }
+
+            // 显示结果
+            displayResult(totalScore, answers);
+        }
+
+        // 显示结果
+        function displayResult(totalScore, answers) {
+            let severity, description, recommendations, resultClass;
+
+            if (totalScore <= 4) {
+                severity = "无或极轻微抑郁";
+                description = "您的测评结果显示目前没有明显的抑郁症状，心理状态良好。";
+                recommendations = [
+                    "继续保持良好的生活习惯",
+                    "定期进行体育锻炼",
+                    "保持社交活动和兴趣爱好",
+                    "如有需要可定期进行心理健康自查"
+                ];
+                resultClass = "result-minimal";
+            } else if (totalScore <= 9) {
+                severity = "轻度抑郁";
+                description = "您可能存在轻度的抑郁症状，建议关注自己的心理状态。";
+                recommendations = [
+                    "增加户外活动和阳光照射",
+                    "保持规律的作息时间",
+                    "与朋友家人多交流",
+                    "考虑学习一些放松技巧",
+                    "如症状持续建议咨询心理健康专家"
+                ];
+                resultClass = "result-mild";
+            } else if (totalScore <= 14) {
+                severity = "中度抑郁";
+                description = "您的测评结果提示可能存在中度抑郁症状，建议寻求专业帮助。";
+                recommendations = [
+                    "建议咨询心理健康专业人士",
+                    "考虑心理咨询或治疗",
+                    "保持与支持系统的联系",
+                    "避免重大决定，减少压力源",
+                    "必要时考虑药物治疗（需医生指导）"
+                ];
+                resultClass = "result-moderate";
+            } else {
+                severity = "重度抑郁";
+                description = "您的测评结果提示可能存在重度抑郁症状，强烈建议立即寻求专业医疗帮助。";
+                recommendations = [
+                    "立即联系心理健康专业人士或医生",
+                    "考虑住院治疗或密集治疗",
+                    "确保有人陪伴，不要独处",
+                    "移除可能的自伤工具",
+                    "如有自伤想法请立即拨打危机干预热线"
+                ];
+                resultClass = "result-severe";
+            }
+
+            const resultHTML = `
+                <div class="card result-card ${resultClass}">
+                    <div class="card-header">
+                        <h4 class="mb-0">
+                            <i class="fas fa-chart-bar me-2"></i>测评结果
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <div class="display-4 fw-bold text-primary">${totalScore}</div>
+                                <p class="text-muted">总分 (0-27分)</p>
+                                <h5 class="fw-bold">${severity}</h5>
+                            </div>
+                            <div class="col-md-8">
+                                <h6>结果解释：</h6>
+                                <p>${description}</p>
+
+                                <h6>建议措施：</h6>
+                                <ul>
+                                    ${recommendations.map(rec => `<li>${rec}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <h6>详细分析：</h6>
+                            <div class="row">
+                                ${answers.map((answer, index) => `
+                                    <div class="col-md-6 mb-2">
+                                        <small class="text-muted">问题${index + 1}：${answer.text} (${answer.score}分)</small>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <div class="alert alert-warning mt-4">
+                            <h6><i class="fas fa-exclamation-triangle me-2"></i>重要提醒</h6>
+                            <p class="mb-0">
+                                此测评结果仅供参考，不能替代专业医学诊断。如果您感到困扰或症状严重，
+                                请及时寻求专业心理健康服务或医疗帮助。
+                            </p>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button class="btn btn-primary me-2" onclick="window.print()">
+                                <i class="fas fa-print me-2"></i>打印结果
+                            </button>
+                            <a href="consultation.html" class="btn btn-success me-2">
+                                <i class="fas fa-comments me-2"></i>在线咨询
+                            </a>
+                            <a href="assessment.html" class="btn btn-outline-primary">
+                                <i class="fas fa-arrow-left me-2"></i>返回测评中心
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('resultSection').innerHTML = resultHTML;
+            document.getElementById('resultSection').style.display = 'block';
+
+            // 滚动到结果区域
+            document.getElementById('resultSection').scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+
+            // 显示完成提示弹窗
+            showCompletionModal();
+        }
+
+        // 显示完成提示弹窗
+        function showCompletionModal() {
+            // 创建弹窗HTML
+            const modalHTML = `
+                <div class="modal fade" id="completionModal" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header bg-primary text-white">
+                                <h5 class="modal-title">
+                                    <i class="fas fa-check-circle me-2"></i>测评完成
+                                </h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body text-center p-4">
+                                <div class="mb-3">
+                                    <i class="fas fa-brain text-primary" style="font-size: 3rem;"></i>
+                                </div>
+                                <h5 class="text-primary mb-3">PHQ-9 抑郁症筛查已完成！</h5>
+                                <p class="text-muted">您的测评结果已生成，包含专业分析和建议。</p>
+                            </div>
+                            <div class="modal-footer justify-content-center">
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+                                    <i class="fas fa-eye me-2"></i>查看结果
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // 添加到页面
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+            // 显示弹窗
+            const modal = new bootstrap.Modal(document.getElementById('completionModal'));
+            modal.show();
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            generateQuestions();
+            console.log('PHQ-9 抑郁症筛查测评已加载');
+        });
+    </script>
+</body>
+</html>

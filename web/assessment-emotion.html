@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智慧驿站·心语同行 - 情绪状态评估</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- 自定义样式 -->
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --warning-color: #ffc107;
+            --warning-dark: #f57c00;
+        }
+        
+        .question-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--warning-color);
+        }
+        
+        .question-card:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .option-label {
+            cursor: pointer;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
+        
+        .option-label:hover {
+            background-color: #f8f9fa;
+            border-color: var(--warning-color);
+        }
+        
+        .option-input:checked + .option-label {
+            background-color: var(--warning-color);
+            color: white;
+            border-color: var(--warning-color);
+        }
+        
+        .progress-container {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .result-card {
+            border-left: 5px solid;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+        
+        .result-excellent { border-left-color: #198754; }
+        .result-good { border-left-color: #20c997; }
+        .result-fair { border-left-color: var(--warning-color); }
+        .result-poor { border-left-color: #fd7e14; }
+        .result-very-poor { border-left-color: #dc3545; }
+        
+        .emotion-positive { color: #198754; }
+        .emotion-negative { color: #dc3545; }
+        
+        /* 导航栏优化样式 */
+        .navbar-brand:hover {
+            text-decoration: none !important;
+        }
+        
+        .nav-link:hover {
+            color: #0d6efd !important;
+            text-decoration: none !important;
+        }
+        
+        /* 移动端优化 */
+        @media (max-width: 768px) {
+            .navbar-brand span {
+                font-size: 1.5rem !important;
+            }
+            
+            .d-flex.flex-wrap {
+                gap: 0.5rem !important;
+            }
+            
+            .nav-link {
+                font-size: 0.9rem;
+                padding: 0.25rem 0.5rem !important;
+            }
+            
+            .btn {
+                font-size: 0.9rem;
+                padding: 0.375rem 0.75rem !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+        <div class="container">
+            <!-- 第一行：网站标题 -->
+            <div class="w-100 d-flex justify-content-center mb-2">
+                <a class="navbar-brand d-flex align-items-center text-decoration-none" href="index.html">
+                    <span class="fw-bold text-primary fs-3">智慧驿站·心语同行</span>
+                </a>
+            </div>
+
+            <!-- 第二行：导航链接 -->
+            <div class="w-100 d-flex justify-content-center">
+                <div class="d-flex flex-wrap justify-content-center align-items-center gap-2 gap-md-3">
+                    <!-- 主要导航链接 -->
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="index.html">首页</a>
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="about.html">关于我们</a>
+                    <a class="btn btn-primary px-3 py-2" href="assessment.html">心理测评</a>
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="activities.html">活动中心</a>
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="community.html">互动社区</a>
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="consultation.html">在线咨询</a>
+
+                    <!-- 用户操作按钮 -->
+                    <div class="d-flex gap-1">
+                        <a href="login.html" class="nav-link text-dark px-2 py-2 text-decoration-none">登录</a>
+                        <a href="register.html" class="nav-link text-dark px-2 py-2 text-decoration-none">注册</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 进度条 -->
+    <div class="progress-container">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h5 class="mb-1">PANAS 情绪状态评估量表</h5>
+                    <p class="text-muted mb-0">请根据最近一周的感受如实回答</p>
+                </div>
+                <div class="col-md-4">
+                    <div class="d-flex align-items-center">
+                        <span class="me-2">进度:</span>
+                        <div class="progress flex-grow-1 me-2">
+                            <div class="progress-bar bg-warning" id="progressBar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <span id="progressText">0/20</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 测评内容 -->
+    <div class="container my-5">
+        <!-- 测评说明 -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="alert alert-warning">
+                    <h6><i class="fas fa-info-circle me-2"></i>测评说明</h6>
+                    <p class="mb-0">
+                        PANAS（积极情绪和消极情绪量表）用于评估您的情绪状态。请根据您在<strong>过去一周内</strong>的实际感受，
+                        选择最符合您情况的选项。该量表包含积极情绪和消极情绪两个维度，请诚实作答。
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 测评表单 -->
+        <form id="emotionForm">
+            <div id="questionsContainer">
+                <!-- 问题将通过JavaScript动态生成 -->
+            </div>
+            
+            <!-- 提交按钮 -->
+            <div class="row mt-4">
+                <div class="col-12 text-center">
+                    <button type="button" class="btn btn-warning btn-lg px-5" id="submitBtn" onclick="calculateResult()" disabled>
+                        <i class="fas fa-calculator me-2"></i>计算结果
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <!-- 结果显示区域 -->
+        <div id="resultSection" class="mt-5" style="display: none;">
+            <!-- 结果将通过JavaScript动态生成 -->
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-light py-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5 class="text-primary mb-3">智慧驿站·心语同行</h5>
+                    <p class="text-muted">
+                        以党建引领为核心，融合心理健康服务的创新平台，
+                        为师生提供专业、温暖、便捷的心理健康支持。
+                    </p>
+                </div>
+
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="text-primary mb-3">服务平台</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="assessment.html" class="text-muted text-decoration-none">心理测评</a></li>
+                        <li><a href="consultation.html" class="text-muted text-decoration-none">在线咨询</a></li>
+                        <li><a href="activities.html" class="text-muted text-decoration-none">活动中心</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="text-primary mb-3">社区</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="community.html" class="text-muted text-decoration-none">讨论区</a></li>
+                        <li><a href="about.html" class="text-muted text-decoration-none">关于我们</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h6 class="text-primary mb-3">联系方式</h6>
+                    <ul class="list-unstyled text-muted">
+                        <li><i class="fas fa-envelope me-2"></i>contact@hearttalk.me</li>
+                        <li><i class="fas fa-phone me-2"></i>400-123-4567</li>
+                    </ul>
+                </div>
+            </div>
+
+            <hr class="my-4">
+
+            <div class="row align-items-center">
+                <div class="col-md-12 text-center">
+                    <p class="text-muted mb-0">
+                        &copy; 2024 智慧驿站·心语同行. 保留所有权利.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+    <!-- 情绪状态评估功能 -->
+    <script>
+        // PANAS 情绪词汇数据
+        const emotionItems = [
+            // 积极情绪 (10项)
+            { text: "热情的", type: "positive" },
+            { text: "兴奋的", type: "positive" },
+            { text: "坚定的", type: "positive" },
+            { text: "专注的", type: "positive" },
+            { text: "有活力的", type: "positive" },
+            { text: "警觉的", type: "positive" },
+            { text: "有灵感的", type: "positive" },
+            { text: "自豪的", type: "positive" },
+            { text: "积极的", type: "positive" },
+            { text: "强壮的", type: "positive" },
+
+            // 消极情绪 (10项)
+            { text: "痛苦的", type: "negative" },
+            { text: "心烦的", type: "negative" },
+            { text: "内疚的", type: "negative" },
+            { text: "害怕的", type: "negative" },
+            { text: "敌对的", type: "negative" },
+            { text: "易怒的", type: "negative" },
+            { text: "羞愧的", type: "negative" },
+            { text: "紧张的", type: "negative" },
+            { text: "焦躁的", type: "negative" },
+            { text: "恐惧的", type: "negative" }
+        ];
+
+        // 选项数据
+        const options = [
+            { value: 1, text: "很少或没有" },
+            { value: 2, text: "有一点" },
+            { value: 3, text: "中等程度" },
+            { value: 4, text: "相当多" },
+            { value: 5, text: "非常多" }
+        ];
+
+        // 生成问题
+        function generateQuestions() {
+            const container = document.getElementById('questionsContainer');
+
+            // 先显示积极情绪部分
+            const positiveSection = document.createElement('div');
+            positiveSection.innerHTML = `
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h5 class="text-success"><i class="fas fa-smile me-2"></i>积极情绪评估</h5>
+                        <p class="text-muted">请评估您在过去一周内体验这些积极情绪的程度：</p>
+                    </div>
+                </div>
+            `;
+            container.appendChild(positiveSection);
+
+            // 生成积极情绪问题
+            emotionItems.forEach((item, index) => {
+                if (item.type === 'positive') {
+                    const questionDiv = document.createElement('div');
+                    questionDiv.className = 'row mb-3';
+                    questionDiv.innerHTML = `
+                        <div class="col-12">
+                            <div class="card question-card">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-3">
+                                            <h6 class="mb-0">
+                                                <span class="badge bg-success me-2">${Math.floor(index/2) + 1}</span>
+                                                <span class="emotion-positive fw-bold">${item.text}</span>
+                                            </h6>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div class="row g-1">
+                                                ${options.map(option => `
+                                                    <div class="col">
+                                                        <input type="radio" class="btn-check option-input" name="q${index}" id="q${index}_${option.value}" value="${option.value}" onchange="updateProgress()">
+                                                        <label class="option-label w-100 text-center small" for="q${index}_${option.value}">
+                                                            <div>${option.text}</div>
+                                                            <small class="text-muted">${option.value}</small>
+                                                        </label>
+                                                    </div>
+                                                `).join('')}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(questionDiv);
+                }
+            });
+
+            // 消极情绪部分分隔
+            const negativeSection = document.createElement('div');
+            negativeSection.innerHTML = `
+                <div class="row mb-4 mt-5">
+                    <div class="col-12">
+                        <h5 class="text-danger"><i class="fas fa-frown me-2"></i>消极情绪评估</h5>
+                        <p class="text-muted">请评估您在过去一周内体验这些消极情绪的程度：</p>
+                    </div>
+                </div>
+            `;
+            container.appendChild(negativeSection);
+
+            // 生成消极情绪问题
+            emotionItems.forEach((item, index) => {
+                if (item.type === 'negative') {
+                    const questionDiv = document.createElement('div');
+                    questionDiv.className = 'row mb-3';
+                    questionDiv.innerHTML = `
+                        <div class="col-12">
+                            <div class="card question-card">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-3">
+                                            <h6 class="mb-0">
+                                                <span class="badge bg-danger me-2">${index - 9}</span>
+                                                <span class="emotion-negative fw-bold">${item.text}</span>
+                                            </h6>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div class="row g-1">
+                                                ${options.map(option => `
+                                                    <div class="col">
+                                                        <input type="radio" class="btn-check option-input" name="q${index}" id="q${index}_${option.value}" value="${option.value}" onchange="updateProgress()">
+                                                        <label class="option-label w-100 text-center small" for="q${index}_${option.value}">
+                                                            <div>${option.text}</div>
+                                                            <small class="text-muted">${option.value}</small>
+                                                        </label>
+                                                    </div>
+                                                `).join('')}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(questionDiv);
+                }
+            });
+        }
+
+        // 更新进度
+        function updateProgress() {
+            const totalQuestions = emotionItems.length;
+            let answeredQuestions = 0;
+
+            for (let i = 0; i < totalQuestions; i++) {
+                const radios = document.querySelectorAll(`input[name="q${i}"]`);
+                for (let radio of radios) {
+                    if (radio.checked) {
+                        answeredQuestions++;
+                        break;
+                    }
+                }
+            }
+
+            const progress = (answeredQuestions / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('progressText').textContent = `${answeredQuestions}/${totalQuestions}`;
+
+            // 启用/禁用提交按钮
+            document.getElementById('submitBtn').disabled = answeredQuestions < totalQuestions;
+        }
+
+        // 计算结果
+        function calculateResult() {
+            let positiveScore = 0;
+            let negativeScore = 0;
+            const answers = [];
+
+            // 收集答案并计算分数
+            for (let i = 0; i < emotionItems.length; i++) {
+                const radios = document.querySelectorAll(`input[name="q${i}"]`);
+                for (let radio of radios) {
+                    if (radio.checked) {
+                        const score = parseInt(radio.value);
+
+                        if (emotionItems[i].type === 'positive') {
+                            positiveScore += score;
+                        } else {
+                            negativeScore += score;
+                        }
+
+                        answers.push({
+                            emotion: emotionItems[i].text,
+                            type: emotionItems[i].type,
+                            score: score,
+                            text: options[score - 1].text
+                        });
+                        break;
+                    }
+                }
+            }
+
+            // 显示结果
+            displayResult(positiveScore, negativeScore, answers);
+        }
+
+        // 显示结果
+        function displayResult(positiveScore, negativeScore, answers) {
+            // 计算情绪平衡指数
+            const emotionBalance = positiveScore - negativeScore;
+            const totalEmotionIntensity = positiveScore + negativeScore;
+
+            let overallStatus, description, recommendations, resultClass;
+
+            // 根据积极情绪和消极情绪的组合判断整体状态
+            if (positiveScore >= 35 && negativeScore <= 20) {
+                overallStatus = "情绪状态优秀";
+                description = "您的情绪状态非常好，积极情绪丰富，消极情绪较少，心理健康水平较高。";
+                recommendations = [
+                    "继续保持积极的生活态度",
+                    "分享您的积极情绪给身边的人",
+                    "可以考虑帮助他人提升情绪状态",
+                    "保持现有的生活方式和应对策略"
+                ];
+                resultClass = "result-excellent";
+            } else if (positiveScore >= 25 && negativeScore <= 30) {
+                overallStatus = "情绪状态良好";
+                description = "您的情绪状态总体良好，积极情绪较多，能够较好地管理消极情绪。";
+                recommendations = [
+                    "继续培养积极情绪",
+                    "学习更多情绪调节技巧",
+                    "保持规律的生活作息",
+                    "适当增加愉快的活动"
+                ];
+                resultClass = "result-good";
+            } else if (positiveScore >= 20 || negativeScore <= 35) {
+                overallStatus = "情绪状态一般";
+                description = "您的情绪状态处于中等水平，可能需要关注情绪的平衡和调节。";
+                recommendations = [
+                    "增加积极活动和体验",
+                    "学习情绪管理技巧",
+                    "寻求社会支持",
+                    "考虑专业的情绪调节训练",
+                    "保持适度的运动和休息"
+                ];
+                resultClass = "result-fair";
+            } else if (negativeScore > 35 || positiveScore < 20) {
+                overallStatus = "情绪状态较差";
+                description = "您可能正在经历较多的消极情绪，建议关注心理健康并寻求适当的帮助。";
+                recommendations = [
+                    "寻求心理健康专业人士的帮助",
+                    "学习压力管理和情绪调节技巧",
+                    "增加社交活动和支持",
+                    "考虑心理咨询或治疗",
+                    "建立健康的生活习惯"
+                ];
+                resultClass = "result-poor";
+            } else {
+                overallStatus = "情绪状态需要关注";
+                description = "您的情绪状态可能存在一些问题，强烈建议寻求专业帮助。";
+                recommendations = [
+                    "立即寻求心理健康专业帮助",
+                    "考虑心理治疗或咨询",
+                    "建立强有力的支持系统",
+                    "学习应急情绪应对策略",
+                    "必要时考虑药物辅助治疗"
+                ];
+                resultClass = "result-very-poor";
+            }
+
+            const resultHTML = `
+                <div class="card result-card ${resultClass}">
+                    <div class="card-header">
+                        <h4 class="mb-0">
+                            <i class="fas fa-chart-bar me-2"></i>情绪状态评估结果
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <div class="mb-3">
+                                    <div class="display-6 fw-bold text-success">${positiveScore}</div>
+                                    <p class="text-muted mb-0">积极情绪分数</p>
+                                    <small class="text-muted">(10-50分)</small>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="display-6 fw-bold text-danger">${negativeScore}</div>
+                                    <p class="text-muted mb-0">消极情绪分数</p>
+                                    <small class="text-muted">(10-50分)</small>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="display-6 fw-bold text-warning">${emotionBalance > 0 ? '+' : ''}${emotionBalance}</div>
+                                    <p class="text-muted mb-0">情绪平衡指数</p>
+                                </div>
+                                <h5 class="fw-bold">${overallStatus}</h5>
+                            </div>
+                            <div class="col-md-8">
+                                <h6>结果解释：</h6>
+                                <p>${description}</p>
+
+                                <h6>建议措施：</h6>
+                                <ul>
+                                    ${recommendations.map(rec => `<li>${rec}</li>`).join('')}
+                                </ul>
+
+                                <div class="row mt-3">
+                                    <div class="col-md-6">
+                                        <h6 class="text-success">积极情绪分析：</h6>
+                                        <div class="progress mb-2">
+                                            <div class="progress-bar bg-success" style="width: ${(positiveScore/50)*100}%"></div>
+                                        </div>
+                                        <small class="text-muted">
+                                            ${positiveScore >= 35 ? '积极情绪丰富' :
+                                              positiveScore >= 25 ? '积极情绪良好' :
+                                              positiveScore >= 20 ? '积极情绪一般' : '积极情绪较少'}
+                                        </small>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="text-danger">消极情绪分析：</h6>
+                                        <div class="progress mb-2">
+                                            <div class="progress-bar bg-danger" style="width: ${(negativeScore/50)*100}%"></div>
+                                        </div>
+                                        <small class="text-muted">
+                                            ${negativeScore <= 20 ? '消极情绪很少' :
+                                              negativeScore <= 30 ? '消极情绪较少' :
+                                              negativeScore <= 35 ? '消极情绪中等' : '消极情绪较多'}
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <h6>详细情绪分析：</h6>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6 class="text-success small">积极情绪详情：</h6>
+                                    ${answers.filter(a => a.type === 'positive').map(answer => `
+                                        <div class="small mb-1">
+                                            <span class="emotion-positive">${answer.emotion}</span>:
+                                            ${answer.text} (${answer.score}分)
+                                        </div>
+                                    `).join('')}
+                                </div>
+                                <div class="col-md-6">
+                                    <h6 class="text-danger small">消极情绪详情：</h6>
+                                    ${answers.filter(a => a.type === 'negative').map(answer => `
+                                        <div class="small mb-1">
+                                            <span class="emotion-negative">${answer.emotion}</span>:
+                                            ${answer.text} (${answer.score}分)
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info mt-4">
+                            <h6><i class="fas fa-lightbulb me-2"></i>情绪健康小贴士</h6>
+                            <p class="mb-0">
+                                积极情绪和消极情绪都是正常的心理体验。关键在于保持情绪的平衡，
+                                培养更多积极情绪，学会有效管理消极情绪。如果消极情绪持续影响日常生活，
+                                建议寻求专业心理健康服务。
+                            </p>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button class="btn btn-warning me-2" onclick="window.print()">
+                                <i class="fas fa-print me-2"></i>打印结果
+                            </button>
+                            <a href="consultation.html" class="btn btn-primary me-2">
+                                <i class="fas fa-comments me-2"></i>在线咨询
+                            </a>
+                            <a href="assessment.html" class="btn btn-outline-warning">
+                                <i class="fas fa-arrow-left me-2"></i>返回测评中心
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('resultSection').innerHTML = resultHTML;
+            document.getElementById('resultSection').style.display = 'block';
+
+            // 滚动到结果区域
+            document.getElementById('resultSection').scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            generateQuestions();
+            console.log('PANAS 情绪状态评估已加载');
+        });
+    </script>
+</body>
+</html>

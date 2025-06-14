@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智慧驿站·心语同行 - PCL-5创伤后应激评估</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- 自定义样式 -->
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --danger-color: #dc3545;
+        }
+        
+        .question-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--danger-color);
+        }
+        
+        .question-card:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .option-label {
+            cursor: pointer;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
+        
+        .option-label:hover {
+            background-color: #f8f9fa;
+            border-color: var(--danger-color);
+        }
+        
+        .option-input:checked + .option-label {
+            background-color: var(--danger-color);
+            color: white;
+            border-color: var(--danger-color);
+        }
+        
+        .progress-container {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .result-card {
+            border-left: 5px solid;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+        
+        .result-minimal { border-left-color: #198754; }
+        .result-mild { border-left-color: #ffc107; }
+        .result-moderate { border-left-color: #fd7e14; }
+        .result-severe { border-left-color: var(--danger-color); }
+        
+        .trauma-warning {
+            background-color: #fff3cd;
+            border-color: #ffeaa7;
+            color: #856404;
+        }
+        
+        /* 导航栏优化样式 */
+        .navbar-brand:hover {
+            text-decoration: none !important;
+        }
+        
+        .nav-link:hover {
+            color: #0d6efd !important;
+            text-decoration: none !important;
+        }
+        
+        /* 移动端优化 */
+        @media (max-width: 768px) {
+            .navbar-brand span {
+                font-size: 1.5rem !important;
+            }
+            
+            .d-flex.flex-wrap {
+                gap: 0.5rem !important;
+            }
+            
+            .nav-link {
+                font-size: 0.9rem;
+                padding: 0.25rem 0.5rem !important;
+            }
+            
+            .btn {
+                font-size: 0.9rem;
+                padding: 0.375rem 0.75rem !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+        <div class="container">
+            <!-- 第一行：网站标题 -->
+            <div class="w-100 d-flex justify-content-center mb-2">
+                <a class="navbar-brand d-flex align-items-center text-decoration-none" href="index.html">
+                    <span class="fw-bold text-primary fs-3">智慧驿站·心语同行</span>
+                </a>
+            </div>
+
+            <!-- 第二行：导航链接 -->
+            <div class="w-100 d-flex justify-content-center">
+                <div class="d-flex flex-wrap justify-content-center align-items-center gap-2 gap-md-3">
+                    <!-- 主要导航链接 -->
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="index.html">首页</a>
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="about.html">关于我们</a>
+                    <a class="btn btn-primary px-3 py-2" href="assessment.html">心理测评</a>
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="activities.html">活动中心</a>
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="community.html">互动社区</a>
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="consultation.html">在线咨询</a>
+
+                    <!-- 用户操作按钮 -->
+                    <div class="d-flex gap-1">
+                        <a href="login.html" class="nav-link text-dark px-2 py-2 text-decoration-none">登录</a>
+                        <a href="register.html" class="nav-link text-dark px-2 py-2 text-decoration-none">注册</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 进度条 -->
+    <div class="progress-container">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h5 class="mb-1">PCL-5 创伤后应激障碍检查表</h5>
+                    <p class="text-muted mb-0">请根据最近一个月的感受如实回答</p>
+                </div>
+                <div class="col-md-4">
+                    <div class="d-flex align-items-center">
+                        <span class="me-2">进度:</span>
+                        <div class="progress flex-grow-1 me-2">
+                            <div class="progress-bar bg-danger" id="progressBar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <span id="progressText">0/20</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 测评内容 -->
+    <div class="container my-5">
+        <!-- 测评说明 -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="alert trauma-warning">
+                    <h6><i class="fas fa-exclamation-triangle me-2"></i>重要提醒</h6>
+                    <p class="mb-2">
+                        PCL-5用于评估创伤后应激障碍(PTSD)相关症状。如果您最近经历了创伤性事件，
+                        请根据您在<strong>过去一个月内</strong>的实际感受回答以下问题。
+                    </p>
+                    <p class="mb-0">
+                        <strong>创伤性事件包括但不限于：</strong>严重事故、自然灾害、暴力事件、失去亲人、
+                        严重疾病、性侵犯等可能对心理造成重大冲击的事件。
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 创伤事件确认 -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">创伤事件确认</h6>
+                        <p class="card-text">在开始测评前，请确认您是否经历过创伤性事件：</p>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="traumaConfirm" id="traumaYes" value="yes" onchange="updateTraumaStatus()">
+                            <label class="form-check-label" for="traumaYes">
+                                是的，我经历过创伤性事件
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="traumaConfirm" id="traumaNo" value="no" onchange="updateTraumaStatus()">
+                            <label class="form-check-label" for="traumaNo">
+                                没有，我没有经历过创伤性事件
+                            </label>
+                        </div>
+                        <div id="noTraumaMessage" class="alert alert-info mt-3" style="display: none;">
+                            <p class="mb-0">如果您没有经历过创伤性事件，此测评可能不适用于您。建议您选择其他相关的心理健康评估工具。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 测评表单 -->
+        <form id="ptsdForm" style="display: none;">
+            <div id="questionsContainer">
+                <!-- 问题将通过JavaScript动态生成 -->
+            </div>
+            
+            <!-- 提交按钮 -->
+            <div class="row mt-4">
+                <div class="col-12 text-center">
+                    <button type="button" class="btn btn-danger btn-lg px-5" id="submitBtn" onclick="calculateResult()" disabled>
+                        <i class="fas fa-calculator me-2"></i>计算结果
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <!-- 结果显示区域 -->
+        <div id="resultSection" class="mt-5" style="display: none;">
+            <!-- 结果将通过JavaScript动态生成 -->
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-light py-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5 class="text-primary mb-3">智慧驿站·心语同行</h5>
+                    <p class="text-muted">
+                        以党建引领为核心，融合心理健康服务的创新平台，
+                        为师生提供专业、温暖、便捷的心理健康支持。
+                    </p>
+                </div>
+
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="text-primary mb-3">服务平台</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="assessment.html" class="text-muted text-decoration-none">心理测评</a></li>
+                        <li><a href="consultation.html" class="text-muted text-decoration-none">在线咨询</a></li>
+                        <li><a href="activities.html" class="text-muted text-decoration-none">活动中心</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="text-primary mb-3">社区</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="community.html" class="text-muted text-decoration-none">讨论区</a></li>
+                        <li><a href="about.html" class="text-muted text-decoration-none">关于我们</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h6 class="text-primary mb-3">联系方式</h6>
+                    <ul class="list-unstyled text-muted">
+                        <li><i class="fas fa-envelope me-2"></i>contact@hearttalk.me</li>
+                        <li><i class="fas fa-phone me-2"></i>400-123-4567</li>
+                    </ul>
+                </div>
+            </div>
+
+            <hr class="my-4">
+
+            <div class="row align-items-center">
+                <div class="col-md-12 text-center">
+                    <p class="text-muted mb-0">
+                        &copy; 2024 智慧驿站·心语同行. 保留所有权利.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+    <!-- PCL-5 创伤后应激评估功能 -->
+    <script>
+        // PCL-5 问题数据（DSM-5标准）
+        const ptsdQuestions = [
+            // B组症状：侵入性症状 (5题)
+            { text: "反复的、令人痛苦的创伤记忆", cluster: "B", symptom: "侵入性记忆" },
+            { text: "反复的、令人痛苦的创伤梦境", cluster: "B", symptom: "创伤梦境" },
+            { text: "突然感觉或行为表现得好像创伤事件正在重新发生", cluster: "B", symptom: "闪回体验" },
+            { text: "暴露于与创伤事件相似的内在或外在线索时感到强烈的心理痛苦", cluster: "B", symptom: "心理痛苦" },
+            { text: "暴露于与创伤事件相似的内在或外在线索时出现强烈的生理反应", cluster: "B", symptom: "生理反应" },
+
+            // C组症状：回避症状 (2题)
+            { text: "努力避免与创伤相关的痛苦记忆、想法或感受", cluster: "C", symptom: "内在回避" },
+            { text: "努力避免引起创伤相关痛苦记忆、想法或感受的外在提醒物", cluster: "C", symptom: "外在回避" },
+
+            // D组症状：认知和情绪的负性改变 (7题)
+            { text: "无法回忆创伤事件的重要方面", cluster: "D", symptom: "记忆缺失" },
+            { text: "对自己、他人或世界持续的、过分负面的信念或期望", cluster: "D", symptom: "负性信念" },
+            { text: "对创伤事件的原因或后果持续的、扭曲的认知，导致责备自己或他人", cluster: "D", symptom: "扭曲认知" },
+            { text: "持续的负性情绪状态（如恐惧、愤怒、内疚或羞耻）", cluster: "D", symptom: "负性情绪" },
+            { text: "对重要活动的兴趣或参与明显减少", cluster: "D", symptom: "兴趣减退" },
+            { text: "感到与他人疏离或疏远", cluster: "D", symptom: "疏离感" },
+            { text: "持续无法体验积极情绪", cluster: "D", symptom: "情绪麻木" },
+
+            // E组症状：警觉性和反应性的明显改变 (6题)
+            { text: "易怒行为和愤怒爆发", cluster: "E", symptom: "易怒愤怒" },
+            { text: "鲁莽或自我毁灭行为", cluster: "E", symptom: "鲁莽行为" },
+            { text: "过度警觉", cluster: "E", symptom: "过度警觉" },
+            { text: "过分的惊跳反应", cluster: "E", symptom: "惊跳反应" },
+            { text: "注意力集中困难", cluster: "E", symptom: "注意困难" },
+            { text: "睡眠障碍", cluster: "E", symptom: "睡眠问题" }
+        ];
+
+        // 选项数据
+        const options = [
+            { value: 0, text: "完全没有" },
+            { value: 1, text: "轻度" },
+            { value: 2, text: "中度" },
+            { value: 3, text: "相当严重" },
+            { value: 4, text: "极度严重" }
+        ];
+
+        // 更新创伤状态
+        function updateTraumaStatus() {
+            const traumaYes = document.getElementById('traumaYes').checked;
+            const traumaNo = document.getElementById('traumaNo').checked;
+            const noTraumaMessage = document.getElementById('noTraumaMessage');
+            const ptsdForm = document.getElementById('ptsdForm');
+
+            if (traumaYes) {
+                noTraumaMessage.style.display = 'none';
+                ptsdForm.style.display = 'block';
+                generateQuestions();
+                updateProgress();
+            } else if (traumaNo) {
+                noTraumaMessage.style.display = 'block';
+                ptsdForm.style.display = 'none';
+            }
+        }
+
+        // 生成问题
+        function generateQuestions() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = ''; // 清空容器
+
+            // B组症状
+            const clusterB = document.createElement('div');
+            clusterB.innerHTML = `
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h5 class="text-danger"><i class="fas fa-brain me-2"></i>侵入性症状</h5>
+                        <p class="text-muted">以下症状与创伤记忆的反复侵入有关：</p>
+                    </div>
+                </div>
+            `;
+            container.appendChild(clusterB);
+
+            ptsdQuestions.forEach((question, index) => {
+                if (question.cluster === 'B') {
+                    const questionDiv = document.createElement('div');
+                    questionDiv.className = 'row mb-3';
+                    questionDiv.innerHTML = `
+                        <div class="col-12">
+                            <div class="card question-card">
+                                <div class="card-body">
+                                    <h6 class="card-title">
+                                        <span class="badge bg-danger me-2">${index + 1}</span>
+                                        ${question.text}
+                                    </h6>
+                                    <small class="text-muted mb-2 d-block">症状类型：${question.symptom}</small>
+                                    <div class="row g-2">
+                                        ${options.map(option => `
+                                            <div class="col-md-2 col-6">
+                                                <input type="radio" class="btn-check option-input" name="q${index}" id="q${index}_${option.value}" value="${option.value}" onchange="updateProgress()">
+                                                <label class="option-label w-100 text-center" for="q${index}_${option.value}">
+                                                    <div class="fw-bold">${option.text}</div>
+                                                    <small class="text-muted">${option.value}分</small>
+                                                </label>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(questionDiv);
+                }
+            });
+
+            // C组症状
+            const clusterC = document.createElement('div');
+            clusterC.innerHTML = `
+                <div class="row mb-4 mt-5">
+                    <div class="col-12">
+                        <h5 class="text-danger"><i class="fas fa-eye-slash me-2"></i>回避症状</h5>
+                        <p class="text-muted">以下症状与避免创伤相关刺激有关：</p>
+                    </div>
+                </div>
+            `;
+            container.appendChild(clusterC);
+
+            ptsdQuestions.forEach((question, index) => {
+                if (question.cluster === 'C') {
+                    const questionDiv = document.createElement('div');
+                    questionDiv.className = 'row mb-3';
+                    questionDiv.innerHTML = `
+                        <div class="col-12">
+                            <div class="card question-card">
+                                <div class="card-body">
+                                    <h6 class="card-title">
+                                        <span class="badge bg-danger me-2">${index + 1}</span>
+                                        ${question.text}
+                                    </h6>
+                                    <small class="text-muted mb-2 d-block">症状类型：${question.symptom}</small>
+                                    <div class="row g-2">
+                                        ${options.map(option => `
+                                            <div class="col-md-2 col-6">
+                                                <input type="radio" class="btn-check option-input" name="q${index}" id="q${index}_${option.value}" value="${option.value}" onchange="updateProgress()">
+                                                <label class="option-label w-100 text-center" for="q${index}_${option.value}">
+                                                    <div class="fw-bold">${option.text}</div>
+                                                    <small class="text-muted">${option.value}分</small>
+                                                </label>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(questionDiv);
+                }
+            });
+
+            // D组症状
+            const clusterD = document.createElement('div');
+            clusterD.innerHTML = `
+                <div class="row mb-4 mt-5">
+                    <div class="col-12">
+                        <h5 class="text-danger"><i class="fas fa-cloud-rain me-2"></i>认知和情绪负性改变</h5>
+                        <p class="text-muted">以下症状与思维和情绪的负性变化有关：</p>
+                    </div>
+                </div>
+            `;
+            container.appendChild(clusterD);
+
+            ptsdQuestions.forEach((question, index) => {
+                if (question.cluster === 'D') {
+                    const questionDiv = document.createElement('div');
+                    questionDiv.className = 'row mb-3';
+                    questionDiv.innerHTML = `
+                        <div class="col-12">
+                            <div class="card question-card">
+                                <div class="card-body">
+                                    <h6 class="card-title">
+                                        <span class="badge bg-danger me-2">${index + 1}</span>
+                                        ${question.text}
+                                    </h6>
+                                    <small class="text-muted mb-2 d-block">症状类型：${question.symptom}</small>
+                                    <div class="row g-2">
+                                        ${options.map(option => `
+                                            <div class="col-md-2 col-6">
+                                                <input type="radio" class="btn-check option-input" name="q${index}" id="q${index}_${option.value}" value="${option.value}" onchange="updateProgress()">
+                                                <label class="option-label w-100 text-center" for="q${index}_${option.value}">
+                                                    <div class="fw-bold">${option.text}</div>
+                                                    <small class="text-muted">${option.value}分</small>
+                                                </label>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(questionDiv);
+                }
+            });
+
+            // E组症状
+            const clusterE = document.createElement('div');
+            clusterE.innerHTML = `
+                <div class="row mb-4 mt-5">
+                    <div class="col-12">
+                        <h5 class="text-danger"><i class="fas fa-exclamation me-2"></i>警觉性和反应性改变</h5>
+                        <p class="text-muted">以下症状与过度警觉和反应性变化有关：</p>
+                    </div>
+                </div>
+            `;
+            container.appendChild(clusterE);
+
+            ptsdQuestions.forEach((question, index) => {
+                if (question.cluster === 'E') {
+                    const questionDiv = document.createElement('div');
+                    questionDiv.className = 'row mb-3';
+                    questionDiv.innerHTML = `
+                        <div class="col-12">
+                            <div class="card question-card">
+                                <div class="card-body">
+                                    <h6 class="card-title">
+                                        <span class="badge bg-danger me-2">${index + 1}</span>
+                                        ${question.text}
+                                    </h6>
+                                    <small class="text-muted mb-2 d-block">症状类型：${question.symptom}</small>
+                                    <div class="row g-2">
+                                        ${options.map(option => `
+                                            <div class="col-md-2 col-6">
+                                                <input type="radio" class="btn-check option-input" name="q${index}" id="q${index}_${option.value}" value="${option.value}" onchange="updateProgress()">
+                                                <label class="option-label w-100 text-center" for="q${index}_${option.value}">
+                                                    <div class="fw-bold">${option.text}</div>
+                                                    <small class="text-muted">${option.value}分</small>
+                                                </label>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(questionDiv);
+                }
+            });
+        }
+
+        // 更新进度
+        function updateProgress() {
+            const totalQuestions = ptsdQuestions.length;
+            let answeredQuestions = 0;
+
+            for (let i = 0; i < totalQuestions; i++) {
+                const radios = document.querySelectorAll(`input[name="q${i}"]`);
+                for (let radio of radios) {
+                    if (radio.checked) {
+                        answeredQuestions++;
+                        break;
+                    }
+                }
+            }
+
+            const progress = (answeredQuestions / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('progressText').textContent = `${answeredQuestions}/${totalQuestions}`;
+
+            // 启用/禁用提交按钮
+            document.getElementById('submitBtn').disabled = answeredQuestions < totalQuestions;
+        }
+
+        // 计算结果
+        function calculateResult() {
+            let totalScore = 0;
+            let clusterScores = { B: 0, C: 0, D: 0, E: 0 };
+            const answers = [];
+
+            // 收集答案并计算分数
+            for (let i = 0; i < ptsdQuestions.length; i++) {
+                const radios = document.querySelectorAll(`input[name="q${i}"]`);
+                for (let radio of radios) {
+                    if (radio.checked) {
+                        const score = parseInt(radio.value);
+                        totalScore += score;
+                        clusterScores[ptsdQuestions[i].cluster] += score;
+
+                        answers.push({
+                            question: ptsdQuestions[i].text,
+                            cluster: ptsdQuestions[i].cluster,
+                            symptom: ptsdQuestions[i].symptom,
+                            score: score,
+                            text: options[score].text
+                        });
+                        break;
+                    }
+                }
+            }
+
+            // 显示结果
+            displayResult(totalScore, clusterScores, answers);
+        }
+
+        // 显示结果
+        function displayResult(totalScore, clusterScores, answers) {
+            let severity, description, recommendations, resultClass;
+
+            // 根据PCL-5标准判断严重程度
+            if (totalScore < 33) {
+                severity = "PTSD症状轻微";
+                description = "您的创伤后应激症状较轻，但仍需关注心理健康状况。";
+                recommendations = [
+                    "继续关注自己的心理状态",
+                    "学习压力管理和放松技巧",
+                    "保持健康的生活方式",
+                    "寻求社会支持",
+                    "如症状加重请及时寻求帮助"
+                ];
+                resultClass = "result-minimal";
+            } else if (totalScore < 45) {
+                severity = "PTSD症状中等";
+                description = "您可能存在中等程度的创伤后应激症状，建议寻求专业评估。";
+                recommendations = [
+                    "建议咨询心理健康专业人士",
+                    "考虑创伤聚焦的心理治疗",
+                    "学习应对创伤的技巧",
+                    "建立强有力的支持系统",
+                    "保持规律的日常作息",
+                    "避免酒精和药物滥用"
+                ];
+                resultClass = "result-mild";
+            } else if (totalScore < 60) {
+                severity = "PTSD症状较重";
+                description = "您可能存在较重的创伤后应激症状，强烈建议寻求专业治疗。";
+                recommendations = [
+                    "立即寻求心理健康专业人士的帮助",
+                    "考虑专业的创伤治疗（如EMDR、CPT等）",
+                    "可能需要药物辅助治疗",
+                    "建立安全感和稳定性",
+                    "学习情绪调节技巧",
+                    "参加创伤康复支持小组"
+                ];
+                resultClass = "result-moderate";
+            } else {
+                severity = "PTSD症状严重";
+                description = "您可能存在严重的创伤后应激症状，需要立即寻求专业医疗帮助。";
+                recommendations = [
+                    "立即联系心理健康专业人士或医生",
+                    "考虑住院治疗或密集治疗",
+                    "需要专业的创伤治疗和药物治疗",
+                    "确保人身安全，避免再次创伤",
+                    "建立24小时支持系统",
+                    "如有自伤想法请立即拨打危机干预热线"
+                ];
+                resultClass = "result-severe";
+            }
+
+            const resultHTML = `
+                <div class="card result-card ${resultClass}">
+                    <div class="card-header">
+                        <h4 class="mb-0">
+                            <i class="fas fa-chart-bar me-2"></i>PCL-5 创伤后应激评估结果
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <div class="display-4 fw-bold text-danger">${totalScore}</div>
+                                <p class="text-muted">总分 (0-80分)</p>
+                                <h5 class="fw-bold">${severity}</h5>
+
+                                <div class="mt-3">
+                                    <div class="mb-2">
+                                        <div class="fw-bold text-info">${clusterScores.B}</div>
+                                        <small class="text-muted">侵入性症状</small>
+                                    </div>
+                                    <div class="mb-2">
+                                        <div class="fw-bold text-warning">${clusterScores.C}</div>
+                                        <small class="text-muted">回避症状</small>
+                                    </div>
+                                    <div class="mb-2">
+                                        <div class="fw-bold text-secondary">${clusterScores.D}</div>
+                                        <small class="text-muted">认知情绪改变</small>
+                                    </div>
+                                    <div class="mb-2">
+                                        <div class="fw-bold text-dark">${clusterScores.E}</div>
+                                        <small class="text-muted">警觉性改变</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <h6>结果解释：</h6>
+                                <p>${description}</p>
+
+                                <h6>建议措施：</h6>
+                                <ul>
+                                    ${recommendations.map(rec => `<li>${rec}</li>`).join('')}
+                                </ul>
+
+                                <div class="row mt-3">
+                                    <div class="col-md-6">
+                                        <h6 class="text-info small">B组-侵入性症状：</h6>
+                                        <div class="progress mb-2" style="height: 8px;">
+                                            <div class="progress-bar bg-info" style="width: ${(clusterScores.B/20)*100}%"></div>
+                                        </div>
+                                        <small class="text-muted">${clusterScores.B}/20分</small>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="text-warning small">C组-回避症状：</h6>
+                                        <div class="progress mb-2" style="height: 8px;">
+                                            <div class="progress-bar bg-warning" style="width: ${(clusterScores.C/8)*100}%"></div>
+                                        </div>
+                                        <small class="text-muted">${clusterScores.C}/8分</small>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="text-secondary small">D组-认知情绪改变：</h6>
+                                        <div class="progress mb-2" style="height: 8px;">
+                                            <div class="progress-bar bg-secondary" style="width: ${(clusterScores.D/28)*100}%"></div>
+                                        </div>
+                                        <small class="text-muted">${clusterScores.D}/28分</small>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="text-dark small">E组-警觉性改变：</h6>
+                                        <div class="progress mb-2" style="height: 8px;">
+                                            <div class="progress-bar bg-dark" style="width: ${(clusterScores.E/24)*100}%"></div>
+                                        </div>
+                                        <small class="text-muted">${clusterScores.E}/24分</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-danger mt-4">
+                            <h6><i class="fas fa-exclamation-triangle me-2"></i>重要提醒</h6>
+                            <p class="mb-0">
+                                此测评结果仅供参考，不能替代专业医学诊断。PTSD是一种严重的心理健康状况，
+                                需要专业的评估和治疗。如果您正在经历创伤相关困扰，请及时寻求专业帮助。
+                                <strong>如有自伤或伤害他人的想法，请立即拨打紧急求助电话。</strong>
+                            </p>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button class="btn btn-danger me-2" onclick="window.print()">
+                                <i class="fas fa-print me-2"></i>打印结果
+                            </button>
+                            <a href="consultation.html" class="btn btn-primary me-2">
+                                <i class="fas fa-comments me-2"></i>紧急咨询
+                            </a>
+                            <a href="assessment.html" class="btn btn-outline-danger">
+                                <i class="fas fa-arrow-left me-2"></i>返回测评中心
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('resultSection').innerHTML = resultHTML;
+            document.getElementById('resultSection').style.display = 'block';
+
+            // 滚动到结果区域
+            document.getElementById('resultSection').scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('PCL-5 创伤后应激评估已加载');
+        });
+    </script>
+</body>
+</html>

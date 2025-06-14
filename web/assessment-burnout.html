@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智慧驿站·心语同行 - 学习倦怠评估</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- 自定义样式 -->
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --purple-color: #6f42c1;
+        }
+        
+        .question-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--purple-color);
+        }
+        
+        .question-card:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .option-label {
+            cursor: pointer;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
+        
+        .option-label:hover {
+            background-color: #f8f9fa;
+            border-color: var(--purple-color);
+        }
+        
+        .option-input:checked + .option-label {
+            background-color: var(--purple-color);
+            color: white;
+            border-color: var(--purple-color);
+        }
+        
+        .progress-container {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .result-card {
+            border-left: 5px solid;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+        
+        .result-low { border-left-color: #198754; }
+        .result-moderate { border-left-color: #ffc107; }
+        .result-high { border-left-color: #fd7e14; }
+        .result-severe { border-left-color: #dc3545; }
+        
+        .bg-purple { background-color: var(--purple-color) !important; }
+        
+        /* 导航栏优化样式 */
+        .navbar-brand:hover {
+            text-decoration: none !important;
+        }
+        
+        .nav-link:hover {
+            color: #0d6efd !important;
+            text-decoration: none !important;
+        }
+        
+        /* 移动端优化 */
+        @media (max-width: 768px) {
+            .navbar-brand span {
+                font-size: 1.5rem !important;
+            }
+            
+            .d-flex.flex-wrap {
+                gap: 0.5rem !important;
+            }
+            
+            .nav-link {
+                font-size: 0.9rem;
+                padding: 0.25rem 0.5rem !important;
+            }
+            
+            .btn {
+                font-size: 0.9rem;
+                padding: 0.375rem 0.75rem !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+        <div class="container">
+            <!-- 第一行：网站标题 -->
+            <div class="w-100 d-flex justify-content-center mb-2">
+                <a class="navbar-brand d-flex align-items-center text-decoration-none" href="index.html">
+                    <span class="fw-bold text-primary fs-3">智慧驿站·心语同行</span>
+                </a>
+            </div>
+
+            <!-- 第二行：导航链接 -->
+            <div class="w-100 d-flex justify-content-center">
+                <div class="d-flex flex-wrap justify-content-center align-items-center gap-2 gap-md-3">
+                    <!-- 主要导航链接 -->
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="index.html">首页</a>
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="about.html">关于我们</a>
+                    <a class="btn btn-primary px-3 py-2" href="assessment.html">心理测评</a>
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="activities.html">活动中心</a>
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="community.html">互动社区</a>
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="consultation.html">在线咨询</a>
+
+                    <!-- 用户操作按钮 -->
+                    <div class="d-flex gap-1">
+                        <a href="login.html" class="nav-link text-dark px-2 py-2 text-decoration-none">登录</a>
+                        <a href="register.html" class="nav-link text-dark px-2 py-2 text-decoration-none">注册</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 进度条 -->
+    <div class="progress-container">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h5 class="mb-1">学习倦怠量表 (LBI)</h5>
+                    <p class="text-muted mb-0">请根据最近一个月的学习感受如实回答</p>
+                </div>
+                <div class="col-md-4">
+                    <div class="d-flex align-items-center">
+                        <span class="me-2">进度:</span>
+                        <div class="progress flex-grow-1 me-2">
+                            <div class="progress-bar bg-purple" id="progressBar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <span id="progressText">0/15</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 测评内容 -->
+    <div class="container my-5">
+        <!-- 测评说明 -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="alert" style="background-color: #f3f0ff; border-color: var(--purple-color);">
+                    <h6><i class="fas fa-graduation-cap me-2"></i>测评说明</h6>
+                    <p class="mb-0">
+                        学习倦怠量表用于评估学生在学习过程中的倦怠程度。请根据您在<strong>过去一个月内</strong>的实际学习感受，
+                        选择最符合您情况的选项。该量表包含情绪耗竭、去人格化和成就感降低三个维度。
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 测评表单 -->
+        <form id="burnoutForm">
+            <div id="questionsContainer">
+                <!-- 问题将通过JavaScript动态生成 -->
+            </div>
+            
+            <!-- 提交按钮 -->
+            <div class="row mt-4">
+                <div class="col-12 text-center">
+                    <button type="button" class="btn bg-purple text-white btn-lg px-5" id="submitBtn" onclick="calculateResult()" disabled>
+                        <i class="fas fa-calculator me-2"></i>计算结果
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <!-- 结果显示区域 -->
+        <div id="resultSection" class="mt-5" style="display: none;">
+            <!-- 结果将通过JavaScript动态生成 -->
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-light py-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5 class="text-primary mb-3">智慧驿站·心语同行</h5>
+                    <p class="text-muted">
+                        以党建引领为核心，融合心理健康服务的创新平台，
+                        为师生提供专业、温暖、便捷的心理健康支持。
+                    </p>
+                </div>
+
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="text-primary mb-3">服务平台</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="assessment.html" class="text-muted text-decoration-none">心理测评</a></li>
+                        <li><a href="consultation.html" class="text-muted text-decoration-none">在线咨询</a></li>
+                        <li><a href="activities.html" class="text-muted text-decoration-none">活动中心</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="text-primary mb-3">社区</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="community.html" class="text-muted text-decoration-none">讨论区</a></li>
+                        <li><a href="about.html" class="text-muted text-decoration-none">关于我们</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h6 class="text-primary mb-3">联系方式</h6>
+                    <ul class="list-unstyled text-muted">
+                        <li><i class="fas fa-envelope me-2"></i>contact@hearttalk.me</li>
+                        <li><i class="fas fa-phone me-2"></i>400-123-4567</li>
+                    </ul>
+                </div>
+            </div>
+
+            <hr class="my-4">
+
+            <div class="row align-items-center">
+                <div class="col-md-12 text-center">
+                    <p class="text-muted mb-0">
+                        &copy; 2024 智慧驿站·心语同行. 保留所有权利.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+    <!-- 学习倦怠评估功能 -->
+    <script>
+        // 学习倦怠量表问题数据
+        const burnoutQuestions = [
+            // 情绪耗竭维度 (8题)
+            { text: "学习让我感到情绪上的疲惫", dimension: "exhaustion", reverse: false },
+            { text: "一天的学习结束时我感到精疲力竭", dimension: "exhaustion", reverse: false },
+            { text: "早上起床面对一天的学习时我感到疲倦", dimension: "exhaustion", reverse: false },
+            { text: "学习对我来说压力很大", dimension: "exhaustion", reverse: false },
+            { text: "学习让我感到挫败", dimension: "exhaustion", reverse: false },
+            { text: "我觉得学习太辛苦了", dimension: "exhaustion", reverse: false },
+            { text: "学习让我感到身心俱疲", dimension: "exhaustion", reverse: false },
+            { text: "我对学习感到厌倦", dimension: "exhaustion", reverse: false },
+
+            // 去人格化维度 (4题)
+            { text: "自从开始学习以来，我对学习的兴趣下降了", dimension: "cynicism", reverse: false },
+            { text: "我对学习的热情下降了", dimension: "cynicism", reverse: false },
+            { text: "我怀疑我所学知识的价值", dimension: "cynicism", reverse: false },
+            { text: "我对学习能否帮助我实现目标产生怀疑", dimension: "cynicism", reverse: false },
+
+            // 成就感降低维度 (3题，反向计分)
+            { text: "我能有效地解决学习中遇到的问题", dimension: "efficacy", reverse: true },
+            { text: "我相信我能有效地完成学习任务", dimension: "efficacy", reverse: true },
+            { text: "在我看来，我是一个好学生", dimension: "efficacy", reverse: true }
+        ];
+
+        // 选项数据
+        const options = [
+            { value: 1, text: "从不" },
+            { value: 2, text: "很少" },
+            { value: 3, text: "有时" },
+            { value: 4, text: "经常" },
+            { value: 5, text: "总是" }
+        ];
+
+        // 生成问题
+        function generateQuestions() {
+            const container = document.getElementById('questionsContainer');
+
+            // 情绪耗竭部分
+            const exhaustionSection = document.createElement('div');
+            exhaustionSection.innerHTML = `
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h5 style="color: var(--purple-color);"><i class="fas fa-battery-empty me-2"></i>情绪耗竭</h5>
+                        <p class="text-muted">以下问题涉及您在学习过程中的情绪疲惫感受：</p>
+                    </div>
+                </div>
+            `;
+            container.appendChild(exhaustionSection);
+
+            // 生成情绪耗竭问题
+            burnoutQuestions.forEach((question, index) => {
+                if (question.dimension === 'exhaustion') {
+                    const questionDiv = document.createElement('div');
+                    questionDiv.className = 'row mb-3';
+                    questionDiv.innerHTML = `
+                        <div class="col-12">
+                            <div class="card question-card">
+                                <div class="card-body">
+                                    <h6 class="card-title">
+                                        <span class="badge bg-purple me-2">${index + 1}</span>
+                                        ${question.text}
+                                    </h6>
+                                    <div class="row g-2">
+                                        ${options.map(option => `
+                                            <div class="col-md-2 col-6">
+                                                <input type="radio" class="btn-check option-input" name="q${index}" id="q${index}_${option.value}" value="${option.value}" onchange="updateProgress()">
+                                                <label class="option-label w-100 text-center" for="q${index}_${option.value}">
+                                                    <div class="fw-bold">${option.text}</div>
+                                                    <small class="text-muted">${option.value}分</small>
+                                                </label>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(questionDiv);
+                }
+            });
+
+            // 去人格化部分
+            const cynicismSection = document.createElement('div');
+            cynicismSection.innerHTML = `
+                <div class="row mb-4 mt-5">
+                    <div class="col-12">
+                        <h5 style="color: var(--purple-color);"><i class="fas fa-user-times me-2"></i>去人格化</h5>
+                        <p class="text-muted">以下问题涉及您对学习的态度和兴趣变化：</p>
+                    </div>
+                </div>
+            `;
+            container.appendChild(cynicismSection);
+
+            // 生成去人格化问题
+            burnoutQuestions.forEach((question, index) => {
+                if (question.dimension === 'cynicism') {
+                    const questionDiv = document.createElement('div');
+                    questionDiv.className = 'row mb-3';
+                    questionDiv.innerHTML = `
+                        <div class="col-12">
+                            <div class="card question-card">
+                                <div class="card-body">
+                                    <h6 class="card-title">
+                                        <span class="badge bg-purple me-2">${index + 1}</span>
+                                        ${question.text}
+                                    </h6>
+                                    <div class="row g-2">
+                                        ${options.map(option => `
+                                            <div class="col-md-2 col-6">
+                                                <input type="radio" class="btn-check option-input" name="q${index}" id="q${index}_${option.value}" value="${option.value}" onchange="updateProgress()">
+                                                <label class="option-label w-100 text-center" for="q${index}_${option.value}">
+                                                    <div class="fw-bold">${option.text}</div>
+                                                    <small class="text-muted">${option.value}分</small>
+                                                </label>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(questionDiv);
+                }
+            });
+
+            // 成就感部分
+            const efficacySection = document.createElement('div');
+            efficacySection.innerHTML = `
+                <div class="row mb-4 mt-5">
+                    <div class="col-12">
+                        <h5 style="color: var(--purple-color);"><i class="fas fa-trophy me-2"></i>学习效能感</h5>
+                        <p class="text-muted">以下问题涉及您对自己学习能力和成就的评价：</p>
+                    </div>
+                </div>
+            `;
+            container.appendChild(efficacySection);
+
+            // 生成成就感问题
+            burnoutQuestions.forEach((question, index) => {
+                if (question.dimension === 'efficacy') {
+                    const questionDiv = document.createElement('div');
+                    questionDiv.className = 'row mb-3';
+                    questionDiv.innerHTML = `
+                        <div class="col-12">
+                            <div class="card question-card">
+                                <div class="card-body">
+                                    <h6 class="card-title">
+                                        <span class="badge bg-purple me-2">${index + 1}</span>
+                                        ${question.text}
+                                        <i class="fas fa-sync-alt text-warning ms-2" title="反向计分题"></i>
+                                    </h6>
+                                    <div class="row g-2">
+                                        ${options.map(option => `
+                                            <div class="col-md-2 col-6">
+                                                <input type="radio" class="btn-check option-input" name="q${index}" id="q${index}_${option.value}" value="${option.value}" onchange="updateProgress()">
+                                                <label class="option-label w-100 text-center" for="q${index}_${option.value}">
+                                                    <div class="fw-bold">${option.text}</div>
+                                                    <small class="text-muted">${option.value}分</small>
+                                                </label>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(questionDiv);
+                }
+            });
+        }
+
+        // 更新进度
+        function updateProgress() {
+            const totalQuestions = burnoutQuestions.length;
+            let answeredQuestions = 0;
+
+            for (let i = 0; i < totalQuestions; i++) {
+                const radios = document.querySelectorAll(`input[name="q${i}"]`);
+                for (let radio of radios) {
+                    if (radio.checked) {
+                        answeredQuestions++;
+                        break;
+                    }
+                }
+            }
+
+            const progress = (answeredQuestions / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('progressText').textContent = `${answeredQuestions}/${totalQuestions}`;
+
+            // 启用/禁用提交按钮
+            document.getElementById('submitBtn').disabled = answeredQuestions < totalQuestions;
+        }
+
+        // 计算结果
+        function calculateResult() {
+            let exhaustionScore = 0;
+            let cynicismScore = 0;
+            let efficacyScore = 0;
+            const answers = [];
+
+            // 收集答案并计算各维度分数
+            for (let i = 0; i < burnoutQuestions.length; i++) {
+                const radios = document.querySelectorAll(`input[name="q${i}"]`);
+                for (let radio of radios) {
+                    if (radio.checked) {
+                        let score = parseInt(radio.value);
+                        const question = burnoutQuestions[i];
+
+                        // 反向计分题处理
+                        if (question.reverse) {
+                            score = 6 - score;
+                        }
+
+                        // 按维度累加分数
+                        if (question.dimension === 'exhaustion') {
+                            exhaustionScore += score;
+                        } else if (question.dimension === 'cynicism') {
+                            cynicismScore += score;
+                        } else if (question.dimension === 'efficacy') {
+                            efficacyScore += score;
+                        }
+
+                        answers.push({
+                            question: question.text,
+                            dimension: question.dimension,
+                            originalScore: parseInt(radio.value),
+                            finalScore: score,
+                            text: options[parseInt(radio.value) - 1].text,
+                            reverse: question.reverse
+                        });
+                        break;
+                    }
+                }
+            }
+
+            // 计算平均分
+            const exhaustionAvg = exhaustionScore / 8;
+            const cynicismAvg = cynicismScore / 4;
+            const efficacyAvg = efficacyScore / 3;
+
+            // 显示结果
+            displayResult(exhaustionAvg, cynicismAvg, efficacyAvg, answers);
+        }
+
+        // 显示结果
+        function displayResult(exhaustionAvg, cynicismAvg, efficacyAvg, answers) {
+            // 判断倦怠程度
+            let burnoutLevel, description, recommendations, resultClass;
+
+            // 根据各维度分数判断倦怠程度
+            const highExhaustion = exhaustionAvg >= 3.5;
+            const highCynicism = cynicismAvg >= 3.5;
+            const lowEfficacy = efficacyAvg <= 2.5;
+
+            if (highExhaustion && highCynicism && lowEfficacy) {
+                burnoutLevel = "严重学习倦怠";
+                description = "您在学习的三个维度上都表现出明显的倦怠症状，需要立即采取措施。";
+                recommendations = [
+                    "立即寻求学业指导或心理咨询",
+                    "重新评估学习目标和方法",
+                    "考虑暂时减少学习负担",
+                    "建立有效的压力管理策略",
+                    "寻求家人和朋友的支持",
+                    "必要时考虑专业心理治疗"
+                ];
+                resultClass = "result-severe";
+            } else if ((highExhaustion && highCynicism) || (highExhaustion && lowEfficacy) || (highCynicism && lowEfficacy)) {
+                burnoutLevel = "中度学习倦怠";
+                description = "您在学习倦怠的多个维度上表现出症状，建议采取积极措施改善。";
+                recommendations = [
+                    "寻求学业指导和支持",
+                    "调整学习计划和目标",
+                    "学习有效的时间管理技巧",
+                    "增加学习的趣味性和多样性",
+                    "建立良好的学习环境",
+                    "考虑心理咨询或辅导"
+                ];
+                resultClass = "result-high";
+            } else if (highExhaustion || highCynicism || lowEfficacy) {
+                burnoutLevel = "轻度学习倦怠";
+                description = "您在某个维度上表现出倦怠症状，需要关注并采取预防措施。";
+                recommendations = [
+                    "调整学习节奏，适当休息",
+                    "寻找学习的意义和动机",
+                    "改善学习方法和策略",
+                    "增加学习的社交性",
+                    "保持身心健康",
+                    "定期自我评估和调整"
+                ];
+                resultClass = "result-moderate";
+            } else {
+                burnoutLevel = "学习状态良好";
+                description = "您目前的学习状态良好，没有明显的倦怠症状。";
+                recommendations = [
+                    "继续保持良好的学习习惯",
+                    "定期进行自我评估",
+                    "保持学习的热情和动机",
+                    "适当挑战自己",
+                    "帮助其他同学",
+                    "预防倦怠的发生"
+                ];
+                resultClass = "result-low";
+            }
+
+            const resultHTML = `
+                <div class="card result-card ${resultClass}">
+                    <div class="card-header">
+                        <h4 class="mb-0">
+                            <i class="fas fa-chart-bar me-2"></i>学习倦怠评估结果
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <h5 class="fw-bold" style="color: var(--purple-color);">${burnoutLevel}</h5>
+                                <div class="mt-3">
+                                    <div class="mb-2">
+                                        <div class="fw-bold text-danger">${exhaustionAvg.toFixed(2)}</div>
+                                        <small class="text-muted">情绪耗竭</small>
+                                    </div>
+                                    <div class="mb-2">
+                                        <div class="fw-bold text-warning">${cynicismAvg.toFixed(2)}</div>
+                                        <small class="text-muted">去人格化</small>
+                                    </div>
+                                    <div class="mb-2">
+                                        <div class="fw-bold text-success">${efficacyAvg.toFixed(2)}</div>
+                                        <small class="text-muted">学习效能感</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <h6>结果解释：</h6>
+                                <p>${description}</p>
+
+                                <h6>建议措施：</h6>
+                                <ul>
+                                    ${recommendations.map(rec => `<li>${rec}</li>`).join('')}
+                                </ul>
+
+                                <div class="row mt-3">
+                                    <div class="col-md-4">
+                                        <h6 class="text-danger small">情绪耗竭分析：</h6>
+                                        <div class="progress mb-2" style="height: 8px;">
+                                            <div class="progress-bar bg-danger" style="width: ${(exhaustionAvg/5)*100}%"></div>
+                                        </div>
+                                        <small class="text-muted">
+                                            ${exhaustionAvg >= 3.5 ? '高度耗竭' :
+                                              exhaustionAvg >= 2.5 ? '中度耗竭' : '低度耗竭'}
+                                        </small>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h6 class="text-warning small">去人格化分析：</h6>
+                                        <div class="progress mb-2" style="height: 8px;">
+                                            <div class="progress-bar bg-warning" style="width: ${(cynicismAvg/5)*100}%"></div>
+                                        </div>
+                                        <small class="text-muted">
+                                            ${cynicismAvg >= 3.5 ? '高度冷漠' :
+                                              cynicismAvg >= 2.5 ? '中度冷漠' : '低度冷漠'}
+                                        </small>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h6 class="text-success small">学习效能感分析：</h6>
+                                        <div class="progress mb-2" style="height: 8px;">
+                                            <div class="progress-bar bg-success" style="width: ${(efficacyAvg/5)*100}%"></div>
+                                        </div>
+                                        <small class="text-muted">
+                                            ${efficacyAvg >= 3.5 ? '高效能感' :
+                                              efficacyAvg >= 2.5 ? '中等效能感' : '低效能感'}
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <h6>详细分析：</h6>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <h6 class="text-danger small">情绪耗竭详情：</h6>
+                                    ${answers.filter(a => a.dimension === 'exhaustion').map((answer, index) => `
+                                        <div class="small mb-1">
+                                            题${index + 1}: ${answer.text} (${answer.finalScore}分)
+                                        </div>
+                                    `).join('')}
+                                </div>
+                                <div class="col-md-4">
+                                    <h6 class="text-warning small">去人格化详情：</h6>
+                                    ${answers.filter(a => a.dimension === 'cynicism').map((answer, index) => `
+                                        <div class="small mb-1">
+                                            题${index + 9}: ${answer.text} (${answer.finalScore}分)
+                                        </div>
+                                    `).join('')}
+                                </div>
+                                <div class="col-md-4">
+                                    <h6 class="text-success small">学习效能感详情：</h6>
+                                    ${answers.filter(a => a.dimension === 'efficacy').map((answer, index) => `
+                                        <div class="small mb-1">
+                                            题${index + 13}: ${answer.text}
+                                            ${answer.reverse ? `(${answer.originalScore}→${answer.finalScore}分)` : `(${answer.finalScore}分)`}
+                                            ${answer.reverse ? '<span class="text-warning">*</span>' : ''}
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                            <p class="small text-muted mt-2">
+                                <span class="text-warning">*</span> 标记的题目为反向计分题，分数已自动转换
+                            </p>
+                        </div>
+
+                        <div class="alert alert-info mt-4">
+                            <h6><i class="fas fa-lightbulb me-2"></i>学习倦怠预防小贴士</h6>
+                            <p class="mb-0">
+                                学习倦怠是学生常见的心理现象。预防倦怠的关键在于保持学习与休息的平衡，
+                                设定合理的目标，寻找学习的意义，以及建立良好的支持系统。
+                                如果倦怠症状严重影响学习和生活，请及时寻求专业帮助。
+                            </p>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button class="btn bg-purple text-white me-2" onclick="window.print()">
+                                <i class="fas fa-print me-2"></i>打印结果
+                            </button>
+                            <a href="consultation.html" class="btn btn-primary me-2">
+                                <i class="fas fa-comments me-2"></i>在线咨询
+                            </a>
+                            <a href="assessment.html" class="btn" style="border-color: var(--purple-color); color: var(--purple-color);">
+                                <i class="fas fa-arrow-left me-2"></i>返回测评中心
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('resultSection').innerHTML = resultHTML;
+            document.getElementById('resultSection').style.display = 'block';
+
+            // 滚动到结果区域
+            document.getElementById('resultSection').scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            generateQuestions();
+            console.log('学习倦怠量表已加载');
+        });
+    </script>
+</body>
+</html>

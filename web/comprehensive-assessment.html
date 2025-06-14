@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智慧驿站·心语同行 - 综合心理健康评估</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- 自定义样式 -->
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --gradient-start: #667eea;
+            --gradient-end: #764ba2;
+        }
+        
+        .bg-gradient-comprehensive {
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+        }
+        
+        .question-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .question-card:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .option-label {
+            cursor: pointer;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
+        
+        .option-label:hover {
+            background-color: #f8f9fa;
+            border-color: var(--primary-color);
+        }
+        
+        .option-input:checked + .option-label {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .progress-container {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .assessment-phase {
+            display: none;
+        }
+        
+        .assessment-phase.active {
+            display: block;
+        }
+        
+        .phase-indicator {
+            opacity: 0.5;
+            transition: all 0.3s ease;
+        }
+        
+        .phase-indicator.active {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        
+        .phase-indicator.completed {
+            opacity: 1;
+            color: #198754;
+        }
+        
+        .result-card {
+            border-left: 5px solid;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+        
+        .result-excellent { border-left-color: #198754; }
+        .result-good { border-left-color: #20c997; }
+        .result-fair { border-left-color: #ffc107; }
+        .result-poor { border-left-color: #fd7e14; }
+        .result-critical { border-left-color: #dc3545; }
+        
+        .radar-chart-container {
+            position: relative;
+            height: 400px;
+            width: 100%;
+        }
+        
+        /* 导航栏优化样式 */
+        .navbar-brand:hover {
+            text-decoration: none !important;
+        }
+        
+        .nav-link:hover {
+            color: #0d6efd !important;
+            text-decoration: none !important;
+        }
+        
+        /* 动画效果 */
+        @keyframes bounce {
+            0%, 20%, 60%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-20px);
+            }
+            80% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-content {
+            animation: fadeInUp 0.3s ease-out;
+        }
+
+        /* 移动端优化 */
+        @media (max-width: 768px) {
+            .navbar-brand span {
+                font-size: 1.5rem !important;
+            }
+
+            .radar-chart-container {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+        <div class="container">
+            <!-- 第一行：网站标题 -->
+            <div class="w-100 d-flex justify-content-center mb-2">
+                <a class="navbar-brand d-flex align-items-center text-decoration-none" href="index.html">
+                    <span class="fw-bold text-primary fs-3">智慧驿站·心语同行</span>
+                </a>
+            </div>
+
+            <!-- 第二行：导航链接 -->
+            <div class="w-100 d-flex justify-content-center">
+                <div class="d-flex flex-wrap justify-content-center align-items-center gap-2 gap-md-3">
+                    <!-- 主要导航链接 -->
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="index.html">首页</a>
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="about.html">关于我们</a>
+                    <a class="btn btn-primary px-3 py-2" href="assessment.html">心理测评</a>
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="activities.html">活动中心</a>
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="community.html">互动社区</a>
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="consultation.html">在线咨询</a>
+
+                    <!-- 用户操作按钮 -->
+                    <div class="d-flex gap-1 user-actions">
+                        <a href="login.html" class="nav-link text-dark px-2 py-2 text-decoration-none">登录</a>
+                        <a href="register.html" class="nav-link text-dark px-2 py-2 text-decoration-none">注册</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 进度条 -->
+    <div class="progress-container">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h5 class="mb-1">综合心理健康评估</h5>
+                    <p class="text-muted mb-0" id="currentPhaseText">准备开始评估</p>
+                </div>
+                <div class="col-md-4">
+                    <div class="d-flex align-items-center">
+                        <span class="me-2">总进度:</span>
+                        <div class="progress flex-grow-1 me-2">
+                            <div class="progress-bar bg-gradient-comprehensive" id="overallProgressBar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <span id="overallProgressText">0%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 阶段指示器 -->
+            <div class="row mt-3">
+                <div class="col-12">
+                    <div class="d-flex justify-content-center">
+                        <div class="d-flex gap-3">
+                            <div class="phase-indicator active" id="phase-depression">
+                                <i class="fas fa-brain"></i> <small>抑郁</small>
+                            </div>
+                            <div class="phase-indicator" id="phase-anxiety">
+                                <i class="fas fa-heart"></i> <small>焦虑</small>
+                            </div>
+                            <div class="phase-indicator" id="phase-stress">
+                                <i class="fas fa-chart-line"></i> <small>压力</small>
+                            </div>
+                            <div class="phase-indicator" id="phase-emotion">
+                                <i class="fas fa-smile"></i> <small>情绪</small>
+                            </div>
+                            <div class="phase-indicator" id="phase-sleep">
+                                <i class="fas fa-moon"></i> <small>睡眠</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 评估介绍 -->
+    <div class="container my-5" id="introSection">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="card border-0 shadow-lg">
+                    <div class="card-header bg-gradient-comprehensive text-white text-center">
+                        <h3 class="mb-0"><i class="fas fa-star me-2"></i>综合心理健康评估</h3>
+                    </div>
+                    <div class="card-body p-5">
+                        <div class="text-center mb-4">
+                            <h4 class="text-primary">全面心理健康筛查</h4>
+                            <p class="text-muted">科学、专业、全面的心理健康状况评估</p>
+                        </div>
+                        
+                        <div class="row mb-4">
+                            <div class="col-md-3 text-center">
+                                <div class="bg-primary text-white rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                    <span class="fw-bold">5</span>
+                                </div>
+                                <h6>核心测评</h6>
+                                <small class="text-muted">涵盖主要心理健康维度</small>
+                            </div>
+                            <div class="col-md-3 text-center">
+                                <div class="bg-success text-white rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                    <span class="fw-bold">30</span>
+                                </div>
+                                <h6>分钟完成</h6>
+                                <small class="text-muted">合理的评估时长</small>
+                            </div>
+                            <div class="col-md-3 text-center">
+                                <div class="bg-info text-white rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                    <i class="fas fa-chart-pie"></i>
+                                </div>
+                                <h6>专业报告</h6>
+                                <small class="text-muted">详细的分析报告</small>
+                            </div>
+                            <div class="col-md-3 text-center">
+                                <div class="bg-warning text-white rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                    <i class="fas fa-lightbulb"></i>
+                                </div>
+                                <h6>个性化建议</h6>
+                                <small class="text-muted">针对性改善方案</small>
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-info">
+                            <h6><i class="fas fa-info-circle me-2"></i>评估内容</h6>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <ul class="mb-0">
+                                        <li><strong>PHQ-9</strong> 抑郁症状筛查</li>
+                                        <li><strong>GAD-7</strong> 焦虑症状评估</li>
+                                        <li><strong>PSS-10</strong> 压力感知水平</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <ul class="mb-0">
+                                        <li><strong>PANAS</strong> 情绪状态分析</li>
+                                        <li><strong>PSQI</strong> 睡眠质量评估</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button class="btn btn-primary btn-lg px-5" onclick="startComprehensiveAssessment()">
+                                <i class="fas fa-play me-2"></i>开始综合评估
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 评估阶段容器 -->
+    <div class="container my-5" id="assessmentContainer" style="display: none;">
+        <!-- 各个评估阶段将通过JavaScript动态生成 -->
+    </div>
+
+    <!-- 结果显示区域 -->
+    <div class="container my-5" id="resultSection" style="display: none;">
+        <!-- 结果将通过JavaScript动态生成 -->
+    </div>
+
+    <!-- 完成提示弹窗 -->
+    <div class="modal fade" id="completionModal" tabindex="-1" aria-labelledby="completionModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-gradient-comprehensive text-white">
+                    <h5 class="modal-title" id="completionModalLabel">
+                        <i class="fas fa-check-circle me-2"></i>评估完成
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center p-4">
+                    <div class="mb-4">
+                        <i class="fas fa-trophy text-warning" style="font-size: 4rem;"></i>
+                    </div>
+                    <h4 class="text-primary mb-3">恭喜您完成综合心理健康评估！</h4>
+                    <p class="text-muted mb-3" id="completionMessage">
+                        您已成功完成了包含5个核心维度的心理健康评估，耗时 <span id="assessmentDuration"></span> 分钟。
+                    </p>
+                    <div class="alert alert-info">
+                        <i class="fas fa-lightbulb me-2"></i>
+                        您的专业评估报告已生成，包含详细的分析结果和个性化建议。
+                    </div>
+                    <div class="row text-center">
+                        <div class="col-4">
+                            <div class="text-primary">
+                                <i class="fas fa-chart-pie" style="font-size: 2rem;"></i>
+                                <div class="small mt-1">专业分析</div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="text-success">
+                                <i class="fas fa-lightbulb" style="font-size: 2rem;"></i>
+                                <div class="small mt-1">个性化建议</div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="text-warning">
+                                <i class="fas fa-print" style="font-size: 2rem;"></i>
+                                <div class="small mt-1">可打印报告</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-primary btn-lg" data-bs-dismiss="modal">
+                        <i class="fas fa-eye me-2"></i>查看详细报告
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-light py-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5 class="text-primary mb-3">智慧驿站·心语同行</h5>
+                    <p class="text-muted">
+                        以党建引领为核心，融合心理健康服务的创新平台，
+                        为师生提供专业、温暖、便捷的心理健康支持。
+                    </p>
+                </div>
+
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="text-primary mb-3">服务平台</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="assessment.html" class="text-muted text-decoration-none">心理测评</a></li>
+                        <li><a href="consultation.html" class="text-muted text-decoration-none">在线咨询</a></li>
+                        <li><a href="activities.html" class="text-muted text-decoration-none">活动中心</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="text-primary mb-3">社区</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="community.html" class="text-muted text-decoration-none">讨论区</a></li>
+                        <li><a href="about.html" class="text-muted text-decoration-none">关于我们</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h6 class="text-primary mb-3">联系方式</h6>
+                    <ul class="list-unstyled text-muted">
+                        <li><i class="fas fa-envelope me-2"></i>contact@hearttalk.me</li>
+                        <li><i class="fas fa-phone me-2"></i>400-123-4567</li>
+                    </ul>
+                </div>
+            </div>
+
+            <hr class="my-4">
+
+            <div class="row align-items-center">
+                <div class="col-md-12 text-center">
+                    <p class="text-muted mb-0">
+                        &copy; 2024 智慧驿站·心语同行. 保留所有权利.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+    <!-- 用户状态管理 -->
+    <script src="js/user-status.js"></script>
+
+    <!-- 综合心理健康评估功能 -->
+    <script>
+        // 综合评估配置 - 精选核心题目
+        const comprehensiveAssessment = {
+            // PHQ-9 抑郁筛查 - 精选5题
+            depression: {
+                name: "抑郁症状评估",
+                icon: "fas fa-brain",
+                color: "#0d6efd",
+                questions: [
+                    "做事时提不起劲或没有兴趣",
+                    "感到心情低落、沮丧或绝望",
+                    "感觉疲倦或没有活力",
+                    "觉得自己很糟糕，或觉得自己很失败",
+                    "有不如死掉或用某种方式伤害自己的念头"
+                ],
+                options: [
+                    { value: 0, text: "完全没有" },
+                    { value: 1, text: "好几天" },
+                    { value: 2, text: "一半以上的天数" },
+                    { value: 3, text: "几乎每天" }
+                ]
+            },
+
+            // GAD-7 焦虑筛查 - 精选4题
+            anxiety: {
+                name: "焦虑症状评估",
+                icon: "fas fa-heart",
+                color: "#198754",
+                questions: [
+                    "感觉紧张、焦虑或急躁",
+                    "无法停止或控制担忧",
+                    "对各种各样的事情担忧过多",
+                    "很难放松下来"
+                ],
+                options: [
+                    { value: 0, text: "完全没有" },
+                    { value: 1, text: "好几天" },
+                    { value: 2, text: "一半以上的天数" },
+                    { value: 3, text: "几乎每天" }
+                ]
+            },
+
+            // PSS-10 压力评估 - 精选5题
+            stress: {
+                name: "压力水平评估",
+                icon: "fas fa-chart-line",
+                color: "#0dcaf0",
+                questions: [
+                    { text: "在过去的一个月中，您有多经常因为发生了意想不到的事情而感到心烦意乱？", reverse: false },
+                    { text: "在过去的一个月中，您有多经常感到无法控制生活中重要的事情？", reverse: false },
+                    { text: "在过去的一个月中，您有多经常感到紧张和有压力？", reverse: false },
+                    { text: "在过去的一个月中，您有多经常成功地处理恼人的生活麻烦？", reverse: true },
+                    { text: "在过去的一个月中，您有多经常感到您能有效地应对生活中发生的重要变化？", reverse: true }
+                ],
+                options: [
+                    { value: 0, text: "从不" },
+                    { value: 1, text: "几乎从不" },
+                    { value: 2, text: "有时" },
+                    { value: 3, text: "相当经常" },
+                    { value: 4, text: "非常经常" }
+                ]
+            },
+
+            // PANAS 情绪评估 - 精选10题（积极5题+消极5题）
+            emotion: {
+                name: "情绪状态评估",
+                icon: "fas fa-smile",
+                color: "#ffc107",
+                questions: [
+                    { text: "热情的", type: "positive" },
+                    { text: "有活力的", type: "positive" },
+                    { text: "专注的", type: "positive" },
+                    { text: "积极的", type: "positive" },
+                    { text: "有灵感的", type: "positive" },
+                    { text: "痛苦的", type: "negative" },
+                    { text: "心烦的", type: "negative" },
+                    { text: "害怕的", type: "negative" },
+                    { text: "紧张的", type: "negative" },
+                    { text: "焦躁的", type: "negative" }
+                ],
+                options: [
+                    { value: 1, text: "很少或没有" },
+                    { value: 2, text: "有一点" },
+                    { value: 3, text: "中等程度" },
+                    { value: 4, text: "相当多" },
+                    { value: 5, text: "非常多" }
+                ]
+            },
+
+            // PSQI 睡眠评估 - 精选5题
+            sleep: {
+                name: "睡眠质量评估",
+                icon: "fas fa-moon",
+                color: "#212529",
+                questions: [
+                    "在过去一个月内，您如何评价自己的睡眠质量？",
+                    "在过去一个月内，您有多频繁因为30分钟内无法入睡而睡眠困扰？",
+                    "在过去一个月内，您有多频繁因为夜间或清晨醒来而睡眠困扰？",
+                    "在过去一个月内，您有多频繁因为困倦而难以保持清醒进行日常活动？",
+                    "在过去一个月内，您保持足够的热情来完成事情有多困难？"
+                ],
+                options: [
+                    { value: 0, text: "非常好/没有" },
+                    { value: 1, text: "相当好/少于每周一次" },
+                    { value: 2, text: "相当差/每周一到两次" },
+                    { value: 3, text: "非常差/每周三次或以上" }
+                ]
+            }
+        };
+
+        // 评估状态管理
+        let currentPhase = 0;
+        let assessmentData = {};
+        let startTime = null;
+        const phases = ['depression', 'anxiety', 'stress', 'emotion', 'sleep'];
+
+        // 开始综合评估
+        function startComprehensiveAssessment() {
+            startTime = new Date();
+            document.getElementById('introSection').style.display = 'none';
+            document.getElementById('assessmentContainer').style.display = 'block';
+
+            // 初始化评估数据
+            phases.forEach(phase => {
+                assessmentData[phase] = {};
+            });
+
+            // 开始第一个阶段
+            currentPhase = 0;
+            loadPhase(phases[currentPhase]);
+        }
+
+        // 加载评估阶段
+        function loadPhase(phaseName) {
+            const phase = comprehensiveAssessment[phaseName];
+            const container = document.getElementById('assessmentContainer');
+
+            // 更新进度指示器
+            updatePhaseIndicators(phaseName);
+            updateOverallProgress();
+
+            // 更新当前阶段文本
+            document.getElementById('currentPhaseText').textContent = `正在进行：${phase.name}`;
+
+            // 生成阶段内容
+            container.innerHTML = `
+                <div class="assessment-phase active" id="phase-${phaseName}">
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-header" style="background-color: ${phase.color}; color: white;">
+                                    <h5 class="mb-0">
+                                        <i class="${phase.icon} me-2"></i>${phase.name}
+                                        <span class="float-end">${currentPhase + 1}/5</span>
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="progress mb-3">
+                                        <div class="progress-bar" id="phaseProgressBar" style="background-color: ${phase.color}; width: 0%"></div>
+                                    </div>
+                                    <p class="text-muted">请根据您最近的感受如实回答以下问题：</p>
+                                    <div id="phaseQuestions">
+                                        ${generatePhaseQuestions(phaseName, phase)}
+                                    </div>
+                                    <div class="text-center mt-4">
+                                        <button class="btn btn-lg px-5" style="background-color: ${phase.color}; color: white;"
+                                                id="nextPhaseBtn" onclick="nextPhase()" disabled>
+                                            ${currentPhase === phases.length - 1 ? '完成评估' : '下一阶段'}
+                                            <i class="fas fa-arrow-right ms-2"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 生成阶段问题
+        function generatePhaseQuestions(phaseName, phase) {
+            let questionsHTML = '';
+
+            phase.questions.forEach((question, index) => {
+                const questionText = typeof question === 'string' ? question : question.text;
+                const questionId = `${phaseName}_q${index}`;
+
+                questionsHTML += `
+                    <div class="card question-card mb-3">
+                        <div class="card-body">
+                            <h6 class="card-title">
+                                <span class="badge me-2" style="background-color: ${phase.color};">${index + 1}</span>
+                                ${questionText}
+                                ${question.reverse ? '<i class="fas fa-sync-alt text-warning ms-2" title="反向计分题"></i>' : ''}
+                                ${question.type ? `<span class="badge bg-${question.type === 'positive' ? 'success' : 'danger'} ms-2">${question.type === 'positive' ? '积极' : '消极'}</span>` : ''}
+                            </h6>
+                            <div class="row g-2">
+                                ${phase.options.map(option => `
+                                    <div class="col-md-${phase.options.length <= 4 ? '3' : '2'} col-6">
+                                        <input type="radio" class="btn-check option-input"
+                                               name="${questionId}" id="${questionId}_${option.value}"
+                                               value="${option.value}" onchange="updatePhaseProgress('${phaseName}')">
+                                        <label class="option-label w-100 text-center" for="${questionId}_${option.value}">
+                                            <div class="fw-bold small">${option.text}</div>
+                                            <small class="text-muted">${option.value}分</small>
+                                        </label>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            return questionsHTML;
+        }
+
+        // 更新阶段进度
+        function updatePhaseProgress(phaseName) {
+            const phase = comprehensiveAssessment[phaseName];
+            let answeredQuestions = 0;
+
+            // 统计已回答问题数
+            phase.questions.forEach((question, index) => {
+                const questionId = `${phaseName}_q${index}`;
+                const radios = document.querySelectorAll(`input[name="${questionId}"]`);
+                for (let radio of radios) {
+                    if (radio.checked) {
+                        answeredQuestions++;
+                        break;
+                    }
+                }
+            });
+
+            const progress = (answeredQuestions / phase.questions.length) * 100;
+            document.getElementById('phaseProgressBar').style.width = progress + '%';
+
+            // 启用/禁用下一阶段按钮
+            document.getElementById('nextPhaseBtn').disabled = answeredQuestions < phase.questions.length;
+        }
+
+        // 更新阶段指示器
+        function updatePhaseIndicators(currentPhaseName) {
+            phases.forEach((phase, index) => {
+                const indicator = document.getElementById(`phase-${phase}`);
+                indicator.classList.remove('active', 'completed');
+
+                if (phase === currentPhaseName) {
+                    indicator.classList.add('active');
+                } else if (index < currentPhase) {
+                    indicator.classList.add('completed');
+                }
+            });
+        }
+
+        // 更新总体进度
+        function updateOverallProgress() {
+            const progress = ((currentPhase + 1) / phases.length) * 100;
+            document.getElementById('overallProgressBar').style.width = progress + '%';
+            document.getElementById('overallProgressText').textContent = Math.round(progress) + '%';
+        }
+
+        // 下一阶段
+        function nextPhase() {
+            // 收集当前阶段数据
+            collectPhaseData(phases[currentPhase]);
+
+            if (currentPhase < phases.length - 1) {
+                currentPhase++;
+                loadPhase(phases[currentPhase]);
+            } else {
+                // 完成所有评估，显示结果
+                completeAssessment();
+            }
+        }
+
+        // 收集阶段数据
+        function collectPhaseData(phaseName) {
+            const phase = comprehensiveAssessment[phaseName];
+            const phaseData = { answers: [], totalScore: 0 };
+
+            phase.questions.forEach((question, index) => {
+                const questionId = `${phaseName}_q${index}`;
+                const radios = document.querySelectorAll(`input[name="${questionId}"]`);
+
+                for (let radio of radios) {
+                    if (radio.checked) {
+                        let score = parseInt(radio.value);
+
+                        // 处理反向计分
+                        if (question.reverse) {
+                            score = 4 - score;
+                        }
+
+                        phaseData.answers.push({
+                            question: typeof question === 'string' ? question : question.text,
+                            originalScore: parseInt(radio.value),
+                            finalScore: score,
+                            type: question.type || null,
+                            reverse: question.reverse || false
+                        });
+
+                        phaseData.totalScore += score;
+                        break;
+                    }
+                }
+            });
+
+            assessmentData[phaseName] = phaseData;
+        }
+
+        // 完成评估
+        function completeAssessment() {
+            const endTime = new Date();
+            const duration = Math.round((endTime - startTime) / 1000 / 60); // 分钟
+
+            document.getElementById('assessmentContainer').style.display = 'none';
+            document.getElementById('currentPhaseText').textContent = '评估已完成，正在生成报告...';
+
+            // 生成综合报告
+            setTimeout(() => {
+                generateComprehensiveReport(duration);
+                // 显示完成提示弹窗
+                showCompletionModal(duration);
+            }, 1000);
+        }
+
+        // 生成综合报告
+        function generateComprehensiveReport(duration) {
+            // 计算各维度分数和等级
+            const results = calculateComprehensiveResults();
+
+            // 生成雷达图数据
+            const radarData = generateRadarData(results);
+
+            // 显示结果
+            displayComprehensiveResults(results, radarData, duration);
+        }
+
+        // 计算综合结果
+        function calculateComprehensiveResults() {
+            const results = {};
+
+            // 抑郁评估 (0-15分)
+            const depressionScore = assessmentData.depression.totalScore;
+            results.depression = {
+                score: depressionScore,
+                maxScore: 15,
+                percentage: (depressionScore / 15) * 100,
+                level: depressionScore <= 2 ? '无症状' :
+                       depressionScore <= 6 ? '轻度' :
+                       depressionScore <= 10 ? '中度' : '重度',
+                color: depressionScore <= 2 ? '#198754' :
+                       depressionScore <= 6 ? '#ffc107' :
+                       depressionScore <= 10 ? '#fd7e14' : '#dc3545'
+            };
+
+            // 焦虑评估 (0-12分)
+            const anxietyScore = assessmentData.anxiety.totalScore;
+            results.anxiety = {
+                score: anxietyScore,
+                maxScore: 12,
+                percentage: (anxietyScore / 12) * 100,
+                level: anxietyScore <= 2 ? '无症状' :
+                       anxietyScore <= 5 ? '轻度' :
+                       anxietyScore <= 8 ? '中度' : '重度',
+                color: anxietyScore <= 2 ? '#198754' :
+                       anxietyScore <= 5 ? '#ffc107' :
+                       anxietyScore <= 8 ? '#fd7e14' : '#dc3545'
+            };
+
+            // 压力评估 (0-20分)
+            const stressScore = assessmentData.stress.totalScore;
+            results.stress = {
+                score: stressScore,
+                maxScore: 20,
+                percentage: (stressScore / 20) * 100,
+                level: stressScore <= 6 ? '低压力' :
+                       stressScore <= 13 ? '中等压力' :
+                       stressScore <= 17 ? '高压力' : '极高压力',
+                color: stressScore <= 6 ? '#198754' :
+                       stressScore <= 13 ? '#ffc107' :
+                       stressScore <= 17 ? '#fd7e14' : '#dc3545'
+            };
+
+            // 情绪评估
+            const emotionData = assessmentData.emotion;
+            const positiveScore = emotionData.answers.filter(a => a.type === 'positive').reduce((sum, a) => sum + a.finalScore, 0);
+            const negativeScore = emotionData.answers.filter(a => a.type === 'negative').reduce((sum, a) => sum + a.finalScore, 0);
+            const emotionBalance = positiveScore - negativeScore;
+
+            results.emotion = {
+                positiveScore: positiveScore,
+                negativeScore: negativeScore,
+                balance: emotionBalance,
+                percentage: Math.max(0, Math.min(100, ((emotionBalance + 20) / 40) * 100)),
+                level: emotionBalance >= 10 ? '情绪良好' :
+                       emotionBalance >= 0 ? '情绪平衡' :
+                       emotionBalance >= -10 ? '情绪偏低' : '情绪较差',
+                color: emotionBalance >= 10 ? '#198754' :
+                       emotionBalance >= 0 ? '#20c997' :
+                       emotionBalance >= -10 ? '#ffc107' : '#dc3545'
+            };
+
+            // 睡眠评估 (0-15分)
+            const sleepScore = assessmentData.sleep.totalScore;
+            results.sleep = {
+                score: sleepScore,
+                maxScore: 15,
+                percentage: 100 - (sleepScore / 15) * 100, // 分数越低睡眠质量越好
+                level: sleepScore <= 3 ? '睡眠良好' :
+                       sleepScore <= 7 ? '睡眠一般' :
+                       sleepScore <= 11 ? '睡眠较差' : '睡眠很差',
+                color: sleepScore <= 3 ? '#198754' :
+                       sleepScore <= 7 ? '#ffc107' :
+                       sleepScore <= 11 ? '#fd7e14' : '#dc3545'
+            };
+
+            // 计算综合健康指数
+            const healthIndex = (
+                (100 - results.depression.percentage) * 0.25 +
+                (100 - results.anxiety.percentage) * 0.25 +
+                (100 - results.stress.percentage) * 0.2 +
+                results.emotion.percentage * 0.15 +
+                results.sleep.percentage * 0.15
+            );
+
+            results.overall = {
+                score: Math.round(healthIndex),
+                level: healthIndex >= 80 ? '优秀' :
+                       healthIndex >= 70 ? '良好' :
+                       healthIndex >= 60 ? '一般' :
+                       healthIndex >= 50 ? '需关注' : '需要帮助',
+                color: healthIndex >= 80 ? '#198754' :
+                       healthIndex >= 70 ? '#20c997' :
+                       healthIndex >= 60 ? '#ffc107' :
+                       healthIndex >= 50 ? '#fd7e14' : '#dc3545'
+            };
+
+            return results;
+        }
+
+        // 生成雷达图数据
+        function generateRadarData(results) {
+            return {
+                labels: ['抑郁症状', '焦虑症状', '压力水平', '情绪状态', '睡眠质量'],
+                datasets: [{
+                    label: '心理健康状况',
+                    data: [
+                        100 - results.depression.percentage,
+                        100 - results.anxiety.percentage,
+                        100 - results.stress.percentage,
+                        results.emotion.percentage,
+                        results.sleep.percentage
+                    ],
+                    backgroundColor: 'rgba(13, 110, 253, 0.2)',
+                    borderColor: 'rgba(13, 110, 253, 1)',
+                    borderWidth: 2,
+                    pointBackgroundColor: 'rgba(13, 110, 253, 1)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgba(13, 110, 253, 1)'
+                }]
+            };
+        }
+
+        // 显示综合结果
+        function displayComprehensiveResults(results, radarData, duration) {
+            document.getElementById('currentPhaseText').textContent = '评估报告已生成';
+
+            const resultHTML = `
+                <div class="card border-0 shadow-lg">
+                    <div class="card-header bg-gradient-comprehensive text-white text-center">
+                        <h3 class="mb-0"><i class="fas fa-chart-pie me-2"></i>综合心理健康评估报告</h3>
+                        <p class="mb-0 mt-2">评估时间：${duration}分钟 | 生成时间：${new Date().toLocaleString()}</p>
+                    </div>
+                    <div class="card-body p-5">
+                        <!-- 综合健康指数 -->
+                        <div class="row mb-5">
+                            <div class="col-12 text-center">
+                                <div class="display-1 fw-bold mb-3" style="color: ${results.overall.color};">
+                                    ${results.overall.score}
+                                </div>
+                                <h4 class="mb-3">综合心理健康指数</h4>
+                                <h5 class="badge p-3" style="background-color: ${results.overall.color}; font-size: 1.2rem;">
+                                    ${results.overall.level}
+                                </h5>
+                                <div class="progress mt-3" style="height: 20px;">
+                                    <div class="progress-bar" style="background-color: ${results.overall.color}; width: ${results.overall.score}%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 雷达图 -->
+                        <div class="row mb-5">
+                            <div class="col-lg-6">
+                                <h5 class="text-center mb-3">心理健康维度分析</h5>
+                                <div class="radar-chart-container">
+                                    <canvas id="radarChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <h5 class="mb-3">各维度详细分析</h5>
+                                ${generateDimensionAnalysis(results)}
+                            </div>
+                        </div>
+
+                        <!-- 详细结果 -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h5 class="mb-3">详细评估结果</h5>
+                                <div class="row">
+                                    ${generateDetailedResults(results)}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 个性化建议 -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h5 class="mb-3">个性化建议</h5>
+                                ${generatePersonalizedRecommendations(results)}
+                            </div>
+                        </div>
+
+                        <!-- 专业提醒 -->
+                        <div class="alert alert-info">
+                            <h6><i class="fas fa-info-circle me-2"></i>专业提醒</h6>
+                            <p class="mb-0">
+                                此评估结果基于标准化心理测评工具，仅供参考，不能替代专业医学诊断。
+                                如果您在某些维度得分较高或感到困扰，建议咨询心理健康专业人士。
+                                心理健康是一个动态过程，建议定期进行评估和关注。
+                            </p>
+                        </div>
+
+                        <!-- 操作按钮 -->
+                        <div class="text-center">
+                            <button class="btn btn-primary btn-lg me-3" onclick="window.print()">
+                                <i class="fas fa-print me-2"></i>打印报告
+                            </button>
+                            <a href="consultation.html" class="btn btn-warning btn-lg me-3">
+                                <i class="fas fa-comments me-2"></i>在线咨询
+                            </a>
+                            <a href="assessment.html" class="btn btn-outline-primary btn-lg">
+                                <i class="fas fa-arrow-left me-2"></i>返回测评中心
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('resultSection').innerHTML = resultHTML;
+            document.getElementById('resultSection').style.display = 'block';
+
+            // 创建雷达图
+            setTimeout(() => {
+                createRadarChart(radarData);
+            }, 100);
+
+            // 滚动到结果区域
+            document.getElementById('resultSection').scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+
+        // 生成维度分析
+        function generateDimensionAnalysis(results) {
+            const dimensions = [
+                { key: 'depression', name: '抑郁症状', icon: 'fas fa-brain' },
+                { key: 'anxiety', name: '焦虑症状', icon: 'fas fa-heart' },
+                { key: 'stress', name: '压力水平', icon: 'fas fa-chart-line' },
+                { key: 'emotion', name: '情绪状态', icon: 'fas fa-smile' },
+                { key: 'sleep', name: '睡眠质量', icon: 'fas fa-moon' }
+            ];
+
+            return dimensions.map(dim => {
+                const result = results[dim.key];
+                const score = dim.key === 'emotion' ? result.balance : result.score;
+                const percentage = result.percentage;
+
+                return `
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="me-3">
+                            <i class="${dim.icon}" style="color: ${result.color}; font-size: 1.5rem;"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="d-flex justify-content-between">
+                                <span class="fw-bold">${dim.name}</span>
+                                <span class="badge" style="background-color: ${result.color};">${result.level}</span>
+                            </div>
+                            <div class="progress mt-1" style="height: 8px;">
+                                <div class="progress-bar" style="background-color: ${result.color}; width: ${percentage}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 生成详细结果
+        function generateDetailedResults(results) {
+            return `
+                <div class="col-md-6 mb-3">
+                    <div class="card h-100" style="border-left: 4px solid ${results.depression.color};">
+                        <div class="card-body">
+                            <h6><i class="fas fa-brain me-2"></i>抑郁症状评估</h6>
+                            <p class="mb-1">得分：${results.depression.score}/${results.depression.maxScore}</p>
+                            <p class="mb-0 small text-muted">评级：${results.depression.level}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="card h-100" style="border-left: 4px solid ${results.anxiety.color};">
+                        <div class="card-body">
+                            <h6><i class="fas fa-heart me-2"></i>焦虑症状评估</h6>
+                            <p class="mb-1">得分：${results.anxiety.score}/${results.anxiety.maxScore}</p>
+                            <p class="mb-0 small text-muted">评级：${results.anxiety.level}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="card h-100" style="border-left: 4px solid ${results.stress.color};">
+                        <div class="card-body">
+                            <h6><i class="fas fa-chart-line me-2"></i>压力水平评估</h6>
+                            <p class="mb-1">得分：${results.stress.score}/${results.stress.maxScore}</p>
+                            <p class="mb-0 small text-muted">评级：${results.stress.level}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="card h-100" style="border-left: 4px solid ${results.emotion.color};">
+                        <div class="card-body">
+                            <h6><i class="fas fa-smile me-2"></i>情绪状态评估</h6>
+                            <p class="mb-1">积极：${results.emotion.positiveScore} | 消极：${results.emotion.negativeScore}</p>
+                            <p class="mb-0 small text-muted">平衡度：${results.emotion.balance} (${results.emotion.level})</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 mb-3">
+                    <div class="card h-100" style="border-left: 4px solid ${results.sleep.color};">
+                        <div class="card-body">
+                            <h6><i class="fas fa-moon me-2"></i>睡眠质量评估</h6>
+                            <p class="mb-1">得分：${results.sleep.score}/${results.sleep.maxScore} (分数越低睡眠质量越好)</p>
+                            <p class="mb-0 small text-muted">评级：${results.sleep.level}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 生成个性化建议
+        function generatePersonalizedRecommendations(results) {
+            let recommendations = [];
+
+            // 根据各维度结果生成建议
+            if (results.depression.score > 6) {
+                recommendations.push({
+                    title: "抑郁症状管理",
+                    icon: "fas fa-brain",
+                    color: results.depression.color,
+                    items: [
+                        "建议寻求心理健康专业人士的帮助",
+                        "保持规律的作息时间",
+                        "适量进行体育锻炼",
+                        "与信任的朋友或家人交流"
+                    ]
+                });
+            }
+
+            if (results.anxiety.score > 5) {
+                recommendations.push({
+                    title: "焦虑症状缓解",
+                    icon: "fas fa-heart",
+                    color: results.anxiety.color,
+                    items: [
+                        "学习深呼吸和放松技巧",
+                        "练习正念冥想",
+                        "减少咖啡因摄入",
+                        "建立规律的日常作息"
+                    ]
+                });
+            }
+
+            if (results.stress.score > 13) {
+                recommendations.push({
+                    title: "压力管理策略",
+                    icon: "fas fa-chart-line",
+                    color: results.stress.color,
+                    items: [
+                        "学习时间管理技巧",
+                        "设定合理的目标和期望",
+                        "寻求社会支持",
+                        "学习问题解决技巧"
+                    ]
+                });
+            }
+
+            if (results.emotion.balance < 0) {
+                recommendations.push({
+                    title: "情绪调节建议",
+                    icon: "fas fa-smile",
+                    color: results.emotion.color,
+                    items: [
+                        "增加愉快的活动",
+                        "培养积极的兴趣爱好",
+                        "练习感恩和积极思维",
+                        "保持社交联系"
+                    ]
+                });
+            }
+
+            if (results.sleep.score > 7) {
+                recommendations.push({
+                    title: "睡眠质量改善",
+                    icon: "fas fa-moon",
+                    color: results.sleep.color,
+                    items: [
+                        "建立规律的睡眠时间",
+                        "创造良好的睡眠环境",
+                        "避免睡前使用电子设备",
+                        "学习放松技巧"
+                    ]
+                });
+            }
+
+            // 如果所有指标都良好，给出维护建议
+            if (recommendations.length === 0) {
+                recommendations.push({
+                    title: "心理健康维护",
+                    icon: "fas fa-star",
+                    color: "#198754",
+                    items: [
+                        "继续保持良好的生活习惯",
+                        "定期进行自我评估",
+                        "保持积极的社交关系",
+                        "适当挑战自己，促进成长"
+                    ]
+                });
+            }
+
+            return recommendations.map(rec => `
+                <div class="card mb-3" style="border-left: 4px solid ${rec.color};">
+                    <div class="card-body">
+                        <h6><i class="${rec.icon} me-2"></i>${rec.title}</h6>
+                        <ul class="mb-0">
+                            ${rec.items.map(item => `<li>${item}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 创建雷达图
+        function createRadarChart(radarData) {
+            const ctx = document.getElementById('radarChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: radarData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                stepSize: 20
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+
+        // 显示完成提示弹窗
+        function showCompletionModal(duration) {
+            // 更新弹窗内容
+            document.getElementById('assessmentDuration').textContent = duration;
+
+            // 显示弹窗
+            const modal = new bootstrap.Modal(document.getElementById('completionModal'));
+            modal.show();
+
+            // 添加庆祝动画效果
+            setTimeout(() => {
+                // 可以添加一些庆祝的动画效果
+                const trophy = document.querySelector('#completionModal .fa-trophy');
+                if (trophy) {
+                    trophy.style.animation = 'bounce 1s ease-in-out';
+                }
+            }, 500);
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('综合心理健康评估已加载');
+        });
+    </script>

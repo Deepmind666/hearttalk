@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智慧驿站·心语同行 - 管理后台</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- 自定义样式 -->
+    <style>
+        .sidebar {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #dc3545 0%, #6f42c1 100%);
+            color: white;
+        }
+        
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            margin: 0.2rem 0;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .main-content {
+            background: #f8f9fa;
+            min-height: 100vh;
+        }
+        
+        .stats-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stats-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+        
+        .table-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .admin-header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #dc3545 0%, #6f42c1 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .password-field {
+            display: flex;
+            align-items: center;
+            font-family: monospace;
+        }
+
+        .password-hidden {
+            min-width: 80px;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        .password-field button {
+            border: none;
+            background: transparent;
+            color: #6c757d;
+            padding: 2px 6px;
+        }
+
+        .password-field button:hover {
+            color: #495057;
+            background: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- 侧边栏 -->
+            <div class="col-md-3 col-lg-2 sidebar p-0">
+                <div class="p-4">
+                    <h4 class="text-center mb-4">
+                        <i class="fas fa-shield-alt me-2"></i>管理后台
+                    </h4>
+                    
+                    <nav class="nav flex-column">
+                        <a class="nav-link active" href="#" onclick="showSection('dashboard')">
+                            <i class="fas fa-tachometer-alt me-2"></i>仪表板
+                        </a>
+                        <a class="nav-link" href="#" onclick="showSection('users')">
+                            <i class="fas fa-users me-2"></i>用户管理
+                        </a>
+                        <a class="nav-link" href="#" onclick="showSection('appointments')">
+                            <i class="fas fa-calendar-check me-2"></i>预约管理
+                        </a>
+                        <a class="nav-link" href="#" onclick="showSection('assessments')">
+                            <i class="fas fa-chart-bar me-2"></i>测评统计
+                        </a>
+                        <a class="nav-link" href="#" onclick="showSection('settings')">
+                            <i class="fas fa-cogs me-2"></i>系统设置
+                        </a>
+                    </nav>
+                </div>
+                
+                <div class="mt-auto p-4">
+                    <button class="btn btn-outline-light w-100" onclick="adminLogout()">
+                        <i class="fas fa-sign-out-alt me-2"></i>退出登录
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 主内容区 -->
+            <div class="col-md-9 col-lg-10 main-content p-0">
+                <!-- 顶部导航 -->
+                <div class="admin-header p-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0" id="pageTitle">仪表板</h5>
+                        <div class="d-flex align-items-center">
+                            <span class="me-3">管理员</span>
+                            <div class="user-avatar">A</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 内容区域 -->
+                <div class="p-4">
+                    <!-- 仪表板 -->
+                    <div id="dashboard-section" class="content-section">
+                        <div class="row mb-4">
+                            <div class="col-md-3 mb-3">
+                                <div class="card stats-card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div class="stats-icon bg-primary me-3">
+                                                <i class="fas fa-users"></i>
+                                            </div>
+                                            <div>
+                                                <h6 class="text-muted mb-0">注册用户</h6>
+                                                <h3 class="mb-0" id="totalUsers">0</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-3 mb-3">
+                                <div class="card stats-card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div class="stats-icon bg-success me-3">
+                                                <i class="fas fa-user-check"></i>
+                                            </div>
+                                            <div>
+                                                <h6 class="text-muted mb-0">活跃用户</h6>
+                                                <h3 class="mb-0" id="activeUsers">0</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-3 mb-3">
+                                <div class="card stats-card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div class="stats-icon bg-info me-3">
+                                                <i class="fas fa-clipboard-check"></i>
+                                            </div>
+                                            <div>
+                                                <h6 class="text-muted mb-0">测评次数</h6>
+                                                <h3 class="mb-0" id="totalAssessments">0</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-3 mb-3">
+                                <div class="card stats-card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div class="stats-icon bg-warning me-3">
+                                                <i class="fas fa-calendar-check"></i>
+                                            </div>
+                                            <div>
+                                                <h6 class="text-muted mb-0">预约申请</h6>
+                                                <h3 class="mb-0" id="totalAppointments">0</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="table-container">
+                                    <div class="p-3 border-bottom">
+                                        <h6 class="mb-0">最近注册用户</h6>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover mb-0">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th>用户名</th>
+                                                    <th>邮箱</th>
+                                                    <th>密码</th>
+                                                    <th>注册时间</th>
+                                                    <th>最后登录</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="recentUsersTable">
+                                                <!-- 动态生成 -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 用户管理 -->
+                    <div id="users-section" class="content-section" style="display: none;">
+                        <div class="table-container">
+                            <div class="p-3 border-bottom d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0">用户管理</h6>
+                                <div>
+                                    <input type="text" class="form-control" id="userSearch" placeholder="搜索用户..." style="width: 200px;">
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>用户名</th>
+                                            <th>邮箱</th>
+                                            <th>手机号</th>
+                                            <th>密码</th>
+                                            <th>注册时间</th>
+                                            <th>最后登录</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="usersTable">
+                                        <!-- 动态生成 -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 预约管理 -->
+                    <div id="appointments-section" class="content-section" style="display: none;">
+                        <div class="table-container">
+                            <div class="p-3 border-bottom d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0">辅导员预约申请</h6>
+                                <div class="d-flex gap-2">
+                                    <select class="form-select" id="appointmentStatusFilter" style="width: 150px;">
+                                        <option value="">全部状态</option>
+                                        <option value="pending">待处理</option>
+                                        <option value="confirmed">已确认</option>
+                                        <option value="completed">已完成</option>
+                                        <option value="cancelled">已取消</option>
+                                    </select>
+                                    <input type="text" class="form-control" id="appointmentSearch" placeholder="搜索申请..." style="width: 200px;">
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>姓名</th>
+                                            <th>联系电话</th>
+                                            <th>聊天类型</th>
+                                            <th>希望时间</th>
+                                            <th>紧急程度</th>
+                                            <th>申请时间</th>
+                                            <th>状态</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="appointmentsTable">
+                                        <!-- 动态生成 -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- 预约详情模态框 -->
+                        <div class="modal fade" id="appointmentDetailModal" tabindex="-1">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">预约详情</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body" id="appointmentDetailContent">
+                                        <!-- 动态生成 -->
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                                        <button type="button" class="btn btn-success" id="confirmAppointmentBtn">确认预约</button>
+                                        <button type="button" class="btn btn-danger" id="cancelAppointmentBtn">取消预约</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 测评统计 -->
+                    <div id="assessments-section" class="content-section" style="display: none;">
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            测评统计功能正在开发中，敬请期待！
+                        </div>
+                    </div>
+                    
+                    <!-- 系统设置 -->
+                    <div id="settings-section" class="content-section" style="display: none;">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="card border-0 shadow-sm">
+                                    <div class="card-header bg-primary text-white">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-robot me-2"></i>DeepSeek API 设置
+                                        </h5>
+                                    </div>
+                                    <div class="card-body p-4">
+                                        <form id="apiSettingsForm">
+                                            <div class="mb-3">
+                                                <label for="apiKey" class="form-label">API Key *</label>
+                                                <div class="input-group">
+                                                    <input type="password" class="form-control" id="apiKey" placeholder="请输入DeepSeek API Key" required>
+                                                    <button class="btn btn-outline-secondary" type="button" onclick="toggleApiKeyVisibility()">
+                                                        <i class="fas fa-eye" id="apiKeyToggleIcon"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="form-text">
+                                                    请在 <a href="https://platform.deepseek.com/" target="_blank">DeepSeek 官网</a> 获取API Key
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="apiUrl" class="form-label">API 地址</label>
+                                                <input type="url" class="form-control" id="apiUrl" value="https://api.deepseek.com/v1/chat/completions" readonly>
+                                                <div class="form-text">DeepSeek API 默认地址</div>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="modelName" class="form-label">模型名称</label>
+                                                <select class="form-select" id="modelName">
+                                                    <option value="deepseek-chat">deepseek-chat</option>
+                                                    <option value="deepseek-coder">deepseek-coder</option>
+                                                </select>
+                                                <div class="form-text">选择要使用的DeepSeek模型</div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="maxTokens" class="form-label">最大Token数</label>
+                                                        <input type="number" class="form-control" id="maxTokens" value="1000" min="100" max="4000">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="temperature" class="form-label">温度参数</label>
+                                                        <input type="number" class="form-control" id="temperature" value="0.7" min="0" max="2" step="0.1">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="systemPrompt" class="form-label">系统提示词</label>
+                                                <textarea class="form-control" id="systemPrompt" rows="4" placeholder="设置AI助手的角色和行为...">你是一个专业的心理健康智能助手，名叫"心语"。你的任务是为用户提供温暖的情感支持和心理健康建议。请用温和、理解、专业的语气回复用户，避免给出具体的医疗诊断，如果用户需要专业治疗建议预约辅导员。</textarea>
+                                            </div>
+
+                                            <div class="d-flex gap-2">
+                                                <button type="submit" class="btn btn-primary">
+                                                    <i class="fas fa-save me-2"></i>保存设置
+                                                </button>
+                                                <button type="button" class="btn btn-success" onclick="testApiConnection()">
+                                                    <i class="fas fa-plug me-2"></i>测试连接
+                                                </button>
+                                                <button type="button" class="btn btn-warning" onclick="resetApiSettings()">
+                                                    <i class="fas fa-undo me-2"></i>重置默认
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4">
+                                <div class="card border-0 shadow-sm">
+                                    <div class="card-header bg-info text-white">
+                                        <h6 class="mb-0">
+                                            <i class="fas fa-info-circle me-2"></i>使用说明
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <h6>获取API Key</h6>
+                                            <ol class="small">
+                                                <li>访问 <a href="https://platform.deepseek.com/" target="_blank">DeepSeek 官网</a></li>
+                                                <li>注册并登录账户</li>
+                                                <li>在控制台创建API Key</li>
+                                                <li>复制API Key到上方输入框</li>
+                                            </ol>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <h6>参数说明</h6>
+                                            <ul class="small">
+                                                <li><strong>最大Token数:</strong> 控制回复长度</li>
+                                                <li><strong>温度参数:</strong> 控制回复的创造性</li>
+                                                <li><strong>系统提示词:</strong> 定义AI助手的角色</li>
+                                            </ul>
+                                        </div>
+
+                                        <div class="alert alert-warning small">
+                                            <i class="fas fa-exclamation-triangle me-1"></i>
+                                            请妥善保管API Key，避免泄露
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+    <!-- 管理后台功能 -->
+    <script>
+        // 检查管理员权限
+        function checkAdminAuth() {
+            const adminSession = JSON.parse(localStorage.getItem('adminSession') || 'null');
+            if (!adminSession || !adminSession.isAdmin) {
+                alert('请先登录管理员账户');
+                window.location.href = 'admin-login.html';
+                return false;
+            }
+            return true;
+        }
+
+        // 获取用户数据
+        function getUsers() {
+            return JSON.parse(localStorage.getItem('users') || '[]');
+        }
+
+        // 显示指定部分
+        function showSection(sectionName) {
+            // 隐藏所有内容区域
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.style.display = 'none';
+            });
+
+            // 显示指定区域
+            document.getElementById(`${sectionName}-section`).style.display = 'block';
+
+            // 更新导航状态
+            document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // 更新页面标题
+            const titles = {
+                'dashboard': '仪表板',
+                'users': '用户管理',
+                'appointments': '预约管理',
+                'assessments': '测评统计',
+                'settings': '系统设置'
+            };
+            document.getElementById('pageTitle').textContent = titles[sectionName];
+
+            // 根据不同部分加载数据
+            if (sectionName === 'dashboard') {
+                loadDashboardData();
+            } else if (sectionName === 'users') {
+                loadUsersData();
+            } else if (sectionName === 'appointments') {
+                loadAppointmentsData();
+            }
+        }
+
+        // 加载仪表板数据
+        function loadDashboardData() {
+            const users = getUsers();
+            const appointments = getAppointments();
+            const today = new Date().toDateString();
+
+            // 统计数据
+            const totalUsers = users.length;
+            const activeUsers = users.filter(user => user.lastLogin).length;
+            const totalAppointments = appointments.length;
+
+            // 更新统计卡片
+            document.getElementById('totalUsers').textContent = totalUsers;
+            document.getElementById('activeUsers').textContent = activeUsers;
+            document.getElementById('totalAssessments').textContent = '0'; // 暂时为0
+            document.getElementById('totalAppointments').textContent = totalAppointments;
+
+            // 显示最近注册用户
+            const recentUsers = users.slice(-5).reverse();
+            const recentUsersTable = document.getElementById('recentUsersTable');
+
+            if (recentUsers.length === 0) {
+                recentUsersTable.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="text-center text-muted">暂无用户数据</td>
+                    </tr>
+                `;
+            } else {
+                recentUsersTable.innerHTML = recentUsers.map(user => `
+                    <tr>
+                        <td>${user.username}</td>
+                        <td>${user.email}</td>
+                        <td>
+                            <span class="password-field" data-password="${user.password}">
+                                <span class="password-hidden">••••••••</span>
+                                <button class="btn btn-sm btn-outline-secondary ms-2" onclick="togglePassword(this)">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </span>
+                        </td>
+                        <td>${formatDateTime(user.registerTime)}</td>
+                        <td>${user.lastLogin ? formatDateTime(user.lastLogin) : '从未登录'}</td>
+                    </tr>
+                `).join('');
+            }
+        }
+
+        // 加载用户数据
+        function loadUsersData() {
+            const users = getUsers();
+            const usersTable = document.getElementById('usersTable');
+
+            if (users.length === 0) {
+                usersTable.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="text-center text-muted">暂无用户数据</td>
+                    </tr>
+                `;
+            } else {
+                usersTable.innerHTML = users.map(user => `
+                    <tr>
+                        <td>${user.id}</td>
+                        <td>${user.username}</td>
+                        <td>${user.email}</td>
+                        <td>${user.phone || '未填写'}</td>
+                        <td>
+                            <span class="password-field" data-password="${user.password}">
+                                <span class="password-hidden">••••••••</span>
+                                <button class="btn btn-sm btn-outline-secondary ms-2" onclick="togglePassword(this)">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </span>
+                        </td>
+                        <td>${formatDateTime(user.registerTime)}</td>
+                        <td>${user.lastLogin ? formatDateTime(user.lastLogin) : '从未登录'}</td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-danger" onclick="deleteUser(${user.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+        }
+
+        // 删除用户
+        function deleteUser(userId) {
+            if (confirm('确定要删除这个用户吗？此操作不可恢复。')) {
+                const users = getUsers();
+                const filteredUsers = users.filter(user => user.id !== userId);
+                localStorage.setItem('users', JSON.stringify(filteredUsers));
+                loadUsersData();
+                loadDashboardData(); // 更新仪表板数据
+                alert('用户已删除');
+            }
+        }
+
+        // 用户搜索
+        document.getElementById('userSearch').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const users = getUsers();
+            const filteredUsers = users.filter(user =>
+                user.username.toLowerCase().includes(searchTerm) ||
+                user.email.toLowerCase().includes(searchTerm) ||
+                (user.phone && user.phone.includes(searchTerm))
+            );
+
+            const usersTable = document.getElementById('usersTable');
+            if (filteredUsers.length === 0) {
+                usersTable.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="text-center text-muted">未找到匹配的用户</td>
+                    </tr>
+                `;
+            } else {
+                usersTable.innerHTML = filteredUsers.map(user => `
+                    <tr>
+                        <td>${user.id}</td>
+                        <td>${user.username}</td>
+                        <td>${user.email}</td>
+                        <td>${user.phone || '未填写'}</td>
+                        <td>
+                            <span class="password-field" data-password="${user.password}">
+                                <span class="password-hidden">••••••••</span>
+                                <button class="btn btn-sm btn-outline-secondary ms-2" onclick="togglePassword(this)">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </span>
+                        </td>
+                        <td>${formatDateTime(user.registerTime)}</td>
+                        <td>${user.lastLogin ? formatDateTime(user.lastLogin) : '从未登录'}</td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-danger" onclick="deleteUser(${user.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+        });
+
+        // 格式化日期时间
+        function formatDateTime(isoString) {
+            const date = new Date(isoString);
+            return date.toLocaleString('zh-CN');
+        }
+
+        // 切换密码显示/隐藏
+        function togglePassword(button) {
+            const passwordField = button.closest('.password-field');
+            const passwordData = passwordField.getAttribute('data-password');
+            const hiddenSpan = passwordField.querySelector('.password-hidden');
+            const icon = button.querySelector('i');
+
+            if (hiddenSpan.textContent === '••••••••') {
+                // 显示密码
+                hiddenSpan.textContent = passwordData;
+                icon.className = 'fas fa-eye-slash';
+                button.title = '隐藏密码';
+            } else {
+                // 隐藏密码
+                hiddenSpan.textContent = '••••••••';
+                icon.className = 'fas fa-eye';
+                button.title = '显示密码';
+            }
+        }
+
+        // 管理员退出登录
+        function adminLogout() {
+            if (confirm('确定要退出管理后台吗？')) {
+                localStorage.removeItem('adminSession');
+                window.location.href = 'admin-login.html';
+            }
+        }
+
+        // 页面初始化
+        // 获取预约数据
+        function getAppointments() {
+            return JSON.parse(localStorage.getItem('appointments') || '[]');
+        }
+
+        // 保存预约数据
+        function saveAppointments(appointments) {
+            localStorage.setItem('appointments', JSON.stringify(appointments));
+        }
+
+        // 加载预约数据
+        function loadAppointmentsData() {
+            const appointments = getAppointments();
+            const appointmentsTable = document.getElementById('appointmentsTable');
+
+            if (appointments.length === 0) {
+                appointmentsTable.innerHTML = `
+                    <tr>
+                        <td colspan="9" class="text-center text-muted">暂无预约申请</td>
+                    </tr>
+                `;
+            } else {
+                appointmentsTable.innerHTML = appointments.map(appointment => `
+                    <tr>
+                        <td>${appointment.id}</td>
+                        <td>${appointment.name}</td>
+                        <td>${appointment.phone}</td>
+                        <td>${getTypeLabel(appointment.type)}</td>
+                        <td>${formatDateTime(appointment.preferredDate)}</td>
+                        <td>${getUrgencyLabel(appointment.urgency)}</td>
+                        <td>${formatDateTime(appointment.submitTime)}</td>
+                        <td>${getStatusBadge(appointment.status)}</td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary" onclick="viewAppointmentDetail(${appointment.id})">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            ${appointment.status === 'pending' ? `
+                                <button class="btn btn-sm btn-outline-success ms-1" onclick="updateAppointmentStatus(${appointment.id}, 'confirmed')">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger ms-1" onclick="updateAppointmentStatus(${appointment.id}, 'cancelled')">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            ` : ''}
+                        </td>
+                    </tr>
+                `).join('');
+            }
+        }
+
+        // 查看预约详情
+        function viewAppointmentDetail(appointmentId) {
+            const appointments = getAppointments();
+            const appointment = appointments.find(a => a.id === appointmentId);
+
+            if (!appointment) return;
+
+            const detailContent = document.getElementById('appointmentDetailContent');
+            detailContent.innerHTML = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>基本信息</h6>
+                        <table class="table table-borderless">
+                            <tr><td><strong>姓名:</strong></td><td>${appointment.name}</td></tr>
+                            <tr><td><strong>电话:</strong></td><td>${appointment.phone}</td></tr>
+                            <tr><td><strong>邮箱:</strong></td><td>${appointment.email || '未填写'}</td></tr>
+                            <tr><td><strong>聊天类型:</strong></td><td>${getTypeLabel(appointment.type)}</td></tr>
+                            <tr><td><strong>希望时间:</strong></td><td>${formatDateTime(appointment.preferredDate)}</td></tr>
+                            <tr><td><strong>紧急程度:</strong></td><td>${getUrgencyLabel(appointment.urgency)}</td></tr>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>申请信息</h6>
+                        <table class="table table-borderless">
+                            <tr><td><strong>申请时间:</strong></td><td>${formatDateTime(appointment.submitTime)}</td></tr>
+                            <tr><td><strong>当前状态:</strong></td><td>${getStatusBadge(appointment.status)}</td></tr>
+                        </table>
+                        <h6>问题描述</h6>
+                        <div class="border rounded p-3 bg-light">
+                            ${appointment.description}
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // 设置按钮事件
+            document.getElementById('confirmAppointmentBtn').onclick = () => updateAppointmentStatus(appointmentId, 'confirmed');
+            document.getElementById('cancelAppointmentBtn').onclick = () => updateAppointmentStatus(appointmentId, 'cancelled');
+
+            // 显示模态框
+            new bootstrap.Modal(document.getElementById('appointmentDetailModal')).show();
+        }
+
+        // 更新预约状态
+        function updateAppointmentStatus(appointmentId, newStatus) {
+            const appointments = getAppointments();
+            const appointmentIndex = appointments.findIndex(a => a.id === appointmentId);
+
+            if (appointmentIndex !== -1) {
+                appointments[appointmentIndex].status = newStatus;
+                appointments[appointmentIndex].updateTime = new Date().toISOString();
+                saveAppointments(appointments);
+                loadAppointmentsData();
+                loadDashboardData(); // 更新仪表板统计
+
+                // 关闭模态框
+                const modal = bootstrap.Modal.getInstance(document.getElementById('appointmentDetailModal'));
+                if (modal) modal.hide();
+
+                alert(`预约状态已更新为：${getStatusLabel(newStatus)}`);
+            }
+        }
+
+        // 获取类型标签
+        function getTypeLabel(type) {
+            const types = {
+                'study': '学业困扰',
+                'emotion': '情感问题',
+                'stress': '压力疏导',
+                'relationship': '人际关系',
+                'career': '职业规划',
+                'life': '生活指导',
+                'other': '其他问题'
+            };
+            return types[type] || type;
+        }
+
+        // 获取紧急程度标签
+        function getUrgencyLabel(urgency) {
+            const urgencies = {
+                'low': '一般（1-2周内）',
+                'medium': '较急（3-5天内）',
+                'high': '紧急（24小时内）'
+            };
+            return urgencies[urgency] || urgency;
+        }
+
+        // 获取状态徽章
+        function getStatusBadge(status) {
+            const badges = {
+                'pending': '<span class="badge bg-warning">待处理</span>',
+                'confirmed': '<span class="badge bg-success">已确认</span>',
+                'completed': '<span class="badge bg-primary">已完成</span>',
+                'cancelled': '<span class="badge bg-danger">已取消</span>'
+            };
+            return badges[status] || status;
+        }
+
+        // 获取状态标签
+        function getStatusLabel(status) {
+            const labels = {
+                'pending': '待处理',
+                'confirmed': '已确认',
+                'completed': '已完成',
+                'cancelled': '已取消'
+            };
+            return labels[status] || status;
+        }
+
+        // API设置相关功能
+        function toggleApiKeyVisibility() {
+            const apiKeyInput = document.getElementById('apiKey');
+            const toggleIcon = document.getElementById('apiKeyToggleIcon');
+
+            if (apiKeyInput.type === 'password') {
+                apiKeyInput.type = 'text';
+                toggleIcon.className = 'fas fa-eye-slash';
+            } else {
+                apiKeyInput.type = 'password';
+                toggleIcon.className = 'fas fa-eye';
+            }
+        }
+
+        function loadApiSettings() {
+            const settings = JSON.parse(localStorage.getItem('deepseekApiSettings') || '{}');
+
+            if (settings.apiKey) document.getElementById('apiKey').value = settings.apiKey;
+            if (settings.apiUrl) document.getElementById('apiUrl').value = settings.apiUrl;
+            if (settings.modelName) document.getElementById('modelName').value = settings.modelName;
+            if (settings.maxTokens) document.getElementById('maxTokens').value = settings.maxTokens;
+            if (settings.temperature) document.getElementById('temperature').value = settings.temperature;
+            if (settings.systemPrompt) document.getElementById('systemPrompt').value = settings.systemPrompt;
+        }
+
+        function saveApiSettings() {
+            const settings = {
+                apiKey: document.getElementById('apiKey').value,
+                apiUrl: document.getElementById('apiUrl').value,
+                modelName: document.getElementById('modelName').value,
+                maxTokens: parseInt(document.getElementById('maxTokens').value),
+                temperature: parseFloat(document.getElementById('temperature').value),
+                systemPrompt: document.getElementById('systemPrompt').value
+            };
+
+            localStorage.setItem('deepseekApiSettings', JSON.stringify(settings));
+            alert('API设置已保存成功！');
+        }
+
+        function testApiConnection() {
+            const apiKey = document.getElementById('apiKey').value;
+            const apiUrl = document.getElementById('apiUrl').value;
+
+            if (!apiKey) {
+                alert('请先输入API Key');
+                return;
+            }
+
+            const testBtn = event.target;
+            const originalText = testBtn.innerHTML;
+            testBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>测试中...';
+            testBtn.disabled = true;
+
+            // 测试API连接
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                },
+                body: JSON.stringify({
+                    model: document.getElementById('modelName').value,
+                    messages: [
+                        {
+                            role: 'user',
+                            content: '你好，这是一个连接测试'
+                        }
+                    ],
+                    max_tokens: 50,
+                    temperature: 0.7
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+            })
+            .then(data => {
+                alert('API连接测试成功！\n\n回复内容：' + (data.choices?.[0]?.message?.content || '测试成功'));
+            })
+            .catch(error => {
+                console.error('API测试失败:', error);
+                alert('API连接测试失败！\n\n错误信息：' + error.message + '\n\n请检查API Key是否正确，或网络连接是否正常。');
+            })
+            .finally(() => {
+                testBtn.innerHTML = originalText;
+                testBtn.disabled = false;
+            });
+        }
+
+        function resetApiSettings() {
+            if (confirm('确定要重置为默认设置吗？')) {
+                document.getElementById('apiKey').value = '';
+                document.getElementById('apiUrl').value = 'https://api.deepseek.com/v1/chat/completions';
+                document.getElementById('modelName').value = 'deepseek-chat';
+                document.getElementById('maxTokens').value = '1000';
+                document.getElementById('temperature').value = '0.7';
+                document.getElementById('systemPrompt').value = '你是一个专业的心理健康智能助手，名叫"心语"。你的任务是为用户提供温暖的情感支持和心理健康建议。请用温和、理解、专业的语气回复用户，避免给出具体的医疗诊断，如果用户需要专业治疗建议预约辅导员。';
+                alert('已重置为默认设置');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // 检查管理员权限
+            if (!checkAdminAuth()) {
+                return;
+            }
+
+            // 加载默认数据
+            loadDashboardData();
+
+            // 加载API设置
+            loadApiSettings();
+
+            // API设置表单提交
+            document.getElementById('apiSettingsForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveApiSettings();
+            });
+        });
+    </script>
+</body>
+</html>

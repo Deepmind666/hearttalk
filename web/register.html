@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智慧驿站·心语同行 - 用户注册</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- 自定义样式 -->
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .register-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+        }
+
+        .input-group-text {
+            background-color: #f8f9fa;
+            border-color: #ced4da;
+        }
+
+        .password-strength {
+            height: 4px;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .strength-weak { background-color: #dc3545; }
+        .strength-medium { background-color: #ffc107; }
+        .strength-strong { background-color: #198754; }
+
+        .avatar-preview {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 2px solid #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8f9fa;
+            overflow: hidden;
+        }
+
+        .avatar-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div class="card register-card border-0">
+                    <div class="card-body p-5">
+                        <div class="text-center mb-4">
+                            <h2 class="fw-bold text-primary">用户注册</h2>
+                            <p class="text-muted">加入智慧驿站·心语同行</p>
+                        </div>
+
+                        <form id="registerForm">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">用户名 <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                    <input type="text" class="form-control" id="username" placeholder="请输入用户名" required>
+                                </div>
+                                <div class="form-text">用户名长度为3-20个字符</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="email" class="form-label">邮箱 <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                    <input type="email" class="form-control" id="email" placeholder="请输入邮箱地址" required>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">手机号码</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    <input type="tel" class="form-control" id="phone" placeholder="请输入手机号码（可选）">
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="avatar" class="form-label">头像</label>
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar-preview me-3" id="avatarPreview">
+                                        <i class="fas fa-user fa-2x text-muted"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <input type="file" class="form-control" id="avatar" accept="image/*">
+                                        <div class="form-text">支持 JPG、PNG 格式，建议尺寸 200x200 像素</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="password" class="form-label">密码 <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                    <input type="password" class="form-control" id="password" placeholder="请输入密码" required>
+                                    <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                                <div class="password-strength mt-1" id="passwordStrength"></div>
+                                <div class="form-text">密码长度至少8位，包含字母和数字</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="confirmPassword" class="form-label">确认密码 <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                    <input type="password" class="form-control" id="confirmPassword" placeholder="请再次输入密码" required>
+                                </div>
+                            </div>
+
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="agreeTerms" required>
+                                <label class="form-check-label" for="agreeTerms">
+                                    我已阅读并同意 <a href="#" class="text-primary">用户协议</a> 和 <a href="#" class="text-primary">隐私政策</a>
+                                </label>
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-user-plus me-2"></i>立即注册
+                                </button>
+                            </div>
+                        </form>
+
+                        <div class="text-center mt-4">
+                            <p class="text-muted">已有账户？ <a href="login.html" class="text-primary text-decoration-none">立即登录</a></p>
+                            <p class="text-muted">管理员？ <a href="admin-login.html" class="text-secondary text-decoration-none">管理员登录</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+    <!-- 注册功能 -->
+    <script>
+        // 用户数据存储
+        function getUsers() {
+            return JSON.parse(localStorage.getItem('users') || '[]');
+        }
+
+        function saveUser(user) {
+            const users = getUsers();
+            users.push(user);
+            localStorage.setItem('users', JSON.stringify(users));
+        }
+
+        // 密码强度检测
+        function checkPasswordStrength(password) {
+            const strengthBar = document.getElementById('passwordStrength');
+            let strength = 0;
+
+            if (password.length >= 8) strength++;
+            if (/[a-z]/.test(password)) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+            strengthBar.className = 'password-strength mt-1';
+            if (strength <= 2) {
+                strengthBar.classList.add('strength-weak');
+                strengthBar.style.width = '33%';
+            } else if (strength <= 3) {
+                strengthBar.classList.add('strength-medium');
+                strengthBar.style.width = '66%';
+            } else {
+                strengthBar.classList.add('strength-strong');
+                strengthBar.style.width = '100%';
+            }
+        }
+
+        // 切换密码显示
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const password = document.getElementById('password');
+            const icon = this.querySelector('i');
+
+            if (password.type === 'password') {
+                password.type = 'text';
+                icon.className = 'fas fa-eye-slash';
+            } else {
+                password.type = 'password';
+                icon.className = 'fas fa-eye';
+            }
+        });
+
+        // 密码输入监听
+        document.getElementById('password').addEventListener('input', function() {
+            checkPasswordStrength(this.value);
+        });
+
+        // 头像预览功能
+        document.getElementById('avatar').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const preview = document.getElementById('avatarPreview');
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.innerHTML = `<img src="${e.target.result}" alt="头像预览">`;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                preview.innerHTML = '<i class="fas fa-user fa-2x text-muted"></i>';
+            }
+        });
+
+        // 表单提交
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const avatarFile = document.getElementById('avatar').files[0];
+
+            // 验证用户名
+            if (username.length < 3 || username.length > 20) {
+                alert('用户名长度必须在3-20个字符之间');
+                return;
+            }
+
+            // 验证密码
+            if (password.length < 8) {
+                alert('密码长度至少8位');
+                return;
+            }
+
+            if (!/(?=.*[a-zA-Z])(?=.*\d)/.test(password)) {
+                alert('密码必须包含字母和数字');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                alert('两次输入的密码不一致');
+                return;
+            }
+
+            // 检查用户是否已存在
+            const users = getUsers();
+            if (users.some(user => user.username === username)) {
+                alert('用户名已存在');
+                return;
+            }
+
+            if (users.some(user => user.email === email)) {
+                alert('邮箱已被注册');
+                return;
+            }
+
+            // 处理头像数据
+            function saveUserWithAvatar(avatarData = null) {
+                const newUser = {
+                    id: Date.now(),
+                    username: username,
+                    email: email,
+                    phone: phone,
+                    password: password, // 实际应用中应该加密
+                    avatar: avatarData,
+                    registerTime: new Date().toISOString(),
+                    lastLogin: null
+                };
+
+                saveUser(newUser);
+                alert('注册成功！请登录');
+                window.location.href = 'login.html';
+            }
+
+            // 如果有头像文件，转换为base64
+            if (avatarFile) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    saveUserWithAvatar(e.target.result);
+                };
+                reader.readAsDataURL(avatarFile);
+            } else {
+                saveUserWithAvatar();
+            }
+        });
+    </script>
+</body>
+</html>

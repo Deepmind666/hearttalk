@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智慧驿站·心语同行 - PSQI睡眠质量评估</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- 自定义样式 -->
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --dark-color: #212529;
+        }
+        
+        .question-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--dark-color);
+        }
+        
+        .question-card:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .option-label {
+            cursor: pointer;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
+        
+        .option-label:hover {
+            background-color: #f8f9fa;
+            border-color: var(--dark-color);
+        }
+        
+        .option-input:checked + .option-label {
+            background-color: var(--dark-color);
+            color: white;
+            border-color: var(--dark-color);
+        }
+        
+        .time-input {
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            padding: 10px;
+            transition: all 0.2s ease;
+        }
+        
+        .time-input:focus {
+            border-color: var(--dark-color);
+            box-shadow: 0 0 0 0.2rem rgba(33, 37, 41, 0.25);
+        }
+        
+        .progress-container {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .result-card {
+            border-left: 5px solid;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+        
+        .result-excellent { border-left-color: #198754; }
+        .result-good { border-left-color: #20c997; }
+        .result-fair { border-left-color: #ffc107; }
+        .result-poor { border-left-color: #fd7e14; }
+        .result-very-poor { border-left-color: #dc3545; }
+        
+        /* 导航栏优化样式 */
+        .navbar-brand:hover {
+            text-decoration: none !important;
+        }
+        
+        .nav-link:hover {
+            color: #0d6efd !important;
+            text-decoration: none !important;
+        }
+        
+        /* 移动端优化 */
+        @media (max-width: 768px) {
+            .navbar-brand span {
+                font-size: 1.5rem !important;
+            }
+            
+            .d-flex.flex-wrap {
+                gap: 0.5rem !important;
+            }
+            
+            .nav-link {
+                font-size: 0.9rem;
+                padding: 0.25rem 0.5rem !important;
+            }
+            
+            .btn {
+                font-size: 0.9rem;
+                padding: 0.375rem 0.75rem !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+        <div class="container">
+            <!-- 第一行：网站标题 -->
+            <div class="w-100 d-flex justify-content-center mb-2">
+                <a class="navbar-brand d-flex align-items-center text-decoration-none" href="index.html">
+                    <span class="fw-bold text-primary fs-3">智慧驿站·心语同行</span>
+                </a>
+            </div>
+
+            <!-- 第二行：导航链接 -->
+            <div class="w-100 d-flex justify-content-center">
+                <div class="d-flex flex-wrap justify-content-center align-items-center gap-2 gap-md-3">
+                    <!-- 主要导航链接 -->
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="index.html">首页</a>
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="about.html">关于我们</a>
+                    <a class="btn btn-primary px-3 py-2" href="assessment.html">心理测评</a>
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="activities.html">活动中心</a>
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="community.html">互动社区</a>
+                    <a class="nav-link text-dark px-2 py-2 text-decoration-none" href="consultation.html">在线咨询</a>
+
+                    <!-- 用户操作按钮 -->
+                    <div class="d-flex gap-1">
+                        <a href="login.html" class="nav-link text-dark px-2 py-2 text-decoration-none">登录</a>
+                        <a href="register.html" class="nav-link text-dark px-2 py-2 text-decoration-none">注册</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 进度条 -->
+    <div class="progress-container">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h5 class="mb-1">PSQI 匹兹堡睡眠质量指数</h5>
+                    <p class="text-muted mb-0">请根据最近一个月的睡眠情况如实回答</p>
+                </div>
+                <div class="col-md-4">
+                    <div class="d-flex align-items-center">
+                        <span class="me-2">进度:</span>
+                        <div class="progress flex-grow-1 me-2">
+                            <div class="progress-bar bg-dark" id="progressBar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <span id="progressText">0/19</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 测评内容 -->
+    <div class="container my-5">
+        <!-- 测评说明 -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="alert alert-dark">
+                    <h6><i class="fas fa-moon me-2"></i>测评说明</h6>
+                    <p class="mb-0">
+                        PSQI（匹兹堡睡眠质量指数）是评估睡眠质量的标准化工具。请根据您在<strong>过去一个月内</strong>的实际睡眠情况，
+                        选择最符合您情况的选项。该量表包含睡眠质量、入睡时间、睡眠时间、睡眠效率等多个维度。
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 测评表单 -->
+        <form id="sleepForm">
+            <div id="questionsContainer">
+                <!-- 问题将通过JavaScript动态生成 -->
+            </div>
+            
+            <!-- 提交按钮 -->
+            <div class="row mt-4">
+                <div class="col-12 text-center">
+                    <button type="button" class="btn btn-dark btn-lg px-5" id="submitBtn" onclick="calculateResult()" disabled>
+                        <i class="fas fa-calculator me-2"></i>计算结果
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <!-- 结果显示区域 -->
+        <div id="resultSection" class="mt-5" style="display: none;">
+            <!-- 结果将通过JavaScript动态生成 -->
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-light py-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5 class="text-primary mb-3">智慧驿站·心语同行</h5>
+                    <p class="text-muted">
+                        以党建引领为核心，融合心理健康服务的创新平台，
+                        为师生提供专业、温暖、便捷的心理健康支持。
+                    </p>
+                </div>
+
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="text-primary mb-3">服务平台</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="assessment.html" class="text-muted text-decoration-none">心理测评</a></li>
+                        <li><a href="consultation.html" class="text-muted text-decoration-none">在线咨询</a></li>
+                        <li><a href="activities.html" class="text-muted text-decoration-none">活动中心</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="text-primary mb-3">社区</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="community.html" class="text-muted text-decoration-none">讨论区</a></li>
+                        <li><a href="about.html" class="text-muted text-decoration-none">关于我们</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h6 class="text-primary mb-3">联系方式</h6>
+                    <ul class="list-unstyled text-muted">
+                        <li><i class="fas fa-envelope me-2"></i>contact@hearttalk.me</li>
+                        <li><i class="fas fa-phone me-2"></i>400-123-4567</li>
+                    </ul>
+                </div>
+            </div>
+
+            <hr class="my-4">
+
+            <div class="row align-items-center">
+                <div class="col-md-12 text-center">
+                    <p class="text-muted mb-0">
+                        &copy; 2024 智慧驿站·心语同行. 保留所有权利.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+    <!-- PSQI 睡眠质量评估功能 -->
+    <script>
+        // PSQI 问题数据
+        const sleepQuestions = [
+            // 时间相关问题
+            {
+                id: 'bedtime',
+                type: 'time',
+                question: '在过去一个月内，您通常几点上床睡觉？',
+                placeholder: '例如：23:00'
+            },
+            {
+                id: 'sleep_latency',
+                type: 'number',
+                question: '在过去一个月内，您通常需要多长时间（分钟）才能入睡？',
+                placeholder: '例如：30'
+            },
+            {
+                id: 'wake_time',
+                type: 'time',
+                question: '在过去一个月内，您通常几点起床？',
+                placeholder: '例如：07:00'
+            },
+            {
+                id: 'sleep_hours',
+                type: 'number',
+                question: '在过去一个月内，您每晚实际睡眠时间是多少小时？',
+                placeholder: '例如：7.5'
+            },
+
+            // 选择题
+            {
+                id: 'cannot_sleep_30min',
+                type: 'choice',
+                question: '在过去一个月内，您有多频繁因为30分钟内无法入睡而睡眠困扰？',
+                options: [
+                    { value: 0, text: '过去一个月没有' },
+                    { value: 1, text: '少于每周一次' },
+                    { value: 2, text: '每周一到两次' },
+                    { value: 3, text: '每周三次或以上' }
+                ]
+            },
+            {
+                id: 'wake_middle_night',
+                type: 'choice',
+                question: '在过去一个月内，您有多频繁因为夜间或清晨醒来而睡眠困扰？',
+                options: [
+                    { value: 0, text: '过去一个月没有' },
+                    { value: 1, text: '少于每周一次' },
+                    { value: 2, text: '每周一到两次' },
+                    { value: 3, text: '每周三次或以上' }
+                ]
+            },
+            {
+                id: 'bathroom',
+                type: 'choice',
+                question: '在过去一个月内，您有多频繁因为起床上厕所而睡眠困扰？',
+                options: [
+                    { value: 0, text: '过去一个月没有' },
+                    { value: 1, text: '少于每周一次' },
+                    { value: 2, text: '每周一到两次' },
+                    { value: 3, text: '每周三次或以上' }
+                ]
+            },
+            {
+                id: 'breathe_uncomfortable',
+                type: 'choice',
+                question: '在过去一个月内，您有多频繁因为呼吸不舒服而睡眠困扰？',
+                options: [
+                    { value: 0, text: '过去一个月没有' },
+                    { value: 1, text: '少于每周一次' },
+                    { value: 2, text: '每周一到两次' },
+                    { value: 3, text: '每周三次或以上' }
+                ]
+            },
+            {
+                id: 'cough_snore',
+                type: 'choice',
+                question: '在过去一个月内，您有多频繁因为咳嗽或大声打鼾而睡眠困扰？',
+                options: [
+                    { value: 0, text: '过去一个月没有' },
+                    { value: 1, text: '少于每周一次' },
+                    { value: 2, text: '每周一到两次' },
+                    { value: 3, text: '每周三次或以上' }
+                ]
+            },
+            {
+                id: 'feel_cold',
+                type: 'choice',
+                question: '在过去一个月内，您有多频繁因为感觉太冷而睡眠困扰？',
+                options: [
+                    { value: 0, text: '过去一个月没有' },
+                    { value: 1, text: '少于每周一次' },
+                    { value: 2, text: '每周一到两次' },
+                    { value: 3, text: '每周三次或以上' }
+                ]
+            },
+            {
+                id: 'feel_hot',
+                type: 'choice',
+                question: '在过去一个月内，您有多频繁因为感觉太热而睡眠困扰？',
+                options: [
+                    { value: 0, text: '过去一个月没有' },
+                    { value: 1, text: '少于每周一次' },
+                    { value: 2, text: '每周一到两次' },
+                    { value: 3, text: '每周三次或以上' }
+                ]
+            },
+            {
+                id: 'bad_dreams',
+                type: 'choice',
+                question: '在过去一个月内，您有多频繁因为做恶梦而睡眠困扰？',
+                options: [
+                    { value: 0, text: '过去一个月没有' },
+                    { value: 1, text: '少于每周一次' },
+                    { value: 2, text: '每周一到两次' },
+                    { value: 3, text: '每周三次或以上' }
+                ]
+            },
+            {
+                id: 'pain',
+                type: 'choice',
+                question: '在过去一个月内，您有多频繁因为疼痛而睡眠困扰？',
+                options: [
+                    { value: 0, text: '过去一个月没有' },
+                    { value: 1, text: '少于每周一次' },
+                    { value: 2, text: '每周一到两次' },
+                    { value: 3, text: '每周三次或以上' }
+                ]
+            },
+            {
+                id: 'sleep_quality',
+                type: 'choice',
+                question: '在过去一个月内，您如何评价自己的睡眠质量？',
+                options: [
+                    { value: 0, text: '非常好' },
+                    { value: 1, text: '相当好' },
+                    { value: 2, text: '相当差' },
+                    { value: 3, text: '非常差' }
+                ]
+            },
+            {
+                id: 'sleep_medication',
+                type: 'choice',
+                question: '在过去一个月内，您有多频繁服用药物（处方或非处方）来帮助睡眠？',
+                options: [
+                    { value: 0, text: '过去一个月没有' },
+                    { value: 1, text: '少于每周一次' },
+                    { value: 2, text: '每周一到两次' },
+                    { value: 3, text: '每周三次或以上' }
+                ]
+            },
+            {
+                id: 'stay_awake',
+                type: 'choice',
+                question: '在过去一个月内，您有多频繁因为困倦而难以保持清醒进行日常活动？',
+                options: [
+                    { value: 0, text: '过去一个月没有' },
+                    { value: 1, text: '少于每周一次' },
+                    { value: 2, text: '每周一到两次' },
+                    { value: 3, text: '每周三次或以上' }
+                ]
+            },
+            {
+                id: 'enthusiasm',
+                type: 'choice',
+                question: '在过去一个月内，您保持足够的热情来完成事情有多困难？',
+                options: [
+                    { value: 0, text: '没有困难' },
+                    { value: 1, text: '只是有点困难' },
+                    { value: 2, text: '相当困难' },
+                    { value: 3, text: '非常困难' }
+                ]
+            },
+            {
+                id: 'bed_partner',
+                type: 'choice',
+                question: '您有床伴或室友吗？',
+                options: [
+                    { value: 0, text: '没有床伴或室友' },
+                    { value: 1, text: '伴侣/室友在另一房间' },
+                    { value: 2, text: '伴侣在同一房间但不同床' },
+                    { value: 3, text: '伴侣在同一张床' }
+                ]
+            }
+        ];
+
+        let questionIndex = 0;
+
+        // 生成问题
+        function generateQuestions() {
+            const container = document.getElementById('questionsContainer');
+
+            sleepQuestions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'row mb-4';
+
+                if (q.type === 'time' || q.type === 'number') {
+                    questionDiv.innerHTML = `
+                        <div class="col-12">
+                            <div class="card question-card">
+                                <div class="card-body">
+                                    <h6 class="card-title">
+                                        <span class="badge bg-dark me-2">${index + 1}</span>
+                                        ${q.question}
+                                    </h6>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <input type="${q.type === 'time' ? 'time' : 'number'}"
+                                                   class="form-control time-input"
+                                                   id="${q.id}"
+                                                   placeholder="${q.placeholder}"
+                                                   ${q.type === 'number' ? 'min="0" step="0.5"' : ''}
+                                                   onchange="updateProgress()">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    questionDiv.innerHTML = `
+                        <div class="col-12">
+                            <div class="card question-card">
+                                <div class="card-body">
+                                    <h6 class="card-title">
+                                        <span class="badge bg-dark me-2">${index + 1}</span>
+                                        ${q.question}
+                                    </h6>
+                                    <div class="row g-2">
+                                        ${q.options.map(option => `
+                                            <div class="col-md-6 col-12">
+                                                <input type="radio" class="btn-check option-input" name="${q.id}" id="${q.id}_${option.value}" value="${option.value}" onchange="updateProgress()">
+                                                <label class="option-label w-100" for="${q.id}_${option.value}">
+                                                    <div>${option.text}</div>
+                                                    <small class="text-muted">${option.value}分</small>
+                                                </label>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+                container.appendChild(questionDiv);
+            });
+        }
+
+        // 更新进度
+        function updateProgress() {
+            const totalQuestions = sleepQuestions.length;
+            let answeredQuestions = 0;
+
+            sleepQuestions.forEach(q => {
+                if (q.type === 'time' || q.type === 'number') {
+                    const input = document.getElementById(q.id);
+                    if (input && input.value.trim() !== '') {
+                        answeredQuestions++;
+                    }
+                } else {
+                    const radios = document.querySelectorAll(`input[name="${q.id}"]`);
+                    for (let radio of radios) {
+                        if (radio.checked) {
+                            answeredQuestions++;
+                            break;
+                        }
+                    }
+                }
+            });
+
+            const progress = (answeredQuestions / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('progressText').textContent = `${answeredQuestions}/${totalQuestions}`;
+
+            // 启用/禁用提交按钮
+            document.getElementById('submitBtn').disabled = answeredQuestions < totalQuestions;
+        }
+
+        // 计算睡眠效率
+        function calculateSleepEfficiency(bedtime, wakeTime, sleepHours) {
+            // 解析时间
+            const [bedHour, bedMin] = bedtime.split(':').map(Number);
+            const [wakeHour, wakeMin] = wakeTime.split(':').map(Number);
+
+            // 计算在床时间
+            let bedtimeMinutes = bedHour * 60 + bedMin;
+            let waketimeMinutes = wakeHour * 60 + wakeMin;
+
+            // 如果起床时间小于睡觉时间，说明跨夜了
+            if (waketimeMinutes < bedtimeMinutes) {
+                waketimeMinutes += 24 * 60;
+            }
+
+            const timeInBed = (waketimeMinutes - bedtimeMinutes) / 60;
+            const sleepEfficiency = (sleepHours / timeInBed) * 100;
+
+            return Math.min(100, Math.max(0, sleepEfficiency));
+        }
+
+        // 计算PSQI分数
+        function calculatePSQIScore(answers) {
+            let components = {
+                sleepQuality: 0,
+                sleepLatency: 0,
+                sleepDuration: 0,
+                sleepEfficiency: 0,
+                sleepDisturbance: 0,
+                sleepMedication: 0,
+                daytimeDysfunction: 0
+            };
+
+            // 组件1：主观睡眠质量
+            components.sleepQuality = answers.sleep_quality || 0;
+
+            // 组件2：入睡时间
+            const latency = parseFloat(answers.sleep_latency) || 0;
+            const cannotSleep = answers.cannot_sleep_30min || 0;
+            let latencyScore = 0;
+            if (latency <= 15) latencyScore = 0;
+            else if (latency <= 30) latencyScore = 1;
+            else if (latency <= 60) latencyScore = 2;
+            else latencyScore = 3;
+
+            const latencyComponent = latencyScore + cannotSleep;
+            if (latencyComponent === 0) components.sleepLatency = 0;
+            else if (latencyComponent <= 2) components.sleepLatency = 1;
+            else if (latencyComponent <= 4) components.sleepLatency = 2;
+            else components.sleepLatency = 3;
+
+            // 组件3：睡眠时间
+            const sleepHours = parseFloat(answers.sleep_hours) || 0;
+            if (sleepHours > 7) components.sleepDuration = 0;
+            else if (sleepHours >= 6) components.sleepDuration = 1;
+            else if (sleepHours >= 5) components.sleepDuration = 2;
+            else components.sleepDuration = 3;
+
+            // 组件4：睡眠效率
+            if (answers.bedtime && answers.wake_time && sleepHours > 0) {
+                const efficiency = calculateSleepEfficiency(answers.bedtime, answers.wake_time, sleepHours);
+                if (efficiency >= 85) components.sleepEfficiency = 0;
+                else if (efficiency >= 75) components.sleepEfficiency = 1;
+                else if (efficiency >= 65) components.sleepEfficiency = 2;
+                else components.sleepEfficiency = 3;
+            }
+
+            // 组件5：睡眠障碍
+            const disturbanceItems = [
+                'wake_middle_night', 'bathroom', 'breathe_uncomfortable', 'cough_snore',
+                'feel_cold', 'feel_hot', 'bad_dreams', 'pain'
+            ];
+            const disturbanceSum = disturbanceItems.reduce((sum, item) => sum + (answers[item] || 0), 0);
+            if (disturbanceSum === 0) components.sleepDisturbance = 0;
+            else if (disturbanceSum <= 9) components.sleepDisturbance = 1;
+            else if (disturbanceSum <= 18) components.sleepDisturbance = 2;
+            else components.sleepDisturbance = 3;
+
+            // 组件6：催眠药物使用
+            components.sleepMedication = answers.sleep_medication || 0;
+
+            // 组件7：日间功能障碍
+            const stayAwake = answers.stay_awake || 0;
+            const enthusiasm = answers.enthusiasm || 0;
+            const daytimeSum = stayAwake + enthusiasm;
+            if (daytimeSum === 0) components.daytimeDysfunction = 0;
+            else if (daytimeSum <= 2) components.daytimeDysfunction = 1;
+            else if (daytimeSum <= 4) components.daytimeDysfunction = 2;
+            else components.daytimeDysfunction = 3;
+
+            const totalScore = Object.values(components).reduce((sum, score) => sum + score, 0);
+
+            return { components, totalScore };
+        }
+
+        // 计算结果
+        function calculateResult() {
+            const answers = {};
+
+            // 收集所有答案
+            sleepQuestions.forEach(q => {
+                if (q.type === 'time' || q.type === 'number') {
+                    const input = document.getElementById(q.id);
+                    answers[q.id] = input.value;
+                } else {
+                    const radios = document.querySelectorAll(`input[name="${q.id}"]`);
+                    for (let radio of radios) {
+                        if (radio.checked) {
+                            answers[q.id] = parseInt(radio.value);
+                            break;
+                        }
+                    }
+                }
+            });
+
+            const result = calculatePSQIScore(answers);
+            displayResult(result, answers);
+        }
+
+        // 显示结果
+        function displayResult(result, answers) {
+            const { components, totalScore } = result;
+
+            let sleepQuality, description, recommendations, resultClass;
+
+            if (totalScore <= 5) {
+                sleepQuality = "睡眠质量良好";
+                description = "您的睡眠质量很好，能够获得充足和高质量的睡眠。";
+                recommendations = [
+                    "继续保持良好的睡眠习惯",
+                    "维持规律的作息时间",
+                    "保持适宜的睡眠环境",
+                    "继续健康的生活方式"
+                ];
+                resultClass = "result-excellent";
+            } else if (totalScore <= 10) {
+                sleepQuality = "睡眠质量一般";
+                description = "您的睡眠质量存在一些问题，可能需要改善睡眠习惯。";
+                recommendations = [
+                    "建立规律的睡眠作息",
+                    "改善睡眠环境（温度、光线、噪音）",
+                    "避免睡前使用电子设备",
+                    "学习放松技巧",
+                    "限制咖啡因和酒精摄入"
+                ];
+                resultClass = "result-fair";
+            } else if (totalScore <= 15) {
+                sleepQuality = "睡眠质量较差";
+                description = "您的睡眠质量较差，建议采取措施改善睡眠或寻求专业帮助。";
+                recommendations = [
+                    "咨询睡眠专科医生",
+                    "进行睡眠卫生教育",
+                    "考虑认知行为治疗",
+                    "评估是否有睡眠障碍",
+                    "改善睡眠环境和习惯",
+                    "管理压力和焦虑"
+                ];
+                resultClass = "result-poor";
+            } else {
+                sleepQuality = "睡眠质量很差";
+                description = "您的睡眠质量很差，强烈建议寻求专业医疗帮助。";
+                recommendations = [
+                    "立即咨询睡眠专科医生",
+                    "进行全面的睡眠评估",
+                    "可能需要睡眠监测",
+                    "考虑药物治疗",
+                    "接受专业的睡眠治疗",
+                    "排查潜在的医学问题"
+                ];
+                resultClass = "result-very-poor";
+            }
+
+            // 计算睡眠效率
+            let sleepEfficiency = 0;
+            if (answers.bedtime && answers.wake_time && answers.sleep_hours) {
+                sleepEfficiency = calculateSleepEfficiency(answers.bedtime, answers.wake_time, parseFloat(answers.sleep_hours));
+            }
+
+            const resultHTML = `
+                <div class="card result-card ${resultClass}">
+                    <div class="card-header">
+                        <h4 class="mb-0">
+                            <i class="fas fa-chart-bar me-2"></i>PSQI 睡眠质量评估结果
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <div class="display-4 fw-bold text-dark">${totalScore}</div>
+                                <p class="text-muted">PSQI总分 (0-21分)</p>
+                                <h5 class="fw-bold">${sleepQuality}</h5>
+                                ${sleepEfficiency > 0 ? `
+                                    <div class="mt-3">
+                                        <div class="display-6 fw-bold text-info">${sleepEfficiency.toFixed(1)}%</div>
+                                        <p class="text-muted mb-0">睡眠效率</p>
+                                    </div>
+                                ` : ''}
+                            </div>
+                            <div class="col-md-8">
+                                <h6>结果解释：</h6>
+                                <p>${description}</p>
+
+                                <h6>建议措施：</h6>
+                                <ul>
+                                    ${recommendations.map(rec => `<li>${rec}</li>`).join('')}
+                                </ul>
+
+                                <h6>PSQI组件分析：</h6>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <small class="text-muted">
+                                            • 主观睡眠质量：${components.sleepQuality}分<br>
+                                            • 入睡时间：${components.sleepLatency}分<br>
+                                            • 睡眠时间：${components.sleepDuration}分<br>
+                                            • 睡眠效率：${components.sleepEfficiency}分
+                                        </small>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <small class="text-muted">
+                                            • 睡眠障碍：${components.sleepDisturbance}分<br>
+                                            • 催眠药物：${components.sleepMedication}分<br>
+                                            • 日间功能：${components.daytimeDysfunction}分
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info mt-4">
+                            <h6><i class="fas fa-moon me-2"></i>睡眠健康小贴士</h6>
+                            <p class="mb-0">
+                                良好的睡眠对身心健康至关重要。PSQI总分>5提示睡眠质量较差。
+                                如果您的睡眠问题持续影响日常生活，建议咨询睡眠专科医生。
+                                保持规律作息、创造良好睡眠环境、管理压力都有助于改善睡眠质量。
+                            </p>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button class="btn btn-dark me-2" onclick="window.print()">
+                                <i class="fas fa-print me-2"></i>打印结果
+                            </button>
+                            <a href="consultation.html" class="btn btn-primary me-2">
+                                <i class="fas fa-comments me-2"></i>在线咨询
+                            </a>
+                            <a href="assessment.html" class="btn btn-outline-dark">
+                                <i class="fas fa-arrow-left me-2"></i>返回测评中心
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('resultSection').innerHTML = resultHTML;
+            document.getElementById('resultSection').style.display = 'block';
+
+            // 滚动到结果区域
+            document.getElementById('resultSection').scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            generateQuestions();
+            console.log('PSQI 睡眠质量评估已加载');
+        });
+    </script>
+</body>
+</html>
