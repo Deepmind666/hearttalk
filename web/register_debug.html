@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>注册功能调试</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">🔍 注册功能调试</h1>
+        
+        <div class="alert alert-info">
+            <h5><i class="fas fa-info-circle me-2"></i>调试说明</h5>
+            <p>这个页面用于诊断用户注册失败的具体原因。</p>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">服务器连接测试</h5>
+                    </div>
+                    <div class="card-body">
+                        <button class="btn btn-primary mb-3" onclick="testServerConnection()">
+                            <i class="fas fa-plug me-1"></i>测试服务器连接
+                        </button>
+                        <div id="serverTest"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">注册功能测试</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">用户名</label>
+                            <input type="text" id="debugUsername" class="form-control" value="测试用户">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">邮箱</label>
+                            <input type="email" id="debugEmail" class="form-control" value="test@example.com">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">手机号</label>
+                            <input type="tel" id="debugPhone" class="form-control" value="13800138000">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">密码</label>
+                            <input type="password" id="debugPassword" class="form-control" value="123456">
+                        </div>
+                        <button class="btn btn-success" onclick="testRegister()">
+                            <i class="fas fa-user-plus me-1"></i>测试注册
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-warning text-white">
+                        <h5 class="mb-0">调试日志</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="debugLog" style="max-height: 400px; overflow-y: auto;">
+                            <p class="text-muted">等待测试结果...</p>
+                        </div>
+                        <button class="btn btn-sm btn-outline-secondary mt-2" onclick="clearLog()">
+                            <i class="fas fa-trash me-1"></i>清除日志
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">可能的问题和解决方案</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="accordion" id="troubleshootAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#problem1">
+                                        问题1：服务器连接失败
+                                    </button>
+                                </h2>
+                                <div id="problem1" class="accordion-collapse collapse show">
+                                    <div class="accordion-body">
+                                        <strong>可能原因：</strong>
+                                        <ul>
+                                            <li>save_user.php文件不存在或路径错误</li>
+                                            <li>服务器不支持PHP</li>
+                                            <li>文件权限问题</li>
+                                        </ul>
+                                        <strong>解决方案：</strong>
+                                        <ul>
+                                            <li>确认save_user.php文件在网站根目录</li>
+                                            <li>检查服务器是否支持PHP</li>
+                                            <li>设置文件权限为755</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#problem2">
+                                        问题2：数据保存失败
+                                    </button>
+                                </h2>
+                                <div id="problem2" class="accordion-collapse collapse">
+                                    <div class="accordion-body">
+                                        <strong>可能原因：</strong>
+                                        <ul>
+                                            <li>users_data.json文件无法创建</li>
+                                            <li>目录写入权限不足</li>
+                                            <li>磁盘空间不足</li>
+                                        </ul>
+                                        <strong>解决方案：</strong>
+                                        <ul>
+                                            <li>设置网站目录写入权限</li>
+                                            <li>手动创建users_data.json文件</li>
+                                            <li>检查磁盘空间</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#problem3">
+                                        问题3：CORS跨域问题
+                                    </button>
+                                </h2>
+                                <div id="problem3" class="accordion-collapse collapse">
+                                    <div class="accordion-body">
+                                        <strong>可能原因：</strong>
+                                        <ul>
+                                            <li>浏览器阻止跨域请求</li>
+                                            <li>服务器CORS配置问题</li>
+                                        </ul>
+                                        <strong>解决方案：</strong>
+                                        <ul>
+                                            <li>确认save_user.php中有CORS头设置</li>
+                                            <li>使用相同域名访问</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // 测试服务器连接
+        async function testServerConnection() {
+            log('开始测试服务器连接...');
+            
+            try {
+                // 测试GET请求
+                log('发送GET请求到save_user.php...');
+                const response = await fetch('save_user.php');
+                
+                log(`响应状态: ${response.status} ${response.statusText}`);
+                log(`响应头: ${JSON.stringify(Object.fromEntries(response.headers))}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const text = await response.text();
+                log(`响应内容: ${text}`);
+                
+                try {
+                    const data = JSON.parse(text);
+                    log('JSON解析成功');
+                    log(`解析结果: ${JSON.stringify(data, null, 2)}`);
+                    
+                    if (data.success) {
+                        log('✅ 服务器连接正常！');
+                        document.getElementById('serverTest').innerHTML = `
+                            <div class="alert alert-success">
+                                <i class="fas fa-check-circle me-2"></i>服务器连接正常<br>
+                                <small>用户数量: ${data.total_users}</small>
+                            </div>
+                        `;
+                    } else {
+                        log('❌ 服务器返回错误: ' + data.message);
+                    }
+                } catch (parseError) {
+                    log('❌ JSON解析失败: ' + parseError.message);
+                    log('可能是PHP错误或HTML输出');
+                }
+                
+            } catch (error) {
+                log('❌ 服务器连接失败: ' + error.message);
+                document.getElementById('serverTest').innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="fas fa-times-circle me-2"></i>服务器连接失败<br>
+                        <small>${error.message}</small>
+                    </div>
+                `;
+            }
+        }
+        
+        // 测试注册功能
+        async function testRegister() {
+            const username = document.getElementById('debugUsername').value;
+            const email = document.getElementById('debugEmail').value;
+            const phone = document.getElementById('debugPhone').value;
+            const password = document.getElementById('debugPassword').value;
+            
+            log('开始测试注册功能...');
+            log(`用户名: ${username}`);
+            log(`邮箱: ${email}`);
+            log(`手机: ${phone}`);
+            log(`密码: ${password}`);
+            
+            const userData = {
+                id: Date.now(),
+                username: username,
+                email: email,
+                phone: phone,
+                password: password,
+                avatar: null,
+                register_time: new Date().toISOString(),
+                last_login: null
+            };
+            
+            const requestData = {
+                action: 'register',
+                userData: userData
+            };
+            
+            log('准备发送的数据:');
+            log(JSON.stringify(requestData, null, 2));
+            
+            try {
+                log('发送POST请求到save_user.php...');
+                const response = await fetch('save_user.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestData)
+                });
+                
+                log(`响应状态: ${response.status} ${response.statusText}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const text = await response.text();
+                log(`响应内容: ${text}`);
+                
+                try {
+                    const result = JSON.parse(text);
+                    log('JSON解析成功');
+                    log(`解析结果: ${JSON.stringify(result, null, 2)}`);
+                    
+                    if (result.success) {
+                        log('✅ 注册成功！');
+                        alert('注册测试成功！');
+                    } else {
+                        log('❌ 注册失败: ' + result.message);
+                        alert('注册测试失败: ' + result.message);
+                    }
+                } catch (parseError) {
+                    log('❌ JSON解析失败: ' + parseError.message);
+                    log('服务器可能返回了HTML错误页面');
+                    alert('注册失败: 服务器响应格式错误');
+                }
+                
+            } catch (error) {
+                log('❌ 注册请求失败: ' + error.message);
+                alert('注册失败: ' + error.message);
+            }
+        }
+        
+        // 记录日志
+        function log(message) {
+            const logDiv = document.getElementById('debugLog');
+            const time = new Date().toLocaleTimeString();
+            
+            logDiv.innerHTML += `
+                <div class="border-bottom pb-1 mb-1">
+                    <small class="text-muted">[${time}]</small> ${message}
+                </div>
+            `;
+            
+            // 自动滚动到底部
+            logDiv.scrollTop = logDiv.scrollHeight;
+            
+            // 同时输出到控制台
+            console.log(`[${time}] ${message}`);
+        }
+        
+        // 清除日志
+        function clearLog() {
+            document.getElementById('debugLog').innerHTML = '<p class="text-muted">日志已清除...</p>';
+        }
+        
+        // 页面加载时自动测试服务器连接
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(testServerConnection, 1000);
+        });
+    </script>
+</body>
+</html>

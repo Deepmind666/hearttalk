@@ -27,6 +27,16 @@
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
         }
 
+        .home-link {
+            transition: all 0.3s ease;
+        }
+
+        .home-link:hover {
+            color: #0d6efd !important;
+            text-shadow: 0 2px 4px rgba(13, 110, 253, 0.3);
+            transform: translateY(-1px);
+        }
+
         .form-control:focus {
             border-color: #667eea;
             box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
@@ -67,7 +77,11 @@
                     <div class="card-body p-5">
                         <div class="text-center mb-4">
                             <h2 class="fw-bold text-primary">用户登录</h2>
-                            <p class="text-muted">欢迎回到智慧驿站·心语同行</p>
+                            <p class="text-muted">欢迎回到
+                                <a href="index.html" class="text-decoration-none text-primary fw-bold home-link" title="返回首页">
+                                    智慧驿站·心语同行
+                                </a>
+                            </p>
                         </div>
 
                         <!-- 登录方式选择 -->
@@ -167,6 +181,9 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
+    <!-- 用户数据同步 -->
+    <script src="js/user-sync.js"></script>
+
     <!-- 登录功能 -->
     <script>
         // 获取用户数据
@@ -213,21 +230,39 @@
             const password = document.getElementById('emailPassword').value;
             const rememberMe = document.getElementById('rememberMe').checked;
 
-            const users = getUsers();
-            const user = users.find(u => u.email === email && u.password === password);
+            // 从服务器验证用户
+            try {
+                console.log('正在验证用户登录...');
+                const response = await fetch('save_user.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'login',
+                        email: email,
+                        password: password
+                    })
+                });
 
-            if (user) {
-                updateLastLogin(user.id);
-                setCurrentUser(user);
+                const result = await response.json();
 
-                if (rememberMe) {
-                    localStorage.setItem('rememberUser', JSON.stringify({email: email}));
+                if (result.success) {
+                    // 保存当前用户信息到localStorage（仅用于前端状态管理）
+                    setCurrentUser(result.user);
+
+                    if (rememberMe) {
+                        localStorage.setItem('rememberUser', JSON.stringify({email: email}));
+                    }
+
+                    alert('登录成功！');
+                    window.location.href = 'index.html';
+                } else {
+                    alert('登录失败：' + result.message);
                 }
-
-                alert('登录成功！');
-                window.location.href = 'index.html';
-            } else {
-                alert('邮箱或密码错误');
+            } catch (error) {
+                console.error('登录请求失败:', error);
+                alert('登录失败，请检查网络连接后重试。');
             }
         });
 

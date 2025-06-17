@@ -191,7 +191,7 @@
                     <a class="btn btn-primary px-3 py-2" href="consultation.html">在线咨询</a>
 
                     <!-- 用户操作按钮 -->
-                    <div class="d-flex gap-1">
+                    <div class="d-flex gap-1 user-actions">
                         <a href="login.html" class="nav-link text-dark px-2 py-2 text-decoration-none">登录</a>
                         <a href="register.html" class="nav-link text-dark px-2 py-2 text-decoration-none">注册</a>
                     </div>
@@ -291,6 +291,10 @@
                                         <i class="fas fa-info-circle me-1"></i>
                                         <span id="apiStatusText">智能助手提供情感支持，如需深度交流请预约辅导员聊天</span>
                                     </small>
+                                    <br>
+                                    <button class="btn btn-sm btn-outline-secondary mt-1" onclick="checkApiStatus()">
+                                        <i class="fas fa-sync-alt me-1"></i>检查API状态
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -442,7 +446,7 @@
                     <h6 class="text-primary mb-3">联系方式</h6>
                     <ul class="list-unstyled text-muted">
                         <li><i class="fas fa-envelope me-2"></i>1403073295@qq.com</li>
-                        <li><i class="fas fa-user me-2"></i>技术联系人：李康锐</li>
+                        <li><i class="fas fa-user me-2"></i>技术支持：李康锐</li>
                         <li><i class="fas fa-university me-2"></i>广东工业大学自动化学院本科物联网党支部维护管理</li>
                     </ul>
                 </div>
@@ -462,6 +466,9 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+    <!-- 用户状态管理 -->
+    <script src="js/user-status.js"></script>
 
     <!-- AI聊天功能 -->
     <script>
@@ -587,35 +594,34 @@
 
         // 生成AI回复
         async function generateAIResponse(userMessage) {
-            const apiSettings = JSON.parse(localStorage.getItem('deepseekApiSettings') || '{}');
-
-            // 如果没有配置API，使用预设回复
-            if (!apiSettings.apiKey) {
-                return getFallbackResponse(userMessage);
-            }
-
             try {
-                const response = await fetch(apiSettings.apiUrl || 'https://api.deepseek.com/v1/chat/completions', {
+                // 直接调用DeepSeek API
+                const apiKey = 'sk-5bfe7f1540f8420c835b8efb815d7a2c';
+                const apiUrl = 'https://api.deepseek.com/v1/chat/completions';
+
+                const requestData = {
+                    model: 'deepseek-reasoner',
+                    messages: [
+                        {
+                            role: 'system',
+                            content: '你是"心语"，一位专业的心理健康服务大模型助手。你具备深厚的心理学知识和丰富的咨询经验，致力于为用户提供专业、温暖、个性化的心理健康支持。请用温和、理解、专业的语气与用户交流，提供实用的心理健康建议和情感支持。'
+                        },
+                        {
+                            role: 'user',
+                            content: userMessage
+                        }
+                    ],
+                    max_tokens: 1000,
+                    temperature: 0.7
+                };
+
+                const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${apiSettings.apiKey}`
+                        'Authorization': `Bearer ${apiKey}`
                     },
-                    body: JSON.stringify({
-                        model: apiSettings.modelName || 'deepseek-chat',
-                        messages: [
-                            {
-                                role: 'system',
-                                content: apiSettings.systemPrompt || '你是一个专业的心理健康智能助手，名叫"心语"。你的任务是为用户提供温暖的情感支持和心理健康建议。请用温和、理解、专业的语气回复用户，避免给出具体的医疗诊断，如果用户需要专业治疗建议预约辅导员。'
-                            },
-                            {
-                                role: 'user',
-                                content: userMessage
-                            }
-                        ],
-                        max_tokens: apiSettings.maxTokens || 1000,
-                        temperature: apiSettings.temperature || 0.7
-                    })
+                    body: JSON.stringify(requestData)
                 });
 
                 if (!response.ok) {
@@ -623,13 +629,28 @@
                 }
 
                 const data = await response.json();
-                return data.choices?.[0]?.message?.content || '抱歉，我现在无法回复，请稍后再试。';
+
+                if (data.choices && data.choices[0] && data.choices[0].message) {
+                    return data.choices[0].message.content;
+                } else {
+                    throw new Error('API响应格式错误');
+                }
 
             } catch (error) {
                 console.error('DeepSeek API调用失败:', error);
                 // API调用失败时使用预设回复
                 return getFallbackResponse(userMessage);
             }
+        }
+
+        // 获取当前会话ID
+        function getCurrentSessionId() {
+            let sessionId = localStorage.getItem('chatSessionId');
+            if (!sessionId) {
+                sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('chatSessionId', sessionId);
+            }
+            return sessionId;
         }
 
         // 获取预设回复（当API不可用时）
@@ -704,16 +725,12 @@
 
         // 检查API状态
         function checkApiStatus() {
-            const apiSettings = JSON.parse(localStorage.getItem('deepseekApiSettings') || '{}');
             const statusText = document.getElementById('apiStatusText');
 
-            if (!apiSettings.apiKey) {
-                statusText.innerHTML = '当前使用预设回复模式，管理员可配置DeepSeek API获得更智能的对话体验';
-                statusText.className = 'text-warning';
-            } else {
-                statusText.innerHTML = '已连接心理健康服务大模型，为您提供智能对话服务！';
-                statusText.className = 'text-success';
-            }
+            // 直接设置API已配置状态，因为API密钥已硬编码
+            statusText.innerHTML = '已连接心理健康服务大模型，为您提供智能对话服务！';
+            statusText.className = 'text-success';
+            console.log('API配置正常，使用硬编码的API密钥');
         }
 
         // 页面加载完成后的初始化

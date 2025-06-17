@@ -31,6 +31,14 @@
             color: white;
             background: rgba(255, 255, 255, 0.2);
         }
+
+        .bg-orange {
+            background-color: #fd7e14 !important;
+        }
+
+        .badge.bg-orange {
+            color: white;
+        }
         
         .main-content {
             background: #f8f9fa;
@@ -106,6 +114,24 @@
             color: #495057;
             background: #f8f9fa;
         }
+
+        .admin-status-badge {
+            background: rgba(25, 135, 84, 0.1);
+            border: 1px solid rgba(25, 135, 84, 0.2);
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #198754;
+        }
     </style>
 </head>
 <body>
@@ -138,6 +164,9 @@
                 </div>
                 
                 <div class="mt-auto p-4">
+                    <button class="btn btn-outline-light w-100 mb-2" onclick="goToHomepage()">
+                        <i class="fas fa-home me-2"></i>回到主页
+                    </button>
                     <button class="btn btn-outline-light w-100" onclick="adminLogout()">
                         <i class="fas fa-sign-out-alt me-2"></i>退出登录
                     </button>
@@ -151,8 +180,13 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <h5 class="mb-0" id="pageTitle">仪表板</h5>
                         <div class="d-flex align-items-center">
-                            <span class="me-3">管理员</span>
-                            <div class="user-avatar">A</div>
+                            <div class="admin-status-badge me-3">
+                                <i class="fas fa-shield-alt text-success me-2"></i>
+                                <span class="text-success fw-bold">管理员已登录</span>
+                            </div>
+                            <div class="user-avatar bg-success">
+                                <i class="fas fa-user-shield text-white"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -259,7 +293,10 @@
                         <div class="table-container">
                             <div class="p-3 border-bottom d-flex justify-content-between align-items-center">
                                 <h6 class="mb-0">用户管理</h6>
-                                <div>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-sm btn-outline-primary" onclick="loadUsersData()" title="刷新用户数据">
+                                        <i class="fas fa-sync-alt"></i> 同步数据
+                                    </button>
                                     <input type="text" class="form-control" id="userSearch" placeholder="搜索用户..." style="width: 200px;">
                                 </div>
                             </div>
@@ -346,9 +383,139 @@
                     
                     <!-- 测评统计 -->
                     <div id="assessments-section" class="content-section" style="display: none;">
-                        <div class="alert alert-info">
-                            <i class="fas fa-info-circle me-2"></i>
-                            测评统计功能正在开发中，敬请期待！
+                        <!-- 统计概览 -->
+                        <div class="row mb-4">
+                            <div class="col-md-3">
+                                <div class="card bg-primary text-white">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <h4 class="mb-0" id="totalAssessments">0</h4>
+                                                <p class="mb-0">总测评次数</p>
+                                            </div>
+                                            <div class="align-self-center">
+                                                <i class="fas fa-clipboard-check fa-2x"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card bg-success text-white">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <h4 class="mb-0" id="activeUsers">0</h4>
+                                                <p class="mb-0">活跃用户数</p>
+                                            </div>
+                                            <div class="align-self-center">
+                                                <i class="fas fa-users fa-2x"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card bg-warning text-white">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <h4 class="mb-0" id="avgScore">0</h4>
+                                                <p class="mb-0">平均得分</p>
+                                            </div>
+                                            <div class="align-self-center">
+                                                <i class="fas fa-chart-line fa-2x"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card bg-info text-white">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <h4 class="mb-0" id="todayAssessments">0</h4>
+                                                <p class="mb-0">今日测评</p>
+                                            </div>
+                                            <div class="align-self-center">
+                                                <i class="fas fa-calendar-day fa-2x"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 测评类型统计 -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-chart-pie me-2"></i>测评类型分布
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <canvas id="assessmentTypeChart" width="400" height="200"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-chart-bar me-2"></i>月度测评趋势
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <canvas id="monthlyTrendChart" width="400" height="200"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 详细统计表格 -->
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-table me-2"></i>测评详细记录
+                                </h5>
+                                <div>
+                                    <button class="btn btn-sm btn-outline-primary me-2" onclick="exportAssessmentData()">
+                                        <i class="fas fa-download me-1"></i>导出数据
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-secondary" onclick="refreshAssessmentData()">
+                                        <i class="fas fa-sync-alt me-1"></i>刷新
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover">
+                                        <thead class="table-dark">
+                                            <tr>
+                                                <th>用户名</th>
+                                                <th>测评类型</th>
+                                                <th>得分</th>
+                                                <th>风险等级</th>
+                                                <th>测评时间</th>
+                                                <th>操作</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="assessmentTableBody">
+                                            <!-- 动态加载数据 -->
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- 分页 -->
+                                <nav aria-label="测评记录分页">
+                                    <ul class="pagination justify-content-center" id="assessmentPagination">
+                                        <!-- 动态生成分页 -->
+                                    </ul>
+                                </nav>
+                            </div>
                         </div>
                     </div>
                     
@@ -366,12 +533,7 @@
                                         <form id="apiSettingsForm">
                                             <div class="mb-3">
                                                 <label for="apiKey" class="form-label">API Key *</label>
-                                                <div class="input-group">
-                                                    <input type="password" class="form-control" id="apiKey" placeholder="请输入DeepSeek API Key" required>
-                                                    <button class="btn btn-outline-secondary" type="button" onclick="toggleApiKeyVisibility()">
-                                                        <i class="fas fa-eye" id="apiKeyToggleIcon"></i>
-                                                    </button>
-                                                </div>
+                                                <input type="password" class="form-control" id="apiKey" placeholder="请输入DeepSeek API Key" required>
                                                 <div class="form-text">
                                                     请在 <a href="https://platform.deepseek.com/" target="_blank">DeepSeek 官网</a> 获取API Key
                                                 </div>
@@ -386,10 +548,11 @@
                                             <div class="mb-3">
                                                 <label for="modelName" class="form-label">模型名称</label>
                                                 <select class="form-select" id="modelName">
-                                                    <option value="deepseek-chat">deepseek-chat</option>
-                                                    <option value="deepseek-coder">deepseek-coder</option>
+                                                    <option value="deepseek-chat">deepseek-chat (通用对话模型)</option>
+                                                    <option value="deepseek-reasoner">deepseek-reasoner (推理增强模型)</option>
+                                                    <option value="deepseek-v3">deepseek-v3 (最新版本)</option>
                                                 </select>
-                                                <div class="form-text">选择要使用的DeepSeek模型</div>
+                                                <div class="form-text">推荐使用 deepseek-reasoner 进行心理健康咨询，具有更强的推理和共情能力</div>
                                             </div>
 
                                             <div class="row">
@@ -409,7 +572,16 @@
 
                                             <div class="mb-3">
                                                 <label for="systemPrompt" class="form-label">系统提示词</label>
-                                                <textarea class="form-control" id="systemPrompt" rows="4" placeholder="设置AI助手的角色和行为...">你是一个专业的心理健康智能助手，名叫"心语"。你的任务是为用户提供温暖的情感支持和心理健康建议。请用温和、理解、专业的语气回复用户，避免给出具体的医疗诊断，如果用户需要专业治疗建议预约辅导员。</textarea>
+                                                <textarea class="form-control" id="systemPrompt" rows="6" placeholder="设置AI助手的角色和行为...">你是"心语"，一位专业的心理健康服务大模型助手。你具备深厚的心理学知识和丰富的咨询经验，致力于为用户提供专业、温暖、个性化的心理健康支持。
+
+核心原则：
+1. 共情倾听：以非评判的态度倾听用户，理解并反映他们的情感体验
+2. 专业引导：运用认知行为疗法、正念疗法等循证方法提供建议
+3. 安全边界：不提供医疗诊断，遇到严重心理危机时建议寻求专业帮助
+4. 个性化服务：根据用户的具体情况和需求调整沟通方式和建议内容
+5. 积极赋能：帮助用户发现自身资源，培养应对困难的能力
+
+请用温和、理解、专业的语气与用户交流，提供实用的心理健康建议和情感支持。</textarea>
                                             </div>
 
                                             <div class="d-flex gap-2">
@@ -472,6 +644,12 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- 用户数据同步 -->
+    <script src="js/user-sync.js"></script>
+
     <!-- 管理后台功能 -->
     <script>
         // 检查管理员权限
@@ -485,9 +663,46 @@
             return true;
         }
 
-        // 获取用户数据
-        function getUsers() {
-            return JSON.parse(localStorage.getItem('users') || '[]');
+        // 直接从服务器获取用户数据
+        async function getUsersFromServer() {
+            try {
+                console.log('管理后台：从服务器获取用户数据...');
+                const response = await fetch('save_user.php');
+                const result = await response.json();
+
+                if (result.success) {
+                    console.log('管理后台：获取成功，用户数量:', result.data.length);
+                    return result.data || [];
+                } else {
+                    console.error('管理后台：获取失败', result.message);
+                    return [];
+                }
+            } catch (error) {
+                console.error('管理后台：请求失败', error);
+                return [];
+            }
+        }
+
+        // 删除服务器上的用户
+        async function deleteUserFromServer(userId) {
+            try {
+                const response = await fetch('save_user.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'delete',
+                        user_id: userId
+                    })
+                });
+
+                const result = await response.json();
+                return result.success;
+            } catch (error) {
+                console.error('删除用户失败:', error);
+                return false;
+            }
         }
 
         // 显示指定部分
@@ -523,12 +738,14 @@
                 loadUsersData();
             } else if (sectionName === 'appointments') {
                 loadAppointmentsData();
+            } else if (sectionName === 'assessments') {
+                loadAssessmentStatistics();
             }
         }
 
         // 加载仪表板数据
-        function loadDashboardData() {
-            const users = getUsers();
+        async function loadDashboardData() {
+            const users = await getUsersFromServer();
             const appointments = getAppointments();
             const today = new Date().toDateString();
 
@@ -574,52 +791,87 @@
         }
 
         // 加载用户数据
-        function loadUsersData() {
-            const users = getUsers();
+        async function loadUsersData() {
+            // 显示加载状态
             const usersTable = document.getElementById('usersTable');
+            usersTable.innerHTML = `
+                <tr>
+                    <td colspan="8" class="text-center">
+                        <div class="spinner-border spinner-border-sm me-2"></div>
+                        正在从服务器加载用户数据...
+                    </td>
+                </tr>
+            `;
 
-            if (users.length === 0) {
+            try {
+                // 直接从服务器获取最新数据
+                const users = await getUsersFromServer();
+
+                if (users.length === 0) {
+                    usersTable.innerHTML = `
+                        <tr>
+                            <td colspan="8" class="text-center text-muted">
+                                暂无用户数据
+                                <br><small>用户注册后会在这里显示</small>
+                            </td>
+                        </tr>
+                    `;
+                } else {
+                    usersTable.innerHTML = users.map(user => `
+                        <tr>
+                            <td>${user.id}</td>
+                            <td>${user.username}</td>
+                            <td>${user.email}</td>
+                            <td>${user.phone || '未填写'}</td>
+                            <td>
+                                <span class="password-field" data-password="${user.password}">
+                                    <span class="password-hidden">••••••••</span>
+                                    <button class="btn btn-sm btn-outline-secondary ms-2" onclick="togglePassword(this)">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </span>
+                            </td>
+                            <td>${formatDateTime(user.register_time)}</td>
+                            <td>${user.last_login ? formatDateTime(user.last_login) : '从未登录'}</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-danger" onclick="deleteUser(${user.id})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+
+                console.log('用户数据加载完成，用户数量:', users.length);
+            } catch (error) {
+                console.error('加载用户数据失败:', error);
                 usersTable.innerHTML = `
                     <tr>
-                        <td colspan="8" class="text-center text-muted">暂无用户数据</td>
+                        <td colspan="8" class="text-center text-danger">
+                            加载用户数据失败
+                            <br><button class="btn btn-sm btn-outline-primary mt-2" onclick="loadUsersData()">重试</button>
+                        </td>
                     </tr>
                 `;
-            } else {
-                usersTable.innerHTML = users.map(user => `
-                    <tr>
-                        <td>${user.id}</td>
-                        <td>${user.username}</td>
-                        <td>${user.email}</td>
-                        <td>${user.phone || '未填写'}</td>
-                        <td>
-                            <span class="password-field" data-password="${user.password}">
-                                <span class="password-hidden">••••••••</span>
-                                <button class="btn btn-sm btn-outline-secondary ms-2" onclick="togglePassword(this)">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                            </span>
-                        </td>
-                        <td>${formatDateTime(user.registerTime)}</td>
-                        <td>${user.lastLogin ? formatDateTime(user.lastLogin) : '从未登录'}</td>
-                        <td>
-                            <button class="btn btn-sm btn-outline-danger" onclick="deleteUser(${user.id})">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                `).join('');
             }
         }
 
         // 删除用户
-        function deleteUser(userId) {
+        async function deleteUser(userId) {
             if (confirm('确定要删除这个用户吗？此操作不可恢复。')) {
-                const users = getUsers();
-                const filteredUsers = users.filter(user => user.id !== userId);
-                localStorage.setItem('users', JSON.stringify(filteredUsers));
-                loadUsersData();
-                loadDashboardData(); // 更新仪表板数据
-                alert('用户已删除');
+                try {
+                    const success = await deleteUserFromServer(userId);
+                    if (success) {
+                        alert('用户已删除');
+                        loadUsersData(); // 重新加载用户数据
+                        loadDashboardData(); // 更新仪表板数据
+                    } else {
+                        alert('删除用户失败，请重试');
+                    }
+                } catch (error) {
+                    console.error('删除用户错误:', error);
+                    alert('删除用户失败，请重试');
+                }
             }
         }
 
@@ -690,6 +942,13 @@
                 hiddenSpan.textContent = '••••••••';
                 icon.className = 'fas fa-eye';
                 button.title = '显示密码';
+            }
+        }
+
+        // 回到主页
+        function goToHomepage() {
+            if (confirm('确定要回到主页吗？\n\n您的管理员登录状态将保持，可以随时返回管理后台。')) {
+                window.location.href = 'index.html';
             }
         }
 
@@ -861,43 +1120,409 @@
             return labels[status] || status;
         }
 
-        // API设置相关功能
-        function toggleApiKeyVisibility() {
-            const apiKeyInput = document.getElementById('apiKey');
-            const toggleIcon = document.getElementById('apiKeyToggleIcon');
+        // 测评统计相关功能
+        let assessmentTypeChart = null;
+        let monthlyTrendChart = null;
 
-            if (apiKeyInput.type === 'password') {
-                apiKeyInput.type = 'text';
-                toggleIcon.className = 'fas fa-eye-slash';
-            } else {
-                apiKeyInput.type = 'password';
-                toggleIcon.className = 'fas fa-eye';
-            }
+        // 获取测评数据
+        function getAssessmentData() {
+            return JSON.parse(localStorage.getItem('assessmentResults') || '[]');
         }
 
-        function loadApiSettings() {
-            const settings = JSON.parse(localStorage.getItem('deepseekApiSettings') || '{}');
+        // 生成模拟测评数据（用于演示）
+        function generateMockAssessmentData() {
+            const existingData = getAssessmentData();
+            if (existingData.length > 0) return existingData;
 
-            if (settings.apiKey) document.getElementById('apiKey').value = settings.apiKey;
-            if (settings.apiUrl) document.getElementById('apiUrl').value = settings.apiUrl;
-            if (settings.modelName) document.getElementById('modelName').value = settings.modelName;
-            if (settings.maxTokens) document.getElementById('maxTokens').value = settings.maxTokens;
-            if (settings.temperature) document.getElementById('temperature').value = settings.temperature;
-            if (settings.systemPrompt) document.getElementById('systemPrompt').value = settings.systemPrompt;
+            const users = ['张同学', '李同学', '王同学', '刘同学', '陈同学', '杨同学', '赵同学', '孙同学'];
+            const types = ['PHQ-9', 'GAD-7', 'PSS-10', 'DASS-21', 'PSQI'];
+            const mockData = [];
+
+            for (let i = 0; i < 50; i++) {
+                const type = types[Math.floor(Math.random() * types.length)];
+                let score, riskLevel;
+
+                // 根据测评类型生成合理的分数和风险等级
+                switch (type) {
+                    case 'PHQ-9':
+                        score = Math.floor(Math.random() * 27);
+                        if (score <= 4) riskLevel = '无风险';
+                        else if (score <= 9) riskLevel = '轻度';
+                        else if (score <= 14) riskLevel = '中度';
+                        else if (score <= 19) riskLevel = '中重度';
+                        else riskLevel = '重度';
+                        break;
+                    case 'GAD-7':
+                        score = Math.floor(Math.random() * 21);
+                        if (score <= 4) riskLevel = '无风险';
+                        else if (score <= 9) riskLevel = '轻度';
+                        else if (score <= 14) riskLevel = '中度';
+                        else riskLevel = '重度';
+                        break;
+                    default:
+                        score = Math.floor(Math.random() * 40);
+                        if (score <= 10) riskLevel = '无风险';
+                        else if (score <= 20) riskLevel = '轻度';
+                        else if (score <= 30) riskLevel = '中度';
+                        else riskLevel = '重度';
+                }
+
+                const date = new Date();
+                date.setDate(date.getDate() - Math.floor(Math.random() * 90));
+
+                mockData.push({
+                    id: Date.now() + i,
+                    username: users[Math.floor(Math.random() * users.length)],
+                    type: type,
+                    score: score,
+                    riskLevel: riskLevel,
+                    completedAt: date.toISOString(),
+                    duration: Math.floor(Math.random() * 600) + 120 // 2-12分钟
+                });
+            }
+
+            localStorage.setItem('assessmentResults', JSON.stringify(mockData));
+            return mockData;
+        }
+
+        // 加载测评统计数据
+        function loadAssessmentStatistics() {
+            const assessments = generateMockAssessmentData();
+
+            // 更新统计卡片
+            updateAssessmentCards(assessments);
+
+            // 绘制图表
+            drawAssessmentCharts(assessments);
+
+            // 加载测评记录表格
+            loadAssessmentTable(assessments);
+        }
+
+        // 更新统计卡片
+        function updateAssessmentCards(assessments) {
+            const today = new Date().toDateString();
+            const todayAssessments = assessments.filter(a =>
+                new Date(a.completedAt).toDateString() === today
+            );
+
+            const uniqueUsers = [...new Set(assessments.map(a => a.username))];
+            const totalScore = assessments.reduce((sum, a) => sum + a.score, 0);
+            const avgScore = assessments.length > 0 ? (totalScore / assessments.length).toFixed(1) : 0;
+
+            document.getElementById('totalAssessments').textContent = assessments.length;
+            document.getElementById('activeUsers').textContent = uniqueUsers.length;
+            document.getElementById('avgScore').textContent = avgScore;
+            document.getElementById('todayAssessments').textContent = todayAssessments.length;
+        }
+
+        // 绘制测评图表
+        function drawAssessmentCharts(assessments) {
+            drawAssessmentTypeChart(assessments);
+            drawMonthlyTrendChart(assessments);
+        }
+
+        // 绘制测评类型分布图
+        function drawAssessmentTypeChart(assessments) {
+            const ctx = document.getElementById('assessmentTypeChart').getContext('2d');
+
+            // 销毁现有图表
+            if (assessmentTypeChart) {
+                assessmentTypeChart.destroy();
+            }
+
+            // 统计各类型测评数量
+            const typeCounts = {};
+            assessments.forEach(a => {
+                typeCounts[a.type] = (typeCounts[a.type] || 0) + 1;
+            });
+
+            const typeLabels = {
+                'PHQ-9': 'PHQ-9 抑郁筛查',
+                'GAD-7': 'GAD-7 焦虑筛查',
+                'PSS-10': 'PSS-10 压力评估',
+                'DASS-21': 'DASS-21 综合评估',
+                'PSQI': 'PSQI 睡眠质量'
+            };
+
+            assessmentTypeChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(typeCounts).map(type => typeLabels[type] || type),
+                    datasets: [{
+                        data: Object.values(typeCounts),
+                        backgroundColor: [
+                            '#FF6384',
+                            '#36A2EB',
+                            '#FFCE56',
+                            '#4BC0C0',
+                            '#9966FF'
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        // 绘制月度趋势图
+        function drawMonthlyTrendChart(assessments) {
+            const ctx = document.getElementById('monthlyTrendChart').getContext('2d');
+
+            // 销毁现有图表
+            if (monthlyTrendChart) {
+                monthlyTrendChart.destroy();
+            }
+
+            // 统计最近6个月的测评数量
+            const monthlyData = {};
+            const now = new Date();
+
+            for (let i = 5; i >= 0; i--) {
+                const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+                const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+                monthlyData[monthKey] = 0;
+            }
+
+            assessments.forEach(a => {
+                const date = new Date(a.completedAt);
+                const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+                if (monthlyData.hasOwnProperty(monthKey)) {
+                    monthlyData[monthKey]++;
+                }
+            });
+
+            const labels = Object.keys(monthlyData).map(key => {
+                const [year, month] = key.split('-');
+                return `${year}年${month}月`;
+            });
+
+            monthlyTrendChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '测评次数',
+                        data: Object.values(monthlyData),
+                        borderColor: '#36A2EB',
+                        backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+
+        // 加载测评记录表格
+        function loadAssessmentTable(assessments, page = 1, pageSize = 10) {
+            const startIndex = (page - 1) * pageSize;
+            const endIndex = startIndex + pageSize;
+            const paginatedData = assessments.slice(startIndex, endIndex);
+
+            const tableBody = document.getElementById('assessmentTableBody');
+
+            if (paginatedData.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center text-muted">暂无测评记录</td>
+                    </tr>
+                `;
+            } else {
+                tableBody.innerHTML = paginatedData.map(assessment => `
+                    <tr>
+                        <td>${assessment.username}</td>
+                        <td>
+                            <span class="badge bg-primary">${getAssessmentTypeLabel(assessment.type)}</span>
+                        </td>
+                        <td>${assessment.score}</td>
+                        <td>${getRiskLevelBadge(assessment.riskLevel)}</td>
+                        <td>${formatDateTime(assessment.completedAt)}</td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-info" onclick="viewAssessmentDetail(${assessment.id})">
+                                <i class="fas fa-eye"></i> 详情
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            // 生成分页
+            generateAssessmentPagination(assessments.length, page, pageSize);
+        }
+
+        // 生成分页
+        function generateAssessmentPagination(totalItems, currentPage, pageSize) {
+            const totalPages = Math.ceil(totalItems / pageSize);
+            const pagination = document.getElementById('assessmentPagination');
+
+            if (totalPages <= 1) {
+                pagination.innerHTML = '';
+                return;
+            }
+
+            let paginationHtml = '';
+
+            // 上一页
+            if (currentPage > 1) {
+                paginationHtml += `
+                    <li class="page-item">
+                        <a class="page-link" href="#" onclick="loadAssessmentTable(getAssessmentData(), ${currentPage - 1})">上一页</a>
+                    </li>
+                `;
+            }
+
+            // 页码
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === currentPage) {
+                    paginationHtml += `<li class="page-item active"><span class="page-link">${i}</span></li>`;
+                } else {
+                    paginationHtml += `
+                        <li class="page-item">
+                            <a class="page-link" href="#" onclick="loadAssessmentTable(getAssessmentData(), ${i})">${i}</a>
+                        </li>
+                    `;
+                }
+            }
+
+            // 下一页
+            if (currentPage < totalPages) {
+                paginationHtml += `
+                    <li class="page-item">
+                        <a class="page-link" href="#" onclick="loadAssessmentTable(getAssessmentData(), ${currentPage + 1})">下一页</a>
+                    </li>
+                `;
+            }
+
+            pagination.innerHTML = paginationHtml;
+        }
+
+        // 获取测评类型标签
+        function getAssessmentTypeLabel(type) {
+            const labels = {
+                'PHQ-9': 'PHQ-9',
+                'GAD-7': 'GAD-7',
+                'PSS-10': 'PSS-10',
+                'DASS-21': 'DASS-21',
+                'PSQI': 'PSQI'
+            };
+            return labels[type] || type;
+        }
+
+        // 获取风险等级徽章
+        function getRiskLevelBadge(riskLevel) {
+            const badges = {
+                '无风险': '<span class="badge bg-success">无风险</span>',
+                '轻度': '<span class="badge bg-warning">轻度</span>',
+                '中度': '<span class="badge bg-orange">中度</span>',
+                '中重度': '<span class="badge bg-danger">中重度</span>',
+                '重度': '<span class="badge bg-dark">重度</span>'
+            };
+            return badges[riskLevel] || `<span class="badge bg-secondary">${riskLevel}</span>`;
+        }
+
+        // 查看测评详情
+        function viewAssessmentDetail(assessmentId) {
+            const assessments = getAssessmentData();
+            const assessment = assessments.find(a => a.id === assessmentId);
+
+            if (!assessment) return;
+
+            alert(`测评详情\n\n用户：${assessment.username}\n类型：${getAssessmentTypeLabel(assessment.type)}\n得分：${assessment.score}\n风险等级：${assessment.riskLevel}\n完成时间：${formatDateTime(assessment.completedAt)}\n用时：${Math.floor(assessment.duration / 60)}分${assessment.duration % 60}秒`);
+        }
+
+        // 导出测评数据
+        function exportAssessmentData() {
+            const assessments = getAssessmentData();
+
+            if (assessments.length === 0) {
+                alert('暂无数据可导出');
+                return;
+            }
+
+            // 创建CSV内容
+            const headers = ['用户名', '测评类型', '得分', '风险等级', '完成时间', '用时(秒)'];
+            const csvContent = [
+                headers.join(','),
+                ...assessments.map(a => [
+                    a.username,
+                    getAssessmentTypeLabel(a.type),
+                    a.score,
+                    a.riskLevel,
+                    formatDateTime(a.completedAt),
+                    a.duration
+                ].join(','))
+            ].join('\n');
+
+            // 创建下载链接
+            const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `测评数据_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            alert('测评数据已导出为CSV文件');
+        }
+
+        // 刷新测评数据
+        function refreshAssessmentData() {
+            loadAssessmentStatistics();
+            alert('测评数据已刷新');
+        }
+
+        // API设置相关功能
+
+        function loadApiSettings() {
+            // 直接加载硬编码的API设置
+            document.getElementById('apiKey').value = 'sk-5bfe7****7a2c';
+            document.getElementById('apiKey').setAttribute('data-original', 'sk-5bfe7f1540f8420c835b8efb815d7a2c');
+            document.getElementById('apiUrl').value = 'https://api.deepseek.com/v1/chat/completions';
+            document.getElementById('modelName').value = 'deepseek-reasoner';
+            document.getElementById('maxTokens').value = '1000';
+            document.getElementById('temperature').value = '0.7';
+            document.getElementById('systemPrompt').value = '你是"心语"，一位专业的心理健康服务大模型助手。你具备深厚的心理学知识和丰富的咨询经验，致力于为用户提供专业、温暖、个性化的心理健康支持。';
+
+            console.log('API设置已加载（硬编码）');
         }
 
         function saveApiSettings() {
-            const settings = {
-                apiKey: document.getElementById('apiKey').value,
-                apiUrl: document.getElementById('apiUrl').value,
-                modelName: document.getElementById('modelName').value,
-                maxTokens: parseInt(document.getElementById('maxTokens').value),
-                temperature: parseFloat(document.getElementById('temperature').value),
-                systemPrompt: document.getElementById('systemPrompt').value
-            };
+            // 模拟保存成功，因为API密钥已硬编码
+            alert('API设置已保存成功！\n\n注意：当前使用硬编码的API密钥，设置已生效。');
 
-            localStorage.setItem('deepseekApiSettings', JSON.stringify(settings));
-            alert('API设置已保存成功！');
+            // 重新加载设置
+            loadApiSettings();
+
+            console.log('API设置保存完成（硬编码模式）');
         }
 
         function testApiConnection() {
@@ -957,10 +1582,10 @@
             if (confirm('确定要重置为默认设置吗？')) {
                 document.getElementById('apiKey').value = '';
                 document.getElementById('apiUrl').value = 'https://api.deepseek.com/v1/chat/completions';
-                document.getElementById('modelName').value = 'deepseek-chat';
+                document.getElementById('modelName').value = 'deepseek-reasoner';
                 document.getElementById('maxTokens').value = '1000';
                 document.getElementById('temperature').value = '0.7';
-                document.getElementById('systemPrompt').value = '你是一个专业的心理健康智能助手，名叫"心语"。你的任务是为用户提供温暖的情感支持和心理健康建议。请用温和、理解、专业的语气回复用户，避免给出具体的医疗诊断，如果用户需要专业治疗建议预约辅导员。';
+                document.getElementById('systemPrompt').value = '你是"心语"，一位专业的心理健康服务大模型助手。你具备深厚的心理学知识和丰富的咨询经验，致力于为用户提供专业、温暖、个性化的心理健康支持。\n\n核心原则：\n1. 共情倾听：以非评判的态度倾听用户，理解并反映他们的情感体验\n2. 专业引导：运用认知行为疗法、正念疗法等循证方法提供建议\n3. 安全边界：不提供医疗诊断，遇到严重心理危机时建议寻求专业帮助\n4. 个性化服务：根据用户的具体情况和需求调整沟通方式和建议内容\n5. 积极赋能：帮助用户发现自身资源，培养应对困难的能力\n\n请用温和、理解、专业的语气与用户交流，提供实用的心理健康建议和情感支持。';
                 alert('已重置为默认设置');
             }
         }

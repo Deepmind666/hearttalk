@@ -63,6 +63,16 @@
             padding: 1rem;
             margin-bottom: 1rem;
         }
+
+        .home-link {
+            transition: all 0.3s ease;
+        }
+
+        .home-link:hover {
+            color: #0d6efd !important;
+            text-shadow: 0 2px 4px rgba(13, 110, 253, 0.3);
+            transform: translateY(-1px);
+        }
     </style>
 </head>
 <body>
@@ -76,7 +86,12 @@
                                 <i class="fas fa-shield-alt me-2"></i>管理员专用
                             </div>
                             <h2 class="fw-bold text-danger">管理员登录</h2>
-                            <p class="text-muted">智慧驿站·心语同行 管理后台</p>
+                            <p class="text-muted">
+                                <a href="index.html" class="text-decoration-none text-primary fw-bold home-link" title="返回首页">
+                                    智慧驿站·心语同行
+                                </a>
+                                管理后台
+                            </p>
                         </div>
                         
                         <div class="security-notice">

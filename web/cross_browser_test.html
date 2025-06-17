@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>跨浏览器用户数据测试</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">🌐 跨浏览器用户数据测试</h1>
+        
+        <div class="alert alert-info">
+            <h5><i class="fas fa-info-circle me-2"></i>测试说明</h5>
+            <p>这个页面用于测试用户数据在不同浏览器之间的同步功能。</p>
+            <ol>
+                <li>在一个浏览器中注册用户或创建测试数据</li>
+                <li>在另一个浏览器中访问这个页面</li>
+                <li>点击"强制同步"按钮</li>
+                <li>查看是否能看到其他浏览器的用户数据</li>
+            </ol>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">本地数据状态</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="localStatus" class="mb-3">
+                            <div class="spinner-border spinner-border-sm me-2"></div>
+                            正在检查本地数据...
+                        </div>
+                        
+                        <div class="d-flex gap-2 mb-3">
+                            <button class="btn btn-success" onclick="checkLocalData()">
+                                <i class="fas fa-search me-1"></i>检查本地数据
+                            </button>
+                            <button class="btn btn-warning" onclick="createTestUser()">
+                                <i class="fas fa-plus me-1"></i>创建测试用户
+                            </button>
+                            <button class="btn btn-danger" onclick="clearLocalData()">
+                                <i class="fas fa-trash me-1"></i>清除本地数据
+                            </button>
+                        </div>
+                        
+                        <div id="localUserList"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">服务器数据状态</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="serverStatus" class="mb-3">
+                            <div class="spinner-border spinner-border-sm me-2"></div>
+                            正在检查服务器数据...
+                        </div>
+                        
+                        <div class="d-flex gap-2 mb-3">
+                            <button class="btn btn-primary" onclick="syncFromServer()">
+                                <i class="fas fa-download me-1"></i>从服务器同步
+                            </button>
+                            <button class="btn btn-info" onclick="syncToServer()">
+                                <i class="fas fa-upload me-1"></i>同步到服务器
+                            </button>
+                            <button class="btn btn-warning" onclick="checkServerData()">
+                                <i class="fas fa-server me-1"></i>检查服务器数据
+                            </button>
+                        </div>
+                        
+                        <div id="serverUserList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-warning text-white">
+                        <h5 class="mb-0">同步测试结果</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="syncResults">
+                            <p class="text-muted">点击上方按钮开始测试...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">快速链接</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex gap-2 flex-wrap">
+                            <a href="register.html" class="btn btn-outline-primary" target="_blank">
+                                <i class="fas fa-user-plus me-1"></i>注册页面
+                            </a>
+                            <a href="admin-dashboard.html" class="btn btn-outline-success" target="_blank">
+                                <i class="fas fa-cog me-1"></i>管理后台
+                            </a>
+                            <a href="test_users.html" class="btn btn-outline-info" target="_blank">
+                                <i class="fas fa-users me-1"></i>用户测试页面
+                            </a>
+                            <a href="save_user.php" class="btn btn-outline-warning" target="_blank">
+                                <i class="fas fa-database me-1"></i>服务器数据接口
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // 检查本地数据
+        function checkLocalData() {
+            const users = JSON.parse(localStorage.getItem('hearttalk_users') || '[]');
+            const status = document.getElementById('localStatus');
+            const userList = document.getElementById('localUserList');
+            
+            status.innerHTML = `
+                <div class="alert alert-info">
+                    <strong>本地用户数量：</strong> ${users.length}<br>
+                    <strong>存储键：</strong> hearttalk_users<br>
+                    <strong>最后同步：</strong> ${localStorage.getItem('last_sync_time') || '从未同步'}
+                </div>
+            `;
+            
+            if (users.length > 0) {
+                userList.innerHTML = `
+                    <h6>本地用户列表：</h6>
+                    <ul class="list-group">
+                        ${users.map(user => `
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>${user.username} (${user.email})</span>
+                                <small class="text-muted">${new Date(user.register_time).toLocaleString()}</small>
+                            </li>
+                        `).join('')}
+                    </ul>
+                `;
+            } else {
+                userList.innerHTML = '<p class="text-muted">本地暂无用户数据</p>';
+            }
+            
+            logResult('本地数据检查完成', `找到 ${users.length} 个用户`);
+        }
+        
+        // 检查服务器数据
+        async function checkServerData() {
+            const status = document.getElementById('serverStatus');
+            const userList = document.getElementById('serverUserList');
+            
+            status.innerHTML = '<div class="spinner-border spinner-border-sm me-2"></div>正在检查服务器数据...';
+            
+            try {
+                const response = await fetch('save_user.php');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const users = data.data || [];
+                    status.innerHTML = `
+                        <div class="alert alert-success">
+                            <strong>服务器用户数量：</strong> ${users.length}<br>
+                            <strong>数据文件：</strong> users_data.json<br>
+                            <strong>状态：</strong> 连接正常
+                        </div>
+                    `;
+                    
+                    if (users.length > 0) {
+                        userList.innerHTML = `
+                            <h6>服务器用户列表：</h6>
+                            <ul class="list-group">
+                                ${users.map(user => `
+                                    <li class="list-group-item d-flex justify-content-between">
+                                        <span>${user.username} (${user.email})</span>
+                                        <small class="text-muted">${new Date(user.register_time).toLocaleString()}</small>
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        `;
+                    } else {
+                        userList.innerHTML = '<p class="text-muted">服务器暂无用户数据</p>';
+                    }
+                    
+                    logResult('服务器数据检查完成', `找到 ${users.length} 个用户`);
+                } else {
+                    throw new Error(data.message);
+                }
+            } catch (error) {
+                status.innerHTML = `
+                    <div class="alert alert-danger">
+                        <strong>服务器连接失败：</strong> ${error.message}
+                    </div>
+                `;
+                userList.innerHTML = '';
+                logResult('服务器数据检查失败', error.message);
+            }
+        }
+        
+        // 从服务器同步
+        async function syncFromServer() {
+            logResult('开始从服务器同步', '正在获取服务器数据...');
+            
+            try {
+                const response = await fetch('save_user.php');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const serverUsers = data.data || [];
+                    const localUsers = JSON.parse(localStorage.getItem('hearttalk_users') || '[]');
+                    
+                    // 合并数据
+                    const merged = [...serverUsers];
+                    localUsers.forEach(localUser => {
+                        const exists = serverUsers.some(serverUser => serverUser.email === localUser.email);
+                        if (!exists) {
+                            merged.push(localUser);
+                        }
+                    });
+                    
+                    // 保存合并后的数据
+                    localStorage.setItem('hearttalk_users', JSON.stringify(merged));
+                    localStorage.setItem('last_sync_time', new Date().toISOString());
+                    
+                    logResult('从服务器同步完成', `合并了 ${merged.length} 个用户数据`);
+                    checkLocalData();
+                } else {
+                    throw new Error(data.message);
+                }
+            } catch (error) {
+                logResult('从服务器同步失败', error.message);
+            }
+        }
+        
+        // 同步到服务器
+        async function syncToServer() {
+            const users = JSON.parse(localStorage.getItem('hearttalk_users') || '[]');
+            
+            if (users.length === 0) {
+                logResult('同步到服务器', '本地没有数据需要同步');
+                return;
+            }
+            
+            logResult('开始同步到服务器', `正在上传 ${users.length} 个用户数据...`);
+            
+            try {
+                for (const user of users) {
+                    const response = await fetch('save_user.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(user)
+                    });
+                    
+                    const result = await response.json();
+                    if (!result.success) {
+                        throw new Error(`上传用户 ${user.username} 失败: ${result.message}`);
+                    }
+                }
+                
+                logResult('同步到服务器完成', `成功上传 ${users.length} 个用户数据`);
+                checkServerData();
+            } catch (error) {
+                logResult('同步到服务器失败', error.message);
+            }
+        }
+        
+        // 创建测试用户
+        function createTestUser() {
+            const timestamp = Date.now();
+            const testUser = {
+                id: timestamp,
+                username: `测试用户${timestamp.toString().slice(-4)}`,
+                email: `test${timestamp.toString().slice(-4)}@example.com`,
+                phone: `138${timestamp.toString().slice(-8)}`,
+                password: '123456',
+                avatar: null,
+                register_time: new Date().toISOString(),
+                last_login: null
+            };
+            
+            const users = JSON.parse(localStorage.getItem('hearttalk_users') || '[]');
+            users.push(testUser);
+            localStorage.setItem('hearttalk_users', JSON.stringify(users));
+            
+            logResult('创建测试用户', `用户 ${testUser.username} 创建成功`);
+            checkLocalData();
+        }
+        
+        // 清除本地数据
+        function clearLocalData() {
+            if (confirm('确定要清除所有本地用户数据吗？')) {
+                localStorage.removeItem('hearttalk_users');
+                localStorage.removeItem('last_sync_time');
+                logResult('清除本地数据', '所有本地用户数据已清除');
+                checkLocalData();
+            }
+        }
+        
+        // 记录测试结果
+        function logResult(action, message) {
+            const results = document.getElementById('syncResults');
+            const time = new Date().toLocaleTimeString();
+            
+            results.innerHTML = `
+                <div class="alert alert-info">
+                    <strong>[${time}] ${action}:</strong> ${message}
+                </div>
+            ` + results.innerHTML;
+        }
+        
+        // 页面加载时自动检查
+        document.addEventListener('DOMContentLoaded', function() {
+            checkLocalData();
+            checkServerData();
+        });
+    </script>
+</body>
+</html>
